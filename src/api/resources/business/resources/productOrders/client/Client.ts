@@ -2,7 +2,7 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../../../BaseClient.js";
-import { mergeHeaders } from "../../../../../../core/headers.js";
+import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as core from "../../../../../../core/index.js";
 import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
@@ -103,10 +103,11 @@ export class ProductOrdersClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
      *
      * @example
      *     await client.business.productOrders.get({
-     *         productOrder: "productOrder"
+     *         order: "order"
      *     })
      */
     public get(
@@ -120,7 +121,7 @@ export class ProductOrdersClient {
         request: FiveOneEat.business.GetProductOrdersRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.GetProductOrdersResponse>> {
-        const { productOrder } = request;
+        const { order } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -132,7 +133,7 @@ export class ProductOrdersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `business/product-orders/${core.url.encodePathParam(productOrder)}`,
+                `business/product-orders/${core.url.encodePathParam(order)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -156,6 +157,8 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.FiveOneEatError({
                         statusCode: _response.error.statusCode,
@@ -169,7 +172,7 @@ export class ProductOrdersClient {
             _response.error,
             _response.rawResponse,
             "GET",
-            "/business/product-orders/{productOrder}",
+            "/business/product-orders/{order}",
         );
     }
 
@@ -179,10 +182,11 @@ export class ProductOrdersClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
      *
      * @example
      *     await client.business.productOrders.fulfill({
-     *         productOrder: "productOrder"
+     *         order: "order"
      *     })
      */
     public fulfill(
@@ -196,7 +200,7 @@ export class ProductOrdersClient {
         request: FiveOneEat.business.FulfillProductOrdersRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.FulfillProductOrdersResponse>> {
-        const { productOrder } = request;
+        const { order } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -208,7 +212,7 @@ export class ProductOrdersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `business/product-orders/${core.url.encodePathParam(productOrder)}/fulfill`,
+                `business/product-orders/${core.url.encodePathParam(order)}/fulfill`,
             ),
             method: "PUT",
             headers: _headers,
@@ -232,6 +236,8 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.FiveOneEatError({
                         statusCode: _response.error.statusCode,
@@ -245,7 +251,7 @@ export class ProductOrdersClient {
             _response.error,
             _response.rawResponse,
             "PUT",
-            "/business/product-orders/{productOrder}/fulfill",
+            "/business/product-orders/{order}/fulfill",
         );
     }
 
@@ -255,10 +261,11 @@ export class ProductOrdersClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
      *
      * @example
      *     await client.business.productOrders.markPickedUp({
-     *         productOrder: "productOrder"
+     *         order: "order"
      *     })
      */
     public markPickedUp(
@@ -272,7 +279,7 @@ export class ProductOrdersClient {
         request: FiveOneEat.business.MarkPickedUpProductOrdersRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.MarkPickedUpProductOrdersResponse>> {
-        const { productOrder } = request;
+        const { order } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -284,7 +291,7 @@ export class ProductOrdersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `business/product-orders/${core.url.encodePathParam(productOrder)}/mark-picked-up`,
+                `business/product-orders/${core.url.encodePathParam(order)}/mark-picked-up`,
             ),
             method: "PUT",
             headers: _headers,
@@ -308,6 +315,8 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.FiveOneEatError({
                         statusCode: _response.error.statusCode,
@@ -321,7 +330,7 @@ export class ProductOrdersClient {
             _response.error,
             _response.rawResponse,
             "PUT",
-            "/business/product-orders/{productOrder}/mark-picked-up",
+            "/business/product-orders/{order}/mark-picked-up",
         );
     }
 
@@ -331,11 +340,12 @@ export class ProductOrdersClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
      *     await client.business.productOrders.addTracking({
-     *         productOrder: "productOrder",
+     *         order: "order",
      *         carrier: "carrier",
      *         tracking_number: "tracking_number"
      *     })
@@ -351,7 +361,7 @@ export class ProductOrdersClient {
         request: FiveOneEat.business.AddTrackingProductOrdersRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.AddTrackingProductOrdersResponse>> {
-        const { productOrder, ..._body } = request;
+        const { order, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -363,7 +373,7 @@ export class ProductOrdersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `business/product-orders/${core.url.encodePathParam(productOrder)}/tracking`,
+                `business/product-orders/${core.url.encodePathParam(order)}/tracking`,
             ),
             method: "POST",
             headers: _headers,
@@ -390,6 +400,8 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -408,39 +420,51 @@ export class ProductOrdersClient {
             _response.error,
             _response.rawResponse,
             "POST",
-            "/business/product-orders/{productOrder}/tracking",
+            "/business/product-orders/{order}/tracking",
         );
     }
 
     /**
-     * @param {FiveOneEat.business.RefundProductOrdersRequest} request
+     * Refunds `amount` (dollars) of the order, or everything still refundable
+     * when `amount` is omitted, through Stripe. Sales tax on the refunded part
+     * is reversed automatically.
+     *
+     * Send an `Idempotency-Key` header (1–255 characters, unique per refund you
+     * mean to make) to make retries safe: a repeat with the same key returns
+     * the order with the refund already made, with 200, instead of refunding
+     * again — even when nothing is left to refund. Without it, a retry after a
+     * lost response may refund twice.
+     *
+     * @param {FiveOneEat.business.RefundOrderRequest} request
      * @param {ProductOrdersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
      *     await client.business.productOrders.refund({
-     *         productOrder: "productOrder"
+     *         order: "order"
      *     })
      */
     public refund(
-        request: FiveOneEat.business.RefundProductOrdersRequest,
+        request: FiveOneEat.business.RefundOrderRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.business.RefundProductOrdersResponse> {
         return core.HttpResponsePromise.fromPromise(this.__refund(request, requestOptions));
     }
 
     private async __refund(
-        request: FiveOneEat.business.RefundProductOrdersRequest,
+        request: FiveOneEat.business.RefundOrderRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.RefundProductOrdersResponse>> {
-        const { productOrder, ..._body } = request;
+        const { order, "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
+            mergeOnlyDefinedHeaders({ "Idempotency-Key": idempotencyKey }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -448,7 +472,7 @@ export class ProductOrdersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `business/product-orders/${core.url.encodePathParam(productOrder)}/refund`,
+                `business/product-orders/${core.url.encodePathParam(order)}/refund`,
             ),
             method: "POST",
             headers: _headers,
@@ -475,6 +499,8 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -493,7 +519,7 @@ export class ProductOrdersClient {
             _response.error,
             _response.rawResponse,
             "POST",
-            "/business/product-orders/{productOrder}/refund",
+            "/business/product-orders/{order}/refund",
         );
     }
 
@@ -503,11 +529,12 @@ export class ProductOrdersClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
      *     await client.business.productOrders.getLabelRates({
-     *         productOrder: "productOrder"
+     *         order: "order"
      *     })
      */
     public getLabelRates(
@@ -521,7 +548,7 @@ export class ProductOrdersClient {
         request: FiveOneEat.business.GetLabelRatesProductOrdersRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.GetLabelRatesProductOrdersResponseItem[]>> {
-        const { productOrder } = request;
+        const { order } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -533,7 +560,7 @@ export class ProductOrdersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `business/product-orders/${core.url.encodePathParam(productOrder)}/label-rates`,
+                `business/product-orders/${core.url.encodePathParam(order)}/label-rates`,
             ),
             method: "GET",
             headers: _headers,
@@ -557,6 +584,8 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -575,7 +604,7 @@ export class ProductOrdersClient {
             _response.error,
             _response.rawResponse,
             "GET",
-            "/business/product-orders/{productOrder}/label-rates",
+            "/business/product-orders/{order}/label-rates",
         );
     }
 
@@ -585,11 +614,12 @@ export class ProductOrdersClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
      *     await client.business.productOrders.purchaseLabel({
-     *         productOrder: "productOrder",
+     *         order: "order",
      *         provider_rate_id: "provider_rate_id"
      *     })
      */
@@ -604,7 +634,7 @@ export class ProductOrdersClient {
         request: FiveOneEat.business.PurchaseLabelProductOrdersRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.PurchaseLabelProductOrdersResponse>> {
-        const { productOrder, ..._body } = request;
+        const { order, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -616,7 +646,7 @@ export class ProductOrdersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `business/product-orders/${core.url.encodePathParam(productOrder)}/purchase-label`,
+                `business/product-orders/${core.url.encodePathParam(order)}/purchase-label`,
             ),
             method: "POST",
             headers: _headers,
@@ -643,6 +673,8 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -661,7 +693,7 @@ export class ProductOrdersClient {
             _response.error,
             _response.rawResponse,
             "POST",
-            "/business/product-orders/{productOrder}/purchase-label",
+            "/business/product-orders/{order}/purchase-label",
         );
     }
 }

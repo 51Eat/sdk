@@ -9,6 +9,16 @@ export interface AppHttpResourcesApiV1BusinessCommerceProductResource {
     description: string;
     is_active: boolean;
     published_at: string;
+    /**
+     * Owner-only: never eager-loaded by the guest-facing
+     * `Api\V1\Customer\Shop\ShopController`, which shares this
+     * resource. Mirrors how `variants`/`default_variant` are already
+     * scoped to whichever relations the calling controller loaded. Gated on `relationLoaded()` rather than `whenLoaded()`'s value
+     * form: the latter also hides the field when the loaded relation
+     * itself resolves to null (e.g. a tax code no longer in the
+     * catalog), which would hide a real, owner-visible column value.
+     */
+    tax_code?: string | undefined;
     variants?: FiveOneEat.VariantResource[] | undefined;
     default_variant?: FiveOneEat.VariantResource | undefined;
     created_at: string;

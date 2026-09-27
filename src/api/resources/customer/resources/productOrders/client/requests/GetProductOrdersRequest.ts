@@ -7,5 +7,6 @@
  *     }
  */
 export interface GetProductOrdersRequest {
+    /** The product order ID */
     productOrder: string;
 }

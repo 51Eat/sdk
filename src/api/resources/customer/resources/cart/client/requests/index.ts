@@ -1,9 +1,12 @@
 export type { AddItemCartRequest } from "./AddItemCartRequest.js";
 export type { CheckoutCartRequest } from "./CheckoutCartRequest.js";
+export type { ChooseFulfillmentMethodRequest } from "./ChooseFulfillmentMethodRequest.js";
 export type { ClearCartRequest } from "./ClearCartRequest.js";
 export type { CreatePaymentIntentCartRequest } from "./CreatePaymentIntentCartRequest.js";
 export type { GetCartRequest } from "./GetCartRequest.js";
-export type { GetShippingOptionsCartRequest } from "./GetShippingOptionsCartRequest.js";
+export type { ListShippingOptionsCartRequest } from "./ListShippingOptionsCartRequest.js";
+export type { RefreshCartPaymentRequest } from "./RefreshCartPaymentRequest.js";
 export type { RemoveItemCartRequest } from "./RemoveItemCartRequest.js";
-export type { SelectShippingOptionCartRequest } from "./SelectShippingOptionCartRequest.js";
+export type { SelectShippingRateRequest } from "./SelectShippingRateRequest.js";
+export type { ShippingAddressRequest } from "./ShippingAddressRequest.js";
 export type { UpdateItemCartRequest } from "./UpdateItemCartRequest.js";

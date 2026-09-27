@@ -112,7 +112,8 @@ export class ProductsClient {
      *
      * @example
      *     await client.business.products.create({
-     *         name: "name"
+     *         name: "name",
+     *         tax_code: "tax_code"
      *     })
      */
     public create(
@@ -267,7 +268,8 @@ export class ProductsClient {
      * @example
      *     await client.business.products.update({
      *         product: "product",
-     *         name: "name"
+     *         name: "name",
+     *         tax_code: "tax_code"
      *     })
      */
     public update(

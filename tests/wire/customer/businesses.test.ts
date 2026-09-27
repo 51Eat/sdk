@@ -36,7 +36,7 @@ describe("BusinessesClient", () => {
                 logo: "logo",
                 cover_photo: "cover_photo",
                 hours: {
-                    is_open_now: "is_open_now",
+                    is_open_now: true,
                     next_open_at: "next_open_at",
                     schedule: [
                         {

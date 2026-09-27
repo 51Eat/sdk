@@ -3,9 +3,10 @@
 /**
  * @example
  *     {
- *         productOrder: "productOrder"
+ *         order: "order"
  *     }
  */
 export interface MarkPickedUpProductOrdersRequest {
-    productOrder: string;
+    /** The order ID */
+    order: string;
 }

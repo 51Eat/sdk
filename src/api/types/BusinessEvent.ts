@@ -10,6 +10,13 @@ export interface BusinessEvent {
     starts_at: string;
     ends_at: string;
     location: string;
+    venue_address: string;
+    venue_city: string;
+    venue_state: string;
+    venue_zipcode: string;
+    venue_country: string;
+    latitude: number | null;
+    longitude: number | null;
     is_all_day: string;
     is_featured: string;
     ticket_sales_enabled: string;

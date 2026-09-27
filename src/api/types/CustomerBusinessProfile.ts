@@ -42,7 +42,7 @@ export interface CustomerBusinessProfile {
 
 export namespace CustomerBusinessProfile {
     export interface Hours {
-        is_open_now: string;
+        is_open_now: boolean;
         next_open_at: string | null;
         schedule: FiveOneEat.BusinessScheduleDayResource[];
         exceptions: FiveOneEat.BusinessHourExceptionResource[];

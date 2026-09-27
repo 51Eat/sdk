@@ -80,7 +80,7 @@ describe("MeClient", () => {
                         linkedin_url: null,
                         logo: null,
                         hours: {
-                            is_open_now: "is_open_now",
+                            is_open_now: true,
                             next_open_at: null,
                             schedule: [
                                 {

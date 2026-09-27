@@ -3,13 +3,14 @@
 /**
  * @example
  *     {
- *         productOrder: "productOrder",
+ *         order: "order",
  *         carrier: "carrier",
  *         tracking_number: "tracking_number"
  *     }
  */
 export interface AddTrackingProductOrdersRequest {
-    productOrder: string;
+    /** The order ID */
+    order: string;
     carrier: string;
     tracking_number: string;
     tracking_url?: string | null;

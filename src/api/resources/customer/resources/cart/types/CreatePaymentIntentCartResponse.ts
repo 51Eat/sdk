@@ -5,6 +5,7 @@ export interface CreatePaymentIntentCartResponse {
     payment_intent_id: string;
     subtotal: number;
     tax_amount: number;
+    shipping_amount: number;
     platform_fee: number;
     total_amount: number;
     amount: number;

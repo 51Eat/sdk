@@ -79,7 +79,7 @@ describe("EditorialsClient", () => {
                     logo: "logo",
                     cover_photo: "cover_photo",
                     hours: {
-                        is_open_now: "is_open_now",
+                        is_open_now: true,
                         next_open_at: null,
                         schedule: [
                             {

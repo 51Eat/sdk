@@ -6,6 +6,8 @@ export interface BusinessEventTicketType {
     name: string;
     description: string;
     price: string;
+    /** Stripe tax code (txcd_…); one of EventTaxCodes::ALLOWED. Null for free tiers. */
+    tax_code: string | null;
     quantity_available: string;
     quantity_sold: string;
     remaining_quantity: string;

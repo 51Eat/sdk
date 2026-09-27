@@ -12,7 +12,7 @@ import type * as FiveOneEat from "../../../../../../index.js";
  *     }
  */
 export interface CheckoutCartRequest {
-    /** The business ID */
+    /** The business handle */
     business: string;
     body: FiveOneEat.CheckoutRequest;
 }

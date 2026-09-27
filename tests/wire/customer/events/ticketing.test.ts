@@ -366,6 +366,9 @@ describe("TicketingClient", () => {
             shipping_method: { key: "value" },
             platform_fee: 1.1,
             total_amount: 1.1,
+            total_cents: 1,
+            previous_payment_intent_id: "previous_payment_intent_id",
+            previous_amount_cents: "previous_amount_cents",
         };
 
         server
@@ -399,7 +402,7 @@ describe("TicketingClient", () => {
                 city: "city",
                 state: "state",
                 postal_code: "postal_code",
-                country: "country",
+                country: "xy",
             },
         };
         const rawResponseBody = { key: "value" };
@@ -421,7 +424,7 @@ describe("TicketingClient", () => {
                     city: "city",
                     state: "state",
                     postal_code: "postal_code",
-                    country: "country",
+                    country: "xy",
                 },
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
@@ -436,7 +439,81 @@ describe("TicketingClient", () => {
                 city: "city",
                 state: "state",
                 postal_code: "postal_code",
-                country: "country",
+                country: "xy",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/events/eventId/payment-intent")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.events.ticketing.createPaymentIntent({
+                eventId: "eventId",
+                billing_address: {
+                    line1: "line1",
+                    city: "city",
+                    state: "state",
+                    postal_code: "postal_code",
+                    country: "xy",
+                },
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("createPaymentIntent (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            billing_address: {
+                line1: "line1",
+                city: "city",
+                state: "state",
+                postal_code: "postal_code",
+                country: "xy",
+            },
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/events/eventId/payment-intent")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.events.ticketing.createPaymentIntent({
+                eventId: "eventId",
+                billing_address: {
+                    line1: "line1",
+                    city: "city",
+                    state: "state",
+                    postal_code: "postal_code",
+                    country: "xy",
+                },
+            });
+        }).rejects.toThrow(FiveOneEat.ConflictError);
+    });
+
+    test("createPaymentIntent (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            billing_address: {
+                line1: "line1",
+                city: "city",
+                state: "state",
+                postal_code: "postal_code",
+                country: "xy",
             },
         };
         const rawResponseBody = { key: "value" };
@@ -458,7 +535,7 @@ describe("TicketingClient", () => {
                     city: "city",
                     state: "state",
                     postal_code: "postal_code",
-                    country: "country",
+                    country: "xy",
                 },
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);

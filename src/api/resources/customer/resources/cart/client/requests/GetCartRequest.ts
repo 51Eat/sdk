@@ -7,6 +7,6 @@
  *     }
  */
 export interface GetCartRequest {
-    /** The business ID */
+    /** The business handle */
     business: string;
 }
