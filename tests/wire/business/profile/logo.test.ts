@@ -33,6 +33,11 @@ describe("LogoClient", () => {
                 latitude: 1.1,
                 longitude: 1.1,
                 has_location: true,
+                billing_address: "billing_address",
+                billing_city: "billing_city",
+                billing_state: "billing_state",
+                billing_zipcode: "billing_zipcode",
+                billing_country: "billing_country",
                 logo: "logo",
                 logo_url: "logo_url",
                 hours: {

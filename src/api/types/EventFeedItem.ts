@@ -7,6 +7,12 @@ export interface EventFeedItem {
     starts_at: string;
     ends_at: string;
     location: string | null;
+    address: string | null;
+    city: string | null;
+    state: string | null;
+    zipcode: string | null;
+    latitude: number | null;
+    longitude: number | null;
     is_featured: boolean;
     ticket_sales_enabled: boolean;
     image: string | null;

@@ -11093,7 +11093,8 @@ The message is also in the cart's `fulfillment.checkout_blocker`.
 
 A 409 `{status: "paid", message, payment_intent_id}` means the cart's
 payment already went through (never a second payment): finish checkout
-with that id. A 409 with only a message means it is still processing.
+with that id. A 409 `{status: "processing", message}` means the payment
+is still in flight: don't pay again, check back later.
 </dd>
 </dl>
 </dd>
@@ -14104,6 +14105,10 @@ await client.customer.events.ticketing.calculatePrice({
 
 Create a Stripe payment intent for the tickets held in the cart for the given event.
 Returns a client_secret for the mobile app to confirm payment with Stripe.
+
+A 409 `{status: "paid", message, payment_intent_id}` means these tickets
+are already paid for (the webhook issues them; never pay twice). A 409
+`{status: "processing", message}` means the payment is still in flight.
 </dd>
 </dl>
 </dd>

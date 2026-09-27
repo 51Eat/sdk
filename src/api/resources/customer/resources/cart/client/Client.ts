@@ -431,7 +431,8 @@ export class CartClient {
      *
      * A 409 `{status: "paid", message, payment_intent_id}` means the cart's
      * payment already went through (never a second payment): finish checkout
-     * with that id. A 409 with only a message means it is still processing.
+     * with that id. A 409 `{status: "processing", message}` means the payment
+     * is still in flight: don't pay again, check back later.
      *
      * @param {FiveOneEat.customer.CreatePaymentIntentCartRequest} request
      * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.

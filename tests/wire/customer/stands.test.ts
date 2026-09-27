@@ -143,6 +143,27 @@ describe("StandsClient", () => {
             .mockEndpoint()
             .post("/customer/stands/stand/cart/payment-intent")
             .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.createPaymentIntent({
+                stand: "stand",
+            });
+        }).rejects.toThrow(FiveOneEat.ConflictError);
+    });
+
+    test("createPaymentIntent (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/stands/stand/cart/payment-intent")
+            .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
@@ -262,6 +283,31 @@ describe("StandsClient", () => {
     });
 
     test("checkout (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { payment_intent_id: "payment_intent_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/stands/stand/cart/checkout")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.checkout({
+                stand: "stand",
+                body: {
+                    payment_intent_id: "payment_intent_id",
+                },
+            });
+        }).rejects.toThrow(FiveOneEat.ConflictError);
+    });
+
+    test("checkout (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { payment_intent_id: "payment_intent_id" };
