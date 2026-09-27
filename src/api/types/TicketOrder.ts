@@ -16,7 +16,13 @@ export namespace TicketOrder {
         title: string;
         starts_at: string;
         ends_at: string;
-        location: string;
+        location: string | null;
+        address: string | null;
+        city: string | null;
+        state: string | null;
+        zipcode: string | null;
+        latitude: number | null;
+        longitude: number | null;
         business: Event.Business | null;
     }
 

@@ -94,6 +94,7 @@ export class StandsClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.ConflictError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -148,6 +149,8 @@ export class StandsClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -176,6 +179,7 @@ export class StandsClient {
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.ConflictError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -236,6 +240,8 @@ export class StandsClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,

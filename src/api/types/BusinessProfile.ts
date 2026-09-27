@@ -25,6 +25,11 @@ export interface BusinessProfile {
     latitude: number | null;
     longitude: number | null;
     has_location: boolean;
+    billing_address: string | null;
+    billing_city: string | null;
+    billing_state: string | null;
+    billing_zipcode: string | null;
+    billing_country: string | null;
     logo: string | null;
     logo_url: string | null;
     hours: BusinessProfile.Hours;

@@ -80,6 +80,12 @@ describe("TicketOrdersClient", () => {
                     starts_at: "starts_at",
                     ends_at: "ends_at",
                     location: "location",
+                    address: "address",
+                    city: "city",
+                    state: "state",
+                    zipcode: "zipcode",
+                    latitude: 1.1,
+                    longitude: 1.1,
                     business: { id: "id", name: "name", handle: "handle" },
                 },
                 transaction: {

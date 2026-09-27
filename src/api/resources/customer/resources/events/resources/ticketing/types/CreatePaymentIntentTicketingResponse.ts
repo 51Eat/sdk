@@ -17,7 +17,12 @@ export interface CreatePaymentIntentTicketingResponse {
      * tell whether the price the buyer is about to pay just moved.
      */
     previous_payment_intent_id: string | null;
-    previous_amount_cents: string | null;
+    previous_amount_cents: number | null;
+    /**
+     * Whether the stored intent was pinned to another method or tax
+     * address, even at the same price (e.g. a flat-rate address change).
+     */
+    previous_destination_changed: boolean;
 }
 
 export namespace CreatePaymentIntentTicketingResponse {

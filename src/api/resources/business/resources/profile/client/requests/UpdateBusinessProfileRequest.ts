@@ -33,6 +33,15 @@ export interface UpdateBusinessProfileRequest {
     pickup_hours?: string[] | null;
     same_day_cutoff?: string | null;
     pickup_instructions?: string | null;
+    /**
+     * Where Pro is billed, when different from the business address.
+     * Send all five together, or all null to clear.
+     */
+    billing_address?: string | null;
+    billing_city?: string | null;
+    billing_state?: string | null;
+    billing_zipcode?: string | null;
+    billing_country?: string | null;
 }
 
 export namespace UpdateBusinessProfileRequest {

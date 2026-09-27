@@ -284,6 +284,10 @@ export class TicketingClient {
      * Create a Stripe payment intent for the tickets held in the cart for the given event.
      * Returns a client_secret for the mobile app to confirm payment with Stripe.
      *
+     * A 409 `{status: "paid", message, payment_intent_id}` means these tickets
+     * are already paid for (the webhook issues them; never pay twice). A 409
+     * `{status: "processing", message}` means the payment is still in flight.
+     *
      * @param {FiveOneEat.customer.events.CreatePaymentIntentRequest} request
      * @param {TicketingClient.RequestOptions} requestOptions - Request-specific configuration.
      *
