@@ -3,11 +3,12 @@
 /**
  * @example
  *     {
- *         productOrder: "productOrder",
+ *         order: "order",
  *         provider_rate_id: "provider_rate_id"
  *     }
  */
 export interface PurchaseLabelProductOrdersRequest {
-    productOrder: string;
+    /** The order ID */
+    order: string;
     provider_rate_id: string;
 }

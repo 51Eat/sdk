@@ -9,6 +9,11 @@ export interface ProductResource {
     published_at: string | null;
     metadata: Record<string, unknown> | null;
     product_category_id: string | null;
+    /**
+     * Owner-only: shared with the customer stand shop, so it appears only
+     * when the business controller loaded the `taxCode` relation.
+     */
+    tax_code?: (string | null) | undefined;
     category?: unknown[] | undefined;
     images?: unknown[] | undefined;
     variants?: unknown[] | undefined;

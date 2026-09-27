@@ -26,6 +26,22 @@ describe("CustomerStandsClient", () => {
                 subtotal_cents: 1,
                 subtotal: 1.1,
                 item_count: 1,
+                fulfillment: {
+                    offered_methods: ["offered_methods"],
+                    method: "method",
+                    shipping_address: {
+                        line1: "line1",
+                        line2: null,
+                        city: "city",
+                        state: "state",
+                        postal_code: "postal_code",
+                        country: "country",
+                    },
+                    requires_rate_selection: true,
+                    selected_shipping_rate_id: "selected_shipping_rate_id",
+                    selected_shipping_amount_cents: 1,
+                    checkout_blocker: "checkout_blocker",
+                },
             },
         };
 
@@ -106,6 +122,22 @@ describe("CustomerStandsClient", () => {
                 subtotal_cents: 1,
                 subtotal: 1.1,
                 item_count: 1,
+                fulfillment: {
+                    offered_methods: ["offered_methods"],
+                    method: "method",
+                    shipping_address: {
+                        line1: "line1",
+                        line2: null,
+                        city: "city",
+                        state: "state",
+                        postal_code: "postal_code",
+                        country: "country",
+                    },
+                    requires_rate_selection: true,
+                    selected_shipping_rate_id: "selected_shipping_rate_id",
+                    selected_shipping_amount_cents: 1,
+                    checkout_blocker: "checkout_blocker",
+                },
             },
         };
 

@@ -4,13 +4,11 @@
  * @example
  *     {
  *         business: "business",
- *         provider_rate_id: "provider_rate_id",
- *         amount_cents: 1
+ *         provider_rate_id: "provider_rate_id"
  *     }
  */
-export interface SelectShippingOptionCartRequest {
-    /** The business ID */
+export interface SelectShippingRateRequest {
+    /** The business handle */
     business: string;
     provider_rate_id: string;
-    amount_cents: number;
 }

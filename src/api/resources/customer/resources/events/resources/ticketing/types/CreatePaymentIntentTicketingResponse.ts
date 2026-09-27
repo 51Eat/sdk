@@ -11,6 +11,13 @@ export interface CreatePaymentIntentTicketingResponse {
     shipping_method: unknown | null;
     platform_fee: number;
     total_amount: number;
+    total_cents: number;
+    /**
+     * The stored intent as it stood before this call, so a caller can
+     * tell whether the price the buyer is about to pay just moved.
+     */
+    previous_payment_intent_id: string | null;
+    previous_amount_cents: string | null;
 }
 
 export namespace CreatePaymentIntentTicketingResponse {

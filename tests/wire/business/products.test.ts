@@ -18,6 +18,7 @@ describe("ProductsClient", () => {
                     description: "description",
                     is_active: true,
                     published_at: "published_at",
+                    tax_code: "tax_code",
                     variants: [
                         {
                             id: "id",
@@ -70,7 +71,7 @@ describe("ProductsClient", () => {
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = {
             data: {
                 id: "id",
@@ -79,6 +80,7 @@ describe("ProductsClient", () => {
                 description: "description",
                 is_active: true,
                 published_at: "published_at",
+                tax_code: "tax_code",
                 variants: [
                     {
                         id: "id",
@@ -138,6 +140,7 @@ describe("ProductsClient", () => {
 
         const response = await client.business.products.create({
             name: "name",
+            tax_code: "tax_code",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -145,7 +148,7 @@ describe("ProductsClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -160,6 +163,7 @@ describe("ProductsClient", () => {
         await expect(async () => {
             return await client.business.products.create({
                 name: "name",
+                tax_code: "tax_code",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -167,7 +171,7 @@ describe("ProductsClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -182,6 +186,7 @@ describe("ProductsClient", () => {
         await expect(async () => {
             return await client.business.products.create({
                 name: "name",
+                tax_code: "tax_code",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -189,7 +194,7 @@ describe("ProductsClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -204,6 +209,7 @@ describe("ProductsClient", () => {
         await expect(async () => {
             return await client.business.products.create({
                 name: "name",
+                tax_code: "tax_code",
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
@@ -220,6 +226,7 @@ describe("ProductsClient", () => {
                 description: "description",
                 is_active: true,
                 published_at: "published_at",
+                tax_code: "tax_code",
                 variants: [
                     {
                         id: "id",
@@ -348,7 +355,7 @@ describe("ProductsClient", () => {
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = {
             data: {
                 id: "id",
@@ -357,6 +364,7 @@ describe("ProductsClient", () => {
                 description: "description",
                 is_active: true,
                 published_at: "published_at",
+                tax_code: "tax_code",
                 variants: [
                     {
                         id: "id",
@@ -417,6 +425,7 @@ describe("ProductsClient", () => {
         const response = await client.business.products.update({
             product: "product",
             name: "name",
+            tax_code: "tax_code",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -424,7 +433,7 @@ describe("ProductsClient", () => {
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -440,6 +449,7 @@ describe("ProductsClient", () => {
             return await client.business.products.update({
                 product: "product",
                 name: "name",
+                tax_code: "tax_code",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -447,7 +457,7 @@ describe("ProductsClient", () => {
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -463,6 +473,7 @@ describe("ProductsClient", () => {
             return await client.business.products.update({
                 product: "product",
                 name: "name",
+                tax_code: "tax_code",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -470,7 +481,7 @@ describe("ProductsClient", () => {
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -486,6 +497,7 @@ describe("ProductsClient", () => {
             return await client.business.products.update({
                 product: "product",
                 name: "name",
+                tax_code: "tax_code",
             });
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
@@ -493,7 +505,7 @@ describe("ProductsClient", () => {
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = { name: "name", tax_code: "tax_code" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -509,6 +521,7 @@ describe("ProductsClient", () => {
             return await client.business.products.update({
                 product: "product",
                 name: "name",
+                tax_code: "tax_code",
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });

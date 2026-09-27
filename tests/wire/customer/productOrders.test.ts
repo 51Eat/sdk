@@ -171,4 +171,25 @@ describe("ProductOrdersClient", () => {
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
+
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/customer/product-orders/productOrder")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.productOrders.get({
+                productOrder: "productOrder",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
 });

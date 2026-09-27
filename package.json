@@ -1,6 +1,6 @@
 {
     "name": "@51eat/sdk",
-    "version": "0.0.76",
+    "version": "0.0.77",
     "private": false,
     "repository": {
         "type": "git",
@@ -142,6 +142,17 @@
                 "default": "./dist/cjs/api/resources/business/resources/products/exports.js"
             },
             "default": "./dist/cjs/api/resources/business/resources/products/exports.js"
+        },
+        "./business/taxCodes": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/taxCodes/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/taxCodes/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/taxCodes/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/taxCodes/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/taxCodes/exports.js"
         },
         "./business/events": {
             "import": {

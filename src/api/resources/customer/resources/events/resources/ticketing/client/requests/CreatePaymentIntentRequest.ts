@@ -21,6 +21,7 @@ export interface CreatePaymentIntentRequest {
 export namespace CreatePaymentIntentRequest {
     export interface BillingAddress {
         line1: string;
+        line2?: (string | null) | undefined;
         city: string;
         state: string;
         postal_code: string;

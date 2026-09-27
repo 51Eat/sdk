@@ -3,13 +3,15 @@
 /**
  * @example
  *     {
- *         name: "name"
+ *         name: "name",
+ *         tax_code: "tax_code"
  *     }
  */
 export interface StoreProductRequest {
     name: string;
     description?: string | null;
     is_active?: boolean;
+    tax_code: string;
     product_category_id?: string | null;
     metadata?: string[] | null;
     channel_ids?: string[] | null;

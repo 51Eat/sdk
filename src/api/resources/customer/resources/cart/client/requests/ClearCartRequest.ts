@@ -7,6 +7,6 @@
  *     }
  */
 export interface ClearCartRequest {
-    /** The business ID */
+    /** The business handle */
     business: string;
 }

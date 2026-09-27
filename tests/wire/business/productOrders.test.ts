@@ -118,14 +118,14 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .get("/business/product-orders/productOrder")
+            .get("/business/product-orders/order")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
         const response = await client.business.productOrders.get({
-            productOrder: "productOrder",
+            order: "order",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -138,7 +138,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .get("/business/product-orders/productOrder")
+            .get("/business/product-orders/order")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
@@ -146,7 +146,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.get({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -159,7 +159,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .get("/business/product-orders/productOrder")
+            .get("/business/product-orders/order")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
@@ -167,9 +167,30 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.get({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/product-orders/order")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.get({
+                order: "order",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
 
     test("fulfill (1)", async () => {
@@ -213,14 +234,14 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .put("/business/product-orders/productOrder/fulfill")
+            .put("/business/product-orders/order/fulfill")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
         const response = await client.business.productOrders.fulfill({
-            productOrder: "productOrder",
+            order: "order",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -233,7 +254,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .put("/business/product-orders/productOrder/fulfill")
+            .put("/business/product-orders/order/fulfill")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
@@ -241,7 +262,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.fulfill({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -254,7 +275,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .put("/business/product-orders/productOrder/fulfill")
+            .put("/business/product-orders/order/fulfill")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
@@ -262,9 +283,30 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.fulfill({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("fulfill (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/product-orders/order/fulfill")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.fulfill({
+                order: "order",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
 
     test("markPickedUp (1)", async () => {
@@ -308,14 +350,14 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .put("/business/product-orders/productOrder/mark-picked-up")
+            .put("/business/product-orders/order/mark-picked-up")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
         const response = await client.business.productOrders.markPickedUp({
-            productOrder: "productOrder",
+            order: "order",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -328,7 +370,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .put("/business/product-orders/productOrder/mark-picked-up")
+            .put("/business/product-orders/order/mark-picked-up")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
@@ -336,7 +378,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.markPickedUp({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -349,7 +391,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .put("/business/product-orders/productOrder/mark-picked-up")
+            .put("/business/product-orders/order/mark-picked-up")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
@@ -357,9 +399,30 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.markPickedUp({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("markPickedUp (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/product-orders/order/mark-picked-up")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.markPickedUp({
+                order: "order",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
 
     test("addTracking (1)", async () => {
@@ -403,7 +466,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/tracking")
+            .post("/business/product-orders/order/tracking")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
@@ -411,7 +474,7 @@ describe("ProductOrdersClient", () => {
             .build();
 
         const response = await client.business.productOrders.addTracking({
-            productOrder: "productOrder",
+            order: "order",
             carrier: "carrier",
             tracking_number: "tracking_number",
         });
@@ -426,7 +489,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/tracking")
+            .post("/business/product-orders/order/tracking")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -435,7 +498,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.addTracking({
-                productOrder: "productOrder",
+                order: "order",
                 carrier: "carrier",
                 tracking_number: "tracking_number",
             });
@@ -450,7 +513,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/tracking")
+            .post("/business/product-orders/order/tracking")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(403)
@@ -459,7 +522,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.addTracking({
-                productOrder: "productOrder",
+                order: "order",
                 carrier: "carrier",
                 tracking_number: "tracking_number",
             });
@@ -474,7 +537,31 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/tracking")
+            .post("/business/product-orders/order/tracking")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.addTracking({
+                order: "order",
+                carrier: "carrier",
+                tracking_number: "tracking_number",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("addTracking (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { carrier: "carrier", tracking_number: "tracking_number" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/product-orders/order/tracking")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(422)
@@ -483,7 +570,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.addTracking({
-                productOrder: "productOrder",
+                order: "order",
                 carrier: "carrier",
                 tracking_number: "tracking_number",
             });
@@ -531,7 +618,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/refund")
+            .post("/business/product-orders/order/refund")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
@@ -539,7 +626,7 @@ describe("ProductOrdersClient", () => {
             .build();
 
         const response = await client.business.productOrders.refund({
-            productOrder: "productOrder",
+            order: "order",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -552,7 +639,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/refund")
+            .post("/business/product-orders/order/refund")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -561,7 +648,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.refund({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -574,7 +661,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/refund")
+            .post("/business/product-orders/order/refund")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(403)
@@ -583,7 +670,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.refund({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -596,7 +683,29 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/refund")
+            .post("/business/product-orders/order/refund")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.refund({
+                order: "order",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("refund (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/product-orders/order/refund")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(422)
@@ -605,7 +714,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.refund({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
@@ -629,14 +738,14 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .get("/business/product-orders/productOrder/label-rates")
+            .get("/business/product-orders/order/label-rates")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
         const response = await client.business.productOrders.getLabelRates({
-            productOrder: "productOrder",
+            order: "order",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -649,7 +758,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .get("/business/product-orders/productOrder/label-rates")
+            .get("/business/product-orders/order/label-rates")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
@@ -657,7 +766,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.getLabelRates({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -670,7 +779,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .get("/business/product-orders/productOrder/label-rates")
+            .get("/business/product-orders/order/label-rates")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
@@ -678,7 +787,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.getLabelRates({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -691,7 +800,28 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .get("/business/product-orders/productOrder/label-rates")
+            .get("/business/product-orders/order/label-rates")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.getLabelRates({
+                order: "order",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("getLabelRates (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/product-orders/order/label-rates")
             .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
@@ -699,7 +829,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.getLabelRates({
-                productOrder: "productOrder",
+                order: "order",
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
@@ -745,7 +875,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/purchase-label")
+            .post("/business/product-orders/order/purchase-label")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
@@ -753,7 +883,7 @@ describe("ProductOrdersClient", () => {
             .build();
 
         const response = await client.business.productOrders.purchaseLabel({
-            productOrder: "productOrder",
+            order: "order",
             provider_rate_id: "provider_rate_id",
         });
         expect(response).toEqual(rawResponseBody);
@@ -767,7 +897,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/purchase-label")
+            .post("/business/product-orders/order/purchase-label")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -776,7 +906,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.purchaseLabel({
-                productOrder: "productOrder",
+                order: "order",
                 provider_rate_id: "provider_rate_id",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
@@ -790,7 +920,7 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/purchase-label")
+            .post("/business/product-orders/order/purchase-label")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(403)
@@ -799,7 +929,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.purchaseLabel({
-                productOrder: "productOrder",
+                order: "order",
                 provider_rate_id: "provider_rate_id",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
@@ -813,7 +943,30 @@ describe("ProductOrdersClient", () => {
 
         server
             .mockEndpoint()
-            .post("/business/product-orders/productOrder/purchase-label")
+            .post("/business/product-orders/order/purchase-label")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.purchaseLabel({
+                order: "order",
+                provider_rate_id: "provider_rate_id",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("purchaseLabel (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { provider_rate_id: "provider_rate_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/product-orders/order/purchase-label")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(422)
@@ -822,7 +975,7 @@ describe("ProductOrdersClient", () => {
 
         await expect(async () => {
             return await client.business.productOrders.purchaseLabel({
-                productOrder: "productOrder",
+                order: "order",
                 provider_rate_id: "provider_rate_id",
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);

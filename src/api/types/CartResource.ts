@@ -6,6 +6,8 @@ export interface CartResource {
     subtotal_cents: number;
     subtotal: number;
     item_count: number;
+    /** How the order will be fulfilled and what checkout still needs. */
+    fulfillment: CartResource.Fulfillment;
 }
 
 export namespace CartResource {
@@ -20,6 +22,30 @@ export namespace CartResource {
             quantity: number;
             unit_price_cents: number;
             total_cents: number;
+        }
+    }
+
+    /**
+     * How the order will be fulfilled and what checkout still needs.
+     */
+    export interface Fulfillment {
+        offered_methods: string[];
+        method: string | null;
+        shipping_address: Fulfillment.ShippingAddress | null;
+        requires_rate_selection: boolean;
+        selected_shipping_rate_id: string | null;
+        selected_shipping_amount_cents: number | null;
+        checkout_blocker: string | null;
+    }
+
+    export namespace Fulfillment {
+        export interface ShippingAddress {
+            line1: string;
+            line2: string | null;
+            city: string;
+            state: string;
+            postal_code: string;
+            country: string;
         }
     }
 }

@@ -56,6 +56,8 @@ export * from "./stands/types/index.js";
 export * from "./stripeConnect/client/requests/index.js";
 export * as stripeConnect from "./stripeConnect/index.js";
 export * from "./stripeConnect/types/index.js";
+export * as taxCodes from "./taxCodes/index.js";
+export * from "./taxCodes/types/index.js";
 export * from "./temporaryLocations/client/requests/index.js";
 export * as temporaryLocations from "./temporaryLocations/index.js";
 export * from "./temporaryLocations/types/index.js";

@@ -36,7 +36,7 @@ describe("ProfileClient", () => {
                 logo: "logo",
                 logo_url: "logo_url",
                 hours: {
-                    is_open_now: "is_open_now",
+                    is_open_now: true,
                     next_open_at: "next_open_at",
                     schedule: [
                         {
@@ -154,7 +154,7 @@ describe("ProfileClient", () => {
                 logo: "logo",
                 logo_url: "logo_url",
                 hours: {
-                    is_open_now: "is_open_now",
+                    is_open_now: true,
                     next_open_at: "next_open_at",
                     schedule: [
                         {
@@ -313,7 +313,7 @@ describe("ProfileClient", () => {
                 logo: "logo",
                 logo_url: "logo_url",
                 hours: {
-                    is_open_now: "is_open_now",
+                    is_open_now: true,
                     next_open_at: "next_open_at",
                     schedule: [
                         {
@@ -480,7 +480,7 @@ describe("ProfileClient", () => {
                 logo: "logo",
                 logo_url: "logo_url",
                 hours: {
-                    is_open_now: "is_open_now",
+                    is_open_now: true,
                     next_open_at: "next_open_at",
                     schedule: [
                         {

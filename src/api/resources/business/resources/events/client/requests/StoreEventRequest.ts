@@ -12,6 +12,13 @@ export interface StoreEventRequest {
     title: string;
     description?: string | null;
     location?: string | null;
+    venue_address?: string | null;
+    venue_city?: string | null;
+    venue_state?: string | null;
+    venue_zipcode?: string | null;
+    venue_country?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
     starts_at: string;
     ends_at: string;
     is_all_day?: boolean;

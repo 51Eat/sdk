@@ -1750,7 +1750,7 @@ await client.business.productOrders.list();
 
 ```typescript
 await client.business.productOrders.get({
-    productOrder: "productOrder"
+    order: "order"
 });
 
 ```
@@ -1801,7 +1801,7 @@ await client.business.productOrders.get({
 
 ```typescript
 await client.business.productOrders.fulfill({
-    productOrder: "productOrder"
+    order: "order"
 });
 
 ```
@@ -1852,7 +1852,7 @@ await client.business.productOrders.fulfill({
 
 ```typescript
 await client.business.productOrders.markPickedUp({
-    productOrder: "productOrder"
+    order: "order"
 });
 
 ```
@@ -1903,7 +1903,7 @@ await client.business.productOrders.markPickedUp({
 
 ```typescript
 await client.business.productOrders.addTracking({
-    productOrder: "productOrder",
+    order: "order",
     carrier: "carrier",
     tracking_number: "tracking_number"
 });
@@ -1946,6 +1946,28 @@ await client.business.productOrders.addTracking({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Refunds `amount` (dollars) of the order, or everything still refundable
+when `amount` is omitted, through Stripe. Sales tax on the refunded part
+is reversed automatically.
+
+Send an `Idempotency-Key` header (1–255 characters, unique per refund you
+mean to make) to make retries safe: a repeat with the same key returns
+the order with the refund already made, with 200, instead of refunding
+again — even when nothing is left to refund. Without it, a retry after a
+lost response may refund twice.
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -1956,7 +1978,7 @@ await client.business.productOrders.addTracking({
 
 ```typescript
 await client.business.productOrders.refund({
-    productOrder: "productOrder"
+    order: "order"
 });
 
 ```
@@ -1973,7 +1995,7 @@ await client.business.productOrders.refund({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.business.RefundProductOrdersRequest` 
+**request:** `FiveOneEat.business.RefundOrderRequest` 
     
 </dd>
 </dl>
@@ -2007,7 +2029,7 @@ await client.business.productOrders.refund({
 
 ```typescript
 await client.business.productOrders.getLabelRates({
-    productOrder: "productOrder"
+    order: "order"
 });
 
 ```
@@ -2058,7 +2080,7 @@ await client.business.productOrders.getLabelRates({
 
 ```typescript
 await client.business.productOrders.purchaseLabel({
-    productOrder: "productOrder",
+    order: "order",
     provider_rate_id: "provider_rate_id"
 });
 
@@ -2296,7 +2318,8 @@ await client.business.products.list();
 
 ```typescript
 await client.business.products.create({
-    name: "name"
+    name: "name",
+    tax_code: "tax_code"
 });
 
 ```
@@ -2399,7 +2422,8 @@ await client.business.products.get({
 ```typescript
 await client.business.products.update({
     product: "product",
-    name: "name"
+    name: "name",
+    tax_code: "tax_code"
 });
 
 ```
@@ -2476,6 +2500,64 @@ await client.business.products.delete({
 <dd>
 
 **requestOptions:** `ProductsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Business TaxCodes
+<details><summary><code>client.business.taxCodes.<a href="/src/api/resources/business/resources/taxCodes/client/Client.ts">list</a>() -> FiveOneEat.ListTaxCodesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Stripe's full product tax code catalog. A product's `tax_code` must be
+one where `allowed_on_products` is true; a paid ticket type's must be
+one where `allowed_on_ticket_types` is true.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.taxCodes.list();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `TaxCodesClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -10996,6 +11078,27 @@ await client.customer.cart.removeItem({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Refused with a 422 and a message while the order can't be priced yet: no
+fulfillment method chosen (when the shop offers several), a shipped order
+with no shipping address, or calculated shipping with no option chosen.
+The message is also in the cart's `fulfillment.checkout_blocker`.
+
+A 409 `{status: "paid", message, payment_intent_id}` means the cart's
+payment already went through (never a second payment): finish checkout
+with that id. A 409 with only a message means it is still processing.
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -11043,9 +11146,107 @@ await client.customer.cart.createPaymentIntent({
 </dl>
 </details>
 
+<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">refreshPaymentIntent</a>({ ...params }) -> FiveOneEat.RefreshPaymentIntentCartResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call immediately before presenting or confirming the payment sheet. The
+cart may have changed since its payment intent was created (another
+device, a changed address or shipping option), so it is re-priced and
+the intent brought up to date. Send `amount`, the total in cents the
+buyer is looking at.
+
+- `total_changed: false` — pay with the returned `client_secret`.
+- `total_changed: true` — show "Your total changed to $X", re-initialise
+  the payment sheet with the returned `client_secret` (it carries the new
+  amount), and let the buyer confirm again.
+- 422 with a message — the order can't be priced yet (the same message
+  as `fulfillment.checkout_blocker`); the old intent is cancelled.
+- 409 `status: paid` with `payment_intent_id` — the payment already went
+  through; call checkout with that id instead.
+- 409 `status: processing` — the payment is still processing; don't pay
+  again, check back later.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.cart.refreshPaymentIntent({
+    business: "business",
+    amount: 1
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.customer.RefreshCartPaymentRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CartClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">checkout</a>({ ...params }) -> FiveOneEat.CheckoutCartResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Not gated on commerce readiness: the customer has already paid, so a
+lapsed readiness check must not stop the order from being recorded.
+A 409 means the cart changed after the payment was priced: the payment
+was refunded in full and no order was placed — re-check and pay again.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -11097,9 +11298,23 @@ await client.customer.cart.checkout({
 </dl>
 </details>
 
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">getShippingOptions</a>({ ...params }) -> FiveOneEat.GetShippingOptionsCartResponse</code></summary>
+<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">setFulfillment</a>({ ...params }) -> FiveOneEat.SetFulfillmentCartResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Switching away from shipping clears the saved shipping address and option.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -11110,7 +11325,74 @@ await client.customer.cart.checkout({
 <dd>
 
 ```typescript
-await client.customer.cart.getShippingOptions({
+await client.customer.cart.setFulfillment({
+    business: "business",
+    fulfillment_method: "ship"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.customer.ChooseFulfillmentMethodRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CartClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">setShippingAddress</a>({ ...params }) -> FiveOneEat.SetShippingAddressCartResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Sales tax on a shipped order is worked out from this address. Saving a
+different address clears the chosen shipping option.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.cart.setShippingAddress({
     business: "business",
     address: {
         line1: "line1",
@@ -11134,7 +11416,72 @@ await client.customer.cart.getShippingOptions({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.GetShippingOptionsCartRequest` 
+**request:** `FiveOneEat.customer.ShippingAddressRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CartClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">listShippingOptions</a>({ ...params }) -> FiveOneEat.ListShippingOptionsCartResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Options are held for 30 minutes; choose one by its `provider_rate_id`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.cart.listShippingOptions({
+    business: "business"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.customer.ListShippingOptionsCartRequest` 
     
 </dd>
 </dl>
@@ -11158,6 +11505,21 @@ await client.customer.cart.getShippingOptions({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send only the `provider_rate_id` from the shipping options. The price is
+the one quoted; an option older than 30 minutes is refused with a 422.
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -11169,8 +11531,7 @@ await client.customer.cart.getShippingOptions({
 ```typescript
 await client.customer.cart.selectShippingOption({
     business: "business",
-    provider_rate_id: "provider_rate_id",
-    amount_cents: 1
+    provider_rate_id: "provider_rate_id"
 });
 
 ```
@@ -11187,7 +11548,7 @@ await client.customer.cart.selectShippingOption({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.SelectShippingOptionCartRequest` 
+**request:** `FiveOneEat.customer.SelectShippingRateRequest` 
     
 </dd>
 </dl>

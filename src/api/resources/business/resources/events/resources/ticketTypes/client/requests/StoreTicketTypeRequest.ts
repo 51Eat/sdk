@@ -15,6 +15,7 @@ export interface StoreTicketTypeRequest {
     name: string;
     description?: string | null;
     price: number;
+    tax_code?: string | null;
     quantity_available: number;
     sales_start_at?: string | null;
     sales_end_at?: string | null;

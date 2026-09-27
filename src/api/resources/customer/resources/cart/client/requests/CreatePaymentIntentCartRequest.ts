@@ -7,6 +7,6 @@
  *     }
  */
 export interface CreatePaymentIntentCartRequest {
-    /** The business ID */
+    /** The business handle */
     business: string;
 }

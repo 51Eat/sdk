@@ -424,11 +424,21 @@ export class CartClient {
     }
 
     /**
+     * Refused with a 422 and a message while the order can't be priced yet: no
+     * fulfillment method chosen (when the shop offers several), a shipped order
+     * with no shipping address, or calculated shipping with no option chosen.
+     * The message is also in the cart's `fulfillment.checkout_blocker`.
+     *
+     * A 409 `{status: "paid", message, payment_intent_id}` means the cart's
+     * payment already went through (never a second payment): finish checkout
+     * with that id. A 409 with only a message means it is still processing.
+     *
      * @param {FiveOneEat.customer.CreatePaymentIntentCartRequest} request
      * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.ConflictError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -483,6 +493,8 @@ export class CartClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -506,11 +518,123 @@ export class CartClient {
     }
 
     /**
+     * Call immediately before presenting or confirming the payment sheet. The
+     * cart may have changed since its payment intent was created (another
+     * device, a changed address or shipping option), so it is re-priced and
+     * the intent brought up to date. Send `amount`, the total in cents the
+     * buyer is looking at.
+     *
+     * - `total_changed: false` — pay with the returned `client_secret`.
+     * - `total_changed: true` — show "Your total changed to $X", re-initialise
+     *   the payment sheet with the returned `client_secret` (it carries the new
+     *   amount), and let the buyer confirm again.
+     * - 422 with a message — the order can't be priced yet (the same message
+     *   as `fulfillment.checkout_blocker`); the old intent is cancelled.
+     * - 409 `status: paid` with `payment_intent_id` — the payment already went
+     *   through; call checkout with that id instead.
+     * - 409 `status: processing` — the payment is still processing; don't pay
+     *   again, check back later.
+     *
+     * @param {FiveOneEat.customer.RefreshCartPaymentRequest} request
+     * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.ConflictError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.customer.cart.refreshPaymentIntent({
+     *         business: "business",
+     *         amount: 1
+     *     })
+     */
+    public refreshPaymentIntent(
+        request: FiveOneEat.customer.RefreshCartPaymentRequest,
+        requestOptions?: CartClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.customer.RefreshPaymentIntentCartResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__refreshPaymentIntent(request, requestOptions));
+    }
+
+    private async __refreshPaymentIntent(
+        request: FiveOneEat.customer.RefreshCartPaymentRequest,
+        requestOptions?: CartClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.customer.RefreshPaymentIntentCartResponse>> {
+        const { business, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `customer/businesses/${core.url.encodePathParam(business)}/cart/payment-intent/refresh`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.customer.RefreshPaymentIntentCartResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/customer/businesses/{business}/cart/payment-intent/refresh",
+        );
+    }
+
+    /**
+     * Not gated on commerce readiness: the customer has already paid, so a
+     * lapsed readiness check must not stop the order from being recorded.
+     * A 409 means the cart changed after the payment was priced: the payment
+     * was refunded in full and no order was placed — re-check and pay again.
+     *
      * @param {FiveOneEat.customer.CheckoutCartRequest} request
      * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.ConflictError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -571,6 +695,8 @@ export class CartClient {
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -594,7 +720,9 @@ export class CartClient {
     }
 
     /**
-     * @param {FiveOneEat.customer.GetShippingOptionsCartRequest} request
+     * Switching away from shipping clears the saved shipping address and option.
+     *
+     * @param {FiveOneEat.customer.ChooseFulfillmentMethodRequest} request
      * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -602,27 +730,22 @@ export class CartClient {
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
-     *     await client.customer.cart.getShippingOptions({
+     *     await client.customer.cart.setFulfillment({
      *         business: "business",
-     *         address: {
-     *             line1: "line1",
-     *             city: "city",
-     *             state: "state",
-     *             postal_code: "postal_code"
-     *         }
+     *         fulfillment_method: "ship"
      *     })
      */
-    public getShippingOptions(
-        request: FiveOneEat.customer.GetShippingOptionsCartRequest,
+    public setFulfillment(
+        request: FiveOneEat.customer.ChooseFulfillmentMethodRequest,
         requestOptions?: CartClient.RequestOptions,
-    ): core.HttpResponsePromise<FiveOneEat.customer.GetShippingOptionsCartResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getShippingOptions(request, requestOptions));
+    ): core.HttpResponsePromise<FiveOneEat.customer.SetFulfillmentCartResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__setFulfillment(request, requestOptions));
     }
 
-    private async __getShippingOptions(
-        request: FiveOneEat.customer.GetShippingOptionsCartRequest,
+    private async __setFulfillment(
+        request: FiveOneEat.customer.ChooseFulfillmentMethodRequest,
         requestOptions?: CartClient.RequestOptions,
-    ): Promise<core.WithRawResponse<FiveOneEat.customer.GetShippingOptionsCartResponse>> {
+    ): Promise<core.WithRawResponse<FiveOneEat.customer.SetFulfillmentCartResponse>> {
         const { business, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -635,9 +758,9 @@ export class CartClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.FiveOneEatEnvironment.Production,
-                `customer/businesses/${core.url.encodePathParam(business)}/cart/shipping-options`,
+                `customer/businesses/${core.url.encodePathParam(business)}/cart/fulfillment`,
             ),
-            method: "POST",
+            method: "PUT",
             headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
@@ -651,7 +774,7 @@ export class CartClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as FiveOneEat.customer.GetShippingOptionsCartResponse,
+                data: _response.body as FiveOneEat.customer.SetFulfillmentCartResponse,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -679,13 +802,194 @@ export class CartClient {
         return handleNonStatusCodeError(
             _response.error,
             _response.rawResponse,
-            "POST",
+            "PUT",
+            "/customer/businesses/{business}/cart/fulfillment",
+        );
+    }
+
+    /**
+     * Sales tax on a shipped order is worked out from this address. Saving a
+     * different address clears the chosen shipping option.
+     *
+     * @param {FiveOneEat.customer.ShippingAddressRequest} request
+     * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.customer.cart.setShippingAddress({
+     *         business: "business",
+     *         address: {
+     *             line1: "line1",
+     *             city: "city",
+     *             state: "state",
+     *             postal_code: "postal_code"
+     *         }
+     *     })
+     */
+    public setShippingAddress(
+        request: FiveOneEat.customer.ShippingAddressRequest,
+        requestOptions?: CartClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.customer.SetShippingAddressCartResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__setShippingAddress(request, requestOptions));
+    }
+
+    private async __setShippingAddress(
+        request: FiveOneEat.customer.ShippingAddressRequest,
+        requestOptions?: CartClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.customer.SetShippingAddressCartResponse>> {
+        const { business, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `customer/businesses/${core.url.encodePathParam(business)}/cart/shipping-address`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.customer.SetShippingAddressCartResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PUT",
+            "/customer/businesses/{business}/cart/shipping-address",
+        );
+    }
+
+    /**
+     * Options are held for 30 minutes; choose one by its `provider_rate_id`.
+     *
+     * @param {FiveOneEat.customer.ListShippingOptionsCartRequest} request
+     * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.customer.cart.listShippingOptions({
+     *         business: "business"
+     *     })
+     */
+    public listShippingOptions(
+        request: FiveOneEat.customer.ListShippingOptionsCartRequest,
+        requestOptions?: CartClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.customer.ListShippingOptionsCartResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listShippingOptions(request, requestOptions));
+    }
+
+    private async __listShippingOptions(
+        request: FiveOneEat.customer.ListShippingOptionsCartRequest,
+        requestOptions?: CartClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.customer.ListShippingOptionsCartResponse>> {
+        const { business } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `customer/businesses/${core.url.encodePathParam(business)}/cart/shipping-options`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.customer.ListShippingOptionsCartResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
             "/customer/businesses/{business}/cart/shipping-options",
         );
     }
 
     /**
-     * @param {FiveOneEat.customer.SelectShippingOptionCartRequest} request
+     * Send only the `provider_rate_id` from the shipping options. The price is
+     * the one quoted; an option older than 30 minutes is refused with a 422.
+     *
+     * @param {FiveOneEat.customer.SelectShippingRateRequest} request
      * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -695,19 +999,18 @@ export class CartClient {
      * @example
      *     await client.customer.cart.selectShippingOption({
      *         business: "business",
-     *         provider_rate_id: "provider_rate_id",
-     *         amount_cents: 1
+     *         provider_rate_id: "provider_rate_id"
      *     })
      */
     public selectShippingOption(
-        request: FiveOneEat.customer.SelectShippingOptionCartRequest,
+        request: FiveOneEat.customer.SelectShippingRateRequest,
         requestOptions?: CartClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.customer.SelectShippingOptionCartResponse> {
         return core.HttpResponsePromise.fromPromise(this.__selectShippingOption(request, requestOptions));
     }
 
     private async __selectShippingOption(
-        request: FiveOneEat.customer.SelectShippingOptionCartRequest,
+        request: FiveOneEat.customer.SelectShippingRateRequest,
         requestOptions?: CartClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.customer.SelectShippingOptionCartResponse>> {
         const { business, ..._body } = request;

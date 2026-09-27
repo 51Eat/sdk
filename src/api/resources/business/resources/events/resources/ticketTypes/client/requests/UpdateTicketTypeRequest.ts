@@ -12,6 +12,13 @@ export interface UpdateTicketTypeRequest {
     name?: string;
     description?: string | null;
     price?: number;
+    /**
+     * Whether tax_code is required depends on the price this save
+     * will actually leave in place (stored price when price isn't
+     * sent) — checked in after(), not here, since "required" can't
+     * tell "omitted" from "already valid in storage" apart.
+     */
+    tax_code?: string | null;
     quantity_available?: number;
     sales_start_at?: string | null;
     sales_end_at?: string | null;

@@ -9,7 +9,7 @@
  *     }
  */
 export interface AddItemCartRequest {
-    /** The business ID */
+    /** The business handle */
     business: string;
     variant_id: string;
     quantity: number;

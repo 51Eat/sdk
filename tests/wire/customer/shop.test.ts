@@ -18,6 +18,7 @@ describe("ShopClient", () => {
                     description: "description",
                     is_active: true,
                     published_at: "published_at",
+                    tax_code: "tax_code",
                     variants: [
                         {
                             id: "id",
@@ -95,6 +96,7 @@ describe("ShopClient", () => {
                 description: "description",
                 is_active: true,
                 published_at: "published_at",
+                tax_code: "tax_code",
                 variants: [
                     {
                         id: "id",

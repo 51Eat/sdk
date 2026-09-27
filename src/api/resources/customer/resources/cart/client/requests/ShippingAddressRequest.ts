@@ -12,18 +12,19 @@
  *         }
  *     }
  */
-export interface GetShippingOptionsCartRequest {
-    /** The business ID */
+export interface ShippingAddressRequest {
+    /** The business handle */
     business: string;
-    address: GetShippingOptionsCartRequest.Address;
+    address: ShippingAddressRequest.Address;
 }
 
-export namespace GetShippingOptionsCartRequest {
+export namespace ShippingAddressRequest {
     export interface Address {
         line1: string;
+        line2?: (string | null) | undefined;
         city: string;
         state: string;
         postal_code: string;
-        country?: (string | null) | undefined;
+        country?: string | undefined;
     }
 }

@@ -24,6 +24,7 @@ import { PushNotificationsClient } from "../resources/pushNotifications/client/C
 import { ShippingClient } from "../resources/shipping/client/Client.js";
 import { StandsClient } from "../resources/stands/client/Client.js";
 import { StripeConnectClient } from "../resources/stripeConnect/client/Client.js";
+import { TaxCodesClient } from "../resources/taxCodes/client/Client.js";
 import { TemporaryLocationsClient } from "../resources/temporaryLocations/client/Client.js";
 
 export declare namespace BusinessClient {
@@ -39,6 +40,7 @@ export class BusinessClient {
     protected _productOrders: ProductOrdersClient | undefined;
     protected _priceLists: PriceListsClient | undefined;
     protected _products: ProductsClient | undefined;
+    protected _taxCodes: TaxCodesClient | undefined;
     protected _events: EventsClient | undefined;
     protected _gallery: GalleryClient | undefined;
     protected _hours: HoursClient | undefined;
@@ -86,6 +88,10 @@ export class BusinessClient {
 
     public get products(): ProductsClient {
         return (this._products ??= new ProductsClient(this._options));
+    }
+
+    public get taxCodes(): TaxCodesClient {
+        return (this._taxCodes ??= new TaxCodesClient(this._options));
     }
 
     public get events(): EventsClient {
