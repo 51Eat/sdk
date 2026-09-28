@@ -17,6 +17,8 @@ describe("ProductOrdersClient", () => {
                     status: "status",
                     fulfillment_status: "fulfillment_status",
                     fulfillment_method: "fulfillment_method",
+                    pickup_date: "pickup_date",
+                    pickup_time: "pickup_time",
                     subtotal_cents: 1,
                     discount_cents: 1,
                     shipping_cents: 1,
@@ -33,6 +35,7 @@ describe("ProductOrdersClient", () => {
                         ulid: "ulid",
                         status: "status",
                         refunded_amount_cents: 1,
+                        refundable_amount_cents: 1,
                         payment_completed_at: "payment_completed_at",
                         refunded_at: "refunded_at",
                     },
@@ -88,6 +91,8 @@ describe("ProductOrdersClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -104,6 +109,7 @@ describe("ProductOrdersClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },
@@ -204,6 +210,8 @@ describe("ProductOrdersClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -220,6 +228,7 @@ describe("ProductOrdersClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },
@@ -309,6 +318,27 @@ describe("ProductOrdersClient", () => {
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
 
+    test("fulfill (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/product-orders/order/fulfill")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.fulfill({
+                order: "order",
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
     test("markPickedUp (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
@@ -320,6 +350,8 @@ describe("ProductOrdersClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -336,6 +368,7 @@ describe("ProductOrdersClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },
@@ -425,6 +458,27 @@ describe("ProductOrdersClient", () => {
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
 
+    test("markPickedUp (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/product-orders/order/mark-picked-up")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.productOrders.markPickedUp({
+                order: "order",
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
     test("addTracking (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
@@ -436,6 +490,8 @@ describe("ProductOrdersClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -452,6 +508,7 @@ describe("ProductOrdersClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },
@@ -588,6 +645,8 @@ describe("ProductOrdersClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -604,6 +663,7 @@ describe("ProductOrdersClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },
@@ -845,6 +905,8 @@ describe("ProductOrdersClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -861,6 +923,7 @@ describe("ProductOrdersClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },

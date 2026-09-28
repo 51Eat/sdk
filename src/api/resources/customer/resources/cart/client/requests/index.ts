@@ -9,4 +9,4 @@ export type { RefreshCartPaymentRequest } from "./RefreshCartPaymentRequest.js";
 export type { RemoveItemCartRequest } from "./RemoveItemCartRequest.js";
 export type { SelectShippingRateRequest } from "./SelectShippingRateRequest.js";
 export type { ShippingAddressRequest } from "./ShippingAddressRequest.js";
-export type { UpdateItemCartRequest } from "./UpdateItemCartRequest.js";
+export type { UpdateCartItemRequest } from "./UpdateCartItemRequest.js";

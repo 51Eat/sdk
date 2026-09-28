@@ -177,12 +177,18 @@ export class ProductOrdersClient {
     }
 
     /**
+     * The business's part is done, and the customer is told. A shipped order
+     * becomes `fulfilled` (on its way); a pickup order becomes
+     * `ready_for_pickup`, and `mark-picked-up` completes it once collected.
+     * A farm-stand order is fulfilled at checkout and is refused here.
+     *
      * @param {FiveOneEat.business.FulfillProductOrdersRequest} request
      * @param {ProductOrdersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
      * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
      *     await client.business.productOrders.fulfill({
@@ -238,6 +244,11 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.FiveOneEatError({
                         statusCode: _response.error.statusCode,
@@ -256,12 +267,15 @@ export class ProductOrdersClient {
     }
 
     /**
+     * Only a pickup order, `unfulfilled` or `ready_for_pickup`; it becomes `fulfilled`.
+     *
      * @param {FiveOneEat.business.MarkPickedUpProductOrdersRequest} request
      * @param {ProductOrdersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
      * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
      *     await client.business.productOrders.markPickedUp({
@@ -317,6 +331,11 @@ export class ProductOrdersClient {
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.FiveOneEatError({
                         statusCode: _response.error.statusCode,

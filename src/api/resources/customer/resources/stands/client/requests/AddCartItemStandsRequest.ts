@@ -5,15 +5,15 @@ import type * as FiveOneEat from "../../../../../../index.js";
 /**
  * @example
  *     {
- *         business: "business",
+ *         stand: "stand",
  *         body: {
  *             variant_id: "variant_id",
  *             quantity: 1
  *         }
  *     }
  */
-export interface AddItemCartRequest {
-    /** The business handle */
-    business: string;
+export interface AddCartItemStandsRequest {
+    /** The stand ID */
+    stand: string;
     body: FiveOneEat.AddCartItemRequest;
 }

@@ -24,6 +24,7 @@ export interface BusinessEvent {
     published_at: string;
     sort_order: string;
     image?: (string | null) | undefined;
+    /** The event's ticket tiers. */
     ticket_types?: FiveOneEat.BusinessEventTicketType[] | undefined;
     rsvps_count?: number | undefined;
     attendees_count?: number | undefined;

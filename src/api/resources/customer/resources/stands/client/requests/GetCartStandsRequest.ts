@@ -6,7 +6,7 @@
  *         stand: "stand"
  *     }
  */
-export interface CustomerClearStandCartRequest {
+export interface GetCartStandsRequest {
     /** The stand ID */
     stand: string;
 }

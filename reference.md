@@ -70,162 +70,6 @@ await client.customer.search({
 </dl>
 </details>
 
-## Customer: Stands
-<details><summary><code>client.customerStands.<a href="/src/api/resources/customerStands/client/Client.ts">customerGetStandCart</a>({ ...params }) -> FiveOneEat.CustomerGetStandCartResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customerStands.customerGetStandCart({
-    stand: "stand"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.CustomerGetStandCartRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CustomerStandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customerStands.<a href="/src/api/resources/customerStands/client/Client.ts">customerAddStandCartItem</a>({ ...params }) -> FiveOneEat.CustomerAddStandCartItemResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customerStands.customerAddStandCartItem({
-    stand: "stand",
-    variant_id: "variant_id",
-    quantity: 1
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.CustomerAddStandCartItemRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CustomerStandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customerStands.<a href="/src/api/resources/customerStands/client/Client.ts">customerClearStandCart</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customerStands.customerClearStandCart({
-    stand: "stand"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.CustomerClearStandCartRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CustomerStandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## PublicLists
 <details><summary><code>client.publicLists.<a href="/src/api/resources/publicLists/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetPublicListsResponse</code></summary>
 <dl>
@@ -1791,6 +1635,23 @@ await client.business.productOrders.get({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The business's part is done, and the customer is told. A shipped order
+becomes `fulfilled` (on its way); a pickup order becomes
+`ready_for_pickup`, and `mark-picked-up` completes it once collected.
+A farm-stand order is fulfilled at checkout and is refused here.
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -1841,6 +1702,20 @@ await client.business.productOrders.fulfill({
 <details><summary><code>client.business.productOrders.<a href="/src/api/resources/business/resources/productOrders/client/Client.ts">markPickedUp</a>({ ...params }) -> FiveOneEat.MarkPickedUpProductOrdersResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Only a pickup order, `unfulfilled` or `ready_for_pickup`; it becomes `fulfilled`.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -10871,6 +10746,22 @@ await client.customer.cart.get({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Only a variant this shop sells is accepted: its product is active,
+published and on the storefront, and the variant has a storefront price.
+Anything else is a 422 on `variant_id` ("That item isn't available here.").
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -10882,8 +10773,10 @@ await client.customer.cart.get({
 ```typescript
 await client.customer.cart.addItem({
     business: "business",
-    variant_id: "variant_id",
-    quantity: 1
+    body: {
+        variant_id: "variant_id",
+        quantity: 1
+    }
 });
 
 ```
@@ -10975,6 +10868,21 @@ await client.customer.cart.clear({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An item this shop no longer sells can't be changed, only removed: 422 on
+`variant_id` ("That item isn't available here.").
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -11003,7 +10911,7 @@ await client.customer.cart.updateItem({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.UpdateItemCartRequest` 
+**request:** `FiveOneEat.customer.UpdateCartItemRequest` 
     
 </dd>
 </dl>
@@ -12936,6 +12844,249 @@ await client.customer.stands.scan({
 <dd>
 
 **request:** `FiveOneEat.customer.ScanStandsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `StandsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">nearby</a>({ ...params }) -> FiveOneEat.NearbyStandsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The nearest stands that can take a payment right now, closest first:
+up to 20 within 50 km. `is_here` marks a stand within the arrival
+radius (`meta.arrival_radius_meters`), where the app offers its
+self-checkout without a QR scan. The coordinates are used for this
+lookup only and are never stored.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.stands.nearby({
+    latitude: 1.1,
+    longitude: 1.1
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.customer.NearbyStandsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `StandsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">getCart</a>({ ...params }) -> FiveOneEat.GetCartStandsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.stands.getCart({
+    stand: "stand"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.customer.GetCartStandsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `StandsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">addCartItem</a>({ ...params }) -> FiveOneEat.AddCartItemStandsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Only a variant this stand sells is accepted: its product is active,
+published and on the stand, and the variant has a stand price. Anything
+else is a 422 on `variant_id` ("That item isn't available here.").
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.stands.addCartItem({
+    stand: "stand",
+    body: {
+        variant_id: "variant_id",
+        quantity: 1
+    }
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.customer.AddCartItemStandsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `StandsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">clearCart</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.stands.clearCart({
+    stand: "stand"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.customer.ClearCartStandsRequest` 
     
 </dd>
 </dl>

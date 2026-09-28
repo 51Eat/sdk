@@ -21,6 +21,7 @@ describe("CartClient", () => {
                         quantity: 1,
                         unit_price_cents: 1,
                         total_cents: 1,
+                        available: true,
                     },
                 ],
                 subtotal_cents: 1,
@@ -117,6 +118,7 @@ describe("CartClient", () => {
                         quantity: 1,
                         unit_price_cents: 1,
                         total_cents: 1,
+                        available: true,
                     },
                 ],
                 subtotal_cents: 1,
@@ -152,8 +154,10 @@ describe("CartClient", () => {
 
         const response = await client.customer.cart.addItem({
             business: "business",
-            variant_id: "variant_id",
-            quantity: 1,
+            body: {
+                variant_id: "variant_id",
+                quantity: 1,
+            },
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -176,8 +180,10 @@ describe("CartClient", () => {
         await expect(async () => {
             return await client.customer.cart.addItem({
                 business: "business",
-                variant_id: "variant_id",
-                quantity: 1,
+                body: {
+                    variant_id: "variant_id",
+                    quantity: 1,
+                },
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -200,8 +206,10 @@ describe("CartClient", () => {
         await expect(async () => {
             return await client.customer.cart.addItem({
                 business: "business",
-                variant_id: "variant_id",
-                quantity: 1,
+                body: {
+                    variant_id: "variant_id",
+                    quantity: 1,
+                },
             });
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
@@ -224,8 +232,10 @@ describe("CartClient", () => {
         await expect(async () => {
             return await client.customer.cart.addItem({
                 business: "business",
-                variant_id: "variant_id",
-                quantity: 1,
+                body: {
+                    variant_id: "variant_id",
+                    quantity: 1,
+                },
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
@@ -300,6 +310,7 @@ describe("CartClient", () => {
                         quantity: 1,
                         unit_price_cents: 1,
                         total_cents: 1,
+                        available: true,
                     },
                 ],
                 subtotal_cents: 1,
@@ -448,6 +459,7 @@ describe("CartClient", () => {
                         quantity: 1,
                         unit_price_cents: 1,
                         total_cents: 1,
+                        available: true,
                     },
                 ],
                 subtotal_cents: 1,
@@ -799,6 +811,8 @@ describe("CartClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -815,6 +829,7 @@ describe("CartClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },
@@ -961,6 +976,7 @@ describe("CartClient", () => {
                         quantity: 1,
                         unit_price_cents: 1,
                         total_cents: 1,
+                        available: true,
                     },
                 ],
                 subtotal_cents: 1,
@@ -1088,6 +1104,7 @@ describe("CartClient", () => {
                         quantity: 1,
                         unit_price_cents: 1,
                         total_cents: 1,
+                        available: true,
                     },
                 ],
                 subtotal_cents: 1,
@@ -1335,6 +1352,7 @@ describe("CartClient", () => {
                         quantity: 1,
                         unit_price_cents: 1,
                         total_cents: 1,
+                        available: true,
                     },
                 ],
                 subtotal_cents: 1,
