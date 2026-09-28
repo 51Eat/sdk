@@ -96,6 +96,10 @@ export class CartClient {
     }
 
     /**
+     * Only a variant this shop sells is accepted: its product is active,
+     * published and on the storefront, and the variant has a storefront price.
+     * Anything else is a 422 on `variant_id` ("That item isn't available here.").
+     *
      * @param {FiveOneEat.customer.AddItemCartRequest} request
      * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -106,8 +110,10 @@ export class CartClient {
      * @example
      *     await client.customer.cart.addItem({
      *         business: "business",
-     *         variant_id: "variant_id",
-     *         quantity: 1
+     *         body: {
+     *             variant_id: "variant_id",
+     *             quantity: 1
+     *         }
      *     })
      */
     public addItem(
@@ -121,7 +127,7 @@ export class CartClient {
         request: FiveOneEat.customer.AddItemCartRequest,
         requestOptions?: CartClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.customer.AddItemCartResponse>> {
-        const { business, ..._body } = request;
+        const { business, body: _body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -256,7 +262,10 @@ export class CartClient {
     }
 
     /**
-     * @param {FiveOneEat.customer.UpdateItemCartRequest} request
+     * An item this shop no longer sells can't be changed, only removed: 422 on
+     * `variant_id` ("That item isn't available here.").
+     *
+     * @param {FiveOneEat.customer.UpdateCartItemRequest} request
      * @param {CartClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -271,14 +280,14 @@ export class CartClient {
      *     })
      */
     public updateItem(
-        request: FiveOneEat.customer.UpdateItemCartRequest,
+        request: FiveOneEat.customer.UpdateCartItemRequest,
         requestOptions?: CartClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.customer.UpdateItemCartResponse> {
         return core.HttpResponsePromise.fromPromise(this.__updateItem(request, requestOptions));
     }
 
     private async __updateItem(
-        request: FiveOneEat.customer.UpdateItemCartRequest,
+        request: FiveOneEat.customer.UpdateCartItemRequest,
         requestOptions?: CartClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.customer.UpdateItemCartResponse>> {
         const { cartItem, ..._body } = request;

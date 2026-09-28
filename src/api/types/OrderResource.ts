@@ -8,6 +8,10 @@ export interface OrderResource {
     status: string;
     fulfillment_status: string;
     fulfillment_method: string;
+    /** The buyer's pickup day (Y-m-d) for a pickup order, when they chose one. */
+    pickup_date: string | null;
+    /** The buyer's pickup time (H:i) for a pickup order, when they chose one. */
+    pickup_time: string | null;
     subtotal_cents: number;
     discount_cents: number;
     shipping_cents: number;
@@ -40,6 +44,11 @@ export namespace OrderResource {
         ulid: string;
         status: string;
         refunded_amount_cents: number;
+        /**
+         * What a refund can still return: the total less what's refunded and
+         * the customer-paid service fee and its tax, which are never refunded.
+         */
+        refundable_amount_cents: number;
         payment_completed_at: string;
         refunded_at: string;
     }

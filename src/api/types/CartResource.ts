@@ -22,6 +22,11 @@ export namespace CartResource {
             quantity: number;
             unit_price_cents: number;
             total_cents: number;
+            /**
+             * False once the shop or stand stopped selling this item (unpriced,
+             * taken off sale, or deactivated). Checkout is blocked until it is removed.
+             */
+            available: boolean;
         }
     }
 

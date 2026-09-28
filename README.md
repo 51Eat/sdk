@@ -45,10 +45,12 @@ Instantiate and use the client with the following:
 import { FiveOneEatClient } from "@51eat/sdk";
 
 const client = new FiveOneEatClient({ token: "YOUR_TOKEN" });
-await client.customerStands.customerAddStandCartItem({
-    stand: "stand",
-    variant_id: "variant_id",
-    quantity: 1
+await client.business.auth.register({
+    name: "name",
+    email: "email",
+    password: "password",
+    device_name: "device_name",
+    password_confirmation: "password_confirmation"
 });
 ```
 
@@ -86,7 +88,7 @@ will be thrown.
 import { FiveOneEatError } from "@51eat/sdk";
 
 try {
-    await client.customerStands.customerAddStandCartItem(...);
+    await client.business.auth.register(...);
 } catch (err) {
     if (err instanceof FiveOneEatError) {
         console.log(err.statusCode);
@@ -168,7 +170,7 @@ const client = new FiveOneEatClient({
     }
 });
 
-const response = await client.customerStands.customerAddStandCartItem(..., {
+const response = await client.business.auth.register(..., {
     headers: {
         'X-Custom-Header': 'custom value'
     }
@@ -180,7 +182,7 @@ const response = await client.customerStands.customerAddStandCartItem(..., {
 If you would like to send additional query string parameters as part of the request, use the `queryParams` request option.
 
 ```typescript
-const response = await client.customerStands.customerAddStandCartItem(..., {
+const response = await client.business.auth.register(..., {
     queryParams: {
         'customQueryParamKey': 'custom query param value'
     }
@@ -202,7 +204,7 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```typescript
-const response = await client.customerStands.customerAddStandCartItem(..., {
+const response = await client.business.auth.register(..., {
     maxRetries: 0 // override maxRetries at the request level
 });
 ```
@@ -212,7 +214,7 @@ const response = await client.customerStands.customerAddStandCartItem(..., {
 The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
 
 ```typescript
-const response = await client.customerStands.customerAddStandCartItem(..., {
+const response = await client.business.auth.register(..., {
     timeoutInSeconds: 30 // override timeout to 30s
 });
 ```
@@ -223,7 +225,7 @@ The SDK allows users to abort requests at any point by passing in an abort signa
 
 ```typescript
 const controller = new AbortController();
-const response = await client.customerStands.customerAddStandCartItem(..., {
+const response = await client.business.auth.register(..., {
     abortSignal: controller.signal
 });
 controller.abort(); // aborts the request
@@ -235,7 +237,7 @@ The SDK provides access to raw response data, including headers, through the `.w
 The `.withRawResponse()` method returns a promise that results to an object with a `data` and a `rawResponse` property.
 
 ```typescript
-const { data, rawResponse } = await client.customerStands.customerAddStandCartItem(...).withRawResponse();
+const { data, rawResponse } = await client.business.auth.register(...).withRawResponse();
 
 console.log(data);
 console.log(rawResponse.headers['X-My-Header']);

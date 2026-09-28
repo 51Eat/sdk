@@ -1,6 +1,6 @@
 {
     "name": "@51eat/sdk",
-    "version": "0.0.78",
+    "version": "0.0.79",
     "private": false,
     "repository": {
         "type": "git",
@@ -32,17 +32,6 @@
                 "default": "./dist/cjs/api/resources/customer/exports.js"
             },
             "default": "./dist/cjs/api/resources/customer/exports.js"
-        },
-        "./customerStands": {
-            "import": {
-                "types": "./dist/esm/api/resources/customerStands/exports.d.mts",
-                "default": "./dist/esm/api/resources/customerStands/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/customerStands/exports.d.ts",
-                "default": "./dist/cjs/api/resources/customerStands/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/customerStands/exports.js"
         },
         "./publicLists": {
             "import": {

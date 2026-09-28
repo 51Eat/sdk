@@ -53,6 +53,9 @@ describe("ExploreClient", () => {
                         is_featured: true,
                     },
                 ],
+                stands: [
+                    { id: "id", name: "name", address: null, city: null, state: null, latitude: 1.1, longitude: 1.1 },
+                ],
                 bounds: { north: "north", south: "south", east: "east", west: "west" },
             },
         };

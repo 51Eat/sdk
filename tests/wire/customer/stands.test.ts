@@ -62,6 +62,352 @@ describe("StandsClient", () => {
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
 
+    test("nearby (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            data: [
+                {
+                    id: "id",
+                    name: "name",
+                    city: "city",
+                    latitude: 1.1,
+                    longitude: 1.1,
+                    distance_meters: 1,
+                    is_here: true,
+                    business: { id: "id", name: "name", handle: "handle" },
+                },
+            ],
+            meta: { arrival_radius_meters: 1 },
+        };
+
+        server
+            .mockEndpoint()
+            .get("/customer/stands/nearby")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customer.stands.nearby({
+            latitude: 1.1,
+            longitude: 1.1,
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("nearby (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/customer/stands/nearby")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.nearby({
+                latitude: 90,
+                longitude: 180,
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("getCart (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                items: [
+                    {
+                        id: "id",
+                        variant_id: null,
+                        variant_name: null,
+                        product_name: null,
+                        quantity: 1,
+                        unit_price_cents: 1,
+                        total_cents: 1,
+                        available: true,
+                    },
+                ],
+                subtotal_cents: 1,
+                subtotal: 1.1,
+                item_count: 1,
+                fulfillment: {
+                    offered_methods: ["offered_methods"],
+                    method: "method",
+                    shipping_address: {
+                        line1: "line1",
+                        line2: null,
+                        city: "city",
+                        state: "state",
+                        postal_code: "postal_code",
+                        country: "country",
+                    },
+                    requires_rate_selection: true,
+                    selected_shipping_rate_id: "selected_shipping_rate_id",
+                    selected_shipping_amount_cents: 1,
+                    checkout_blocker: "checkout_blocker",
+                },
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .get("/customer/stands/stand/cart")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customer.stands.getCart({
+            stand: "stand",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("getCart (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/customer/stands/stand/cart")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.getCart({
+                stand: "stand",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("getCart (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/customer/stands/stand/cart")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.getCart({
+                stand: "stand",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("addCartItem (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { variant_id: "variant_id", quantity: 1 };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                items: [
+                    {
+                        id: "id",
+                        variant_id: null,
+                        variant_name: null,
+                        product_name: null,
+                        quantity: 1,
+                        unit_price_cents: 1,
+                        total_cents: 1,
+                        available: true,
+                    },
+                ],
+                subtotal_cents: 1,
+                subtotal: 1.1,
+                item_count: 1,
+                fulfillment: {
+                    offered_methods: ["offered_methods"],
+                    method: "method",
+                    shipping_address: {
+                        line1: "line1",
+                        line2: null,
+                        city: "city",
+                        state: "state",
+                        postal_code: "postal_code",
+                        country: "country",
+                    },
+                    requires_rate_selection: true,
+                    selected_shipping_rate_id: "selected_shipping_rate_id",
+                    selected_shipping_amount_cents: 1,
+                    checkout_blocker: "checkout_blocker",
+                },
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .post("/customer/stands/stand/cart")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customer.stands.addCartItem({
+            stand: "stand",
+            body: {
+                variant_id: "variant_id",
+                quantity: 1,
+            },
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("addCartItem (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { variant_id: "variant_id", quantity: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/stands/stand/cart")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.addCartItem({
+                stand: "stand",
+                body: {
+                    variant_id: "variant_id",
+                    quantity: 1,
+                },
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("addCartItem (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { variant_id: "variant_id", quantity: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/stands/stand/cart")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.addCartItem({
+                stand: "stand",
+                body: {
+                    variant_id: "variant_id",
+                    quantity: 1,
+                },
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("addCartItem (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { variant_id: "variant_id", quantity: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/stands/stand/cart")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.addCartItem({
+                stand: "stand",
+                body: {
+                    variant_id: "variant_id",
+                    quantity: 1,
+                },
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("clearCart (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        server.mockEndpoint().delete("/customer/stands/stand/cart").respondWith().statusCode(200).build();
+
+        const response = await client.customer.stands.clearCart({
+            stand: "stand",
+        });
+        expect(response).toEqual(undefined);
+    });
+
+    test("clearCart (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/customer/stands/stand/cart")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.clearCart({
+                stand: "stand",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("clearCart (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/customer/stands/stand/cart")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.stands.clearCart({
+                stand: "stand",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
     test("createPaymentIntent (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
@@ -186,6 +532,8 @@ describe("StandsClient", () => {
                 status: "status",
                 fulfillment_status: "fulfillment_status",
                 fulfillment_method: "fulfillment_method",
+                pickup_date: "pickup_date",
+                pickup_time: "pickup_time",
                 subtotal_cents: 1,
                 discount_cents: 1,
                 shipping_cents: 1,
@@ -202,6 +550,7 @@ describe("StandsClient", () => {
                     ulid: "ulid",
                     status: "status",
                     refunded_amount_cents: 1,
+                    refundable_amount_cents: 1,
                     payment_completed_at: "payment_completed_at",
                     refunded_at: "refunded_at",
                 },

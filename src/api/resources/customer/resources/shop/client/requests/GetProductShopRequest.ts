@@ -8,7 +8,7 @@
  *     }
  */
 export interface GetProductShopRequest {
-    /** The business ID */
+    /** The business handle */
     business: string;
     /** The product ID */
     product: string;

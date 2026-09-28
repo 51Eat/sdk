@@ -7,7 +7,7 @@
  *     }
  */
 export interface ListProductsShopRequest {
-    /** The business ID */
+    /** The business handle */
     business: string;
     category?: string;
 }

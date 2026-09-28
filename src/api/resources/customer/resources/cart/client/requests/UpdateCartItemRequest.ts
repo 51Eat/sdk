@@ -7,7 +7,7 @@
  *         quantity: 1
  *     }
  */
-export interface UpdateItemCartRequest {
+export interface UpdateCartItemRequest {
     /** The cart item ID */
     cartItem: string;
     quantity: number;

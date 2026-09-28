@@ -6,6 +6,7 @@ export interface ExploreResponse {
     businesses: FiveOneEat.ExploreBusiness[];
     temporary_locations: FiveOneEat.ExploreTemporaryLocation[];
     events: FiveOneEat.ExploreEvent[];
+    stands: FiveOneEat.ExploreStand[];
     bounds: ExploreResponse.Bounds;
 }
 
