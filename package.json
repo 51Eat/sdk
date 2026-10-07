@@ -1,10 +1,10 @@
 {
     "name": "@51eat/sdk",
-    "version": "0.0.79",
+    "version": "1.0.0",
     "private": false,
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/NexuForma/51eat-sdk-typescript.git"
+        "url": "git+https://github.com/51Eat/sdk.git"
     },
     "type": "commonjs",
     "main": "./dist/cjs/index.js",

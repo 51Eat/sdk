@@ -1,6 +1,6 @@
 # 51Eat TypeScript Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FNexuForma%2F51eat-sdk-typescript)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2F51Eat%2Fsdk)
 [![npm shield](https://img.shields.io/npm/v/@51eat/sdk)](https://www.npmjs.com/package/@51eat/sdk)
 
 The 51Eat TypeScript library provides convenient access to the 51Eat APIs from TypeScript.
@@ -35,7 +35,7 @@ npm i -s @51eat/sdk
 
 ## Reference
 
-A full reference for this library is available [here](https://github.com/NexuForma/51eat-sdk-typescript/blob/HEAD/./reference.md).
+A full reference for this library is available [here](https://github.com/51Eat/sdk/blob/HEAD/./reference.md).
 
 ## Usage
 
