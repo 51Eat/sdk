@@ -19,6 +19,5 @@ export namespace Message {
     export interface Sender {
         id: string;
         name: string;
-        email: string;
     }
 }

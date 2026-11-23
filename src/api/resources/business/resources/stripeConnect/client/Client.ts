@@ -23,14 +23,28 @@ export class StripeConnectClient {
     }
 
     /**
-     * Returns the current Stripe Connect connection for the active business,
-     * creating a new Express account on Stripe if one does not yet exist.
-     * Also returns the publishable key and derived flags that the mobile
-     * client uses to decide whether to present onboarding or the management UI.
+     * @deprecated
+     *
+     * Connect with `POST /api/v1/business/stripe-connect` instead.
+     * This endpoint returns the active business's Stripe Connect connection,
+     * still creating a new Express account on Stripe if it has none, along with
+     * the publishable key and the flags the mobile client uses to decide whether
+     * to present onboarding or the management UI. Opening an account on a GET
+     * leaves a new Express account behind every time a disconnected business
+     * opens the screen, so once the app connects with POST this endpoint will
+     * only read the existing connection.
+     *
+     * A 409 with a message means a parallel connect raced this one and
+     * its connection was disconnected meanwhile: ask the owner to try again.
+     *
+     * A 403 with a message means 51Eat hasn't approved the business to sell
+     * yet; nothing is opened on Stripe until it has.
      *
      * @param {StripeConnectClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.ConflictError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -78,6 +92,10 @@ export class StripeConnectClient {
             switch (_response.error.statusCode) {
                 case 401:
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -96,9 +114,96 @@ export class StripeConnectClient {
     }
 
     /**
-     * Deletes the local StripeConnection record. The Stripe account itself is
-     * not deleted; it becomes orphaned from the business and can be reconnected
-     * later by calling the status endpoint.
+     * Opens a new Express account on Stripe for the active business when it
+     * has no live connection (none yet, or it was disconnected), and returns
+     * the connection in the same shape as the status endpoint. A business that
+     * is already connected gets its existing connection back, with its status
+     * refreshed from Stripe. Call this when the owner chooses to connect, then
+     * request an account session for onboarding.
+     *
+     * A 409 with a message means a parallel connect raced this one and
+     * its connection was disconnected meanwhile: ask the owner to try again.
+     *
+     * A 403 with a message means 51Eat hasn't approved the business to sell
+     * yet; nothing is opened on Stripe until it has.
+     *
+     * @param {StripeConnectClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.ConflictError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.stripeConnect.connect()
+     */
+    public connect(
+        requestOptions?: StripeConnectClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.ConnectStripeConnectResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__connect(requestOptions));
+    }
+
+    private async __connect(
+        requestOptions?: StripeConnectClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.ConnectStripeConnectResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                "business/stripe-connect",
+            ),
+            method: "POST",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.ConnectStripeConnectResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/business/stripe-connect");
+    }
+
+    /**
+     * Deauthorizes the business's StripeConnection; the row stays as history.
+     * The Stripe account itself is not deleted. Connecting again opens a new
+     * account.
      *
      * @param {StripeConnectClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -181,6 +286,7 @@ export class StripeConnectClient {
      * @param {StripeConnectClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -238,6 +344,8 @@ export class StripeConnectClient {
             switch (_response.error.statusCode) {
                 case 401:
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,

@@ -9,8 +9,6 @@
 export interface ListBulletinsRequest {
     /** The business handle */
     business: string;
-    /** Page number for pagination */
-    page?: number;
-    /** Number of bulletins per page */
-    per_page?: number;
+    page?: number | null;
+    per_page?: number | null;
 }

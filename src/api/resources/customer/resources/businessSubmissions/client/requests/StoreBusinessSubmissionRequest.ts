@@ -36,6 +36,7 @@ export interface StoreBusinessSubmissionRequest {
     tiktok_url?: string | null;
     youtube_url?: string | null;
     linkedin_url?: string | null;
+    submit_anyway?: boolean | null;
 }
 
 export namespace StoreBusinessSubmissionRequest {

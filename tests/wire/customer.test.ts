@@ -62,11 +62,7 @@ describe("CustomerClient", () => {
         server.mockEndpoint().get("/customer/search").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.customer.search({
-            q: "wings",
-            categories: "restaurant,bakery",
-            city: "Buffalo",
-            cuisines: "italian,mexican",
-            certifications: "kosher,halal",
+            q: "q",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -81,7 +77,7 @@ describe("CustomerClient", () => {
 
         await expect(async () => {
             return await client.customer.search({
-                q: "q",
+                q: "x",
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });

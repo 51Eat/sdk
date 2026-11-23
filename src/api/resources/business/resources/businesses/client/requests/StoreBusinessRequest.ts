@@ -26,6 +26,7 @@ export interface StoreBusinessRequest {
     has_location?: boolean;
     seasonal?: boolean;
     operating_months?: StoreBusinessRequest.OperatingMonths.Item[] | null;
+    create_anyway?: boolean;
 }
 
 export namespace StoreBusinessRequest {

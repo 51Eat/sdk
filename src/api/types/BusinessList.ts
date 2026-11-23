@@ -8,6 +8,6 @@ export interface BusinessList {
     is_public: boolean;
     items_count: number;
     cover_image?: (string | null) | undefined;
-    created_at: string;
-    updated_at: string;
+    created_at: string | null;
+    updated_at: string | null;
 }

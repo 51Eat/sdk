@@ -33,7 +33,6 @@ export class MessagesClient {
      * @param {MessagesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
-     * @throws {@link FiveOneEat.ForbiddenError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -95,8 +94,6 @@ export class MessagesClient {
             switch (_response.error.statusCode) {
                 case 401:
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,
@@ -123,7 +120,7 @@ export class MessagesClient {
      * Send a new message to a specific conversation. The message will be marked
      * as sent by the authenticated customer.
      *
-     * @param {FiveOneEat.customer.messaging.SendMessagesRequest} request
+     * @param {FiveOneEat.customer.messaging.AppHttpRequestsApiV1CustomerMessagingStoreMessageRequest} request
      * @param {MessagesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -133,18 +130,18 @@ export class MessagesClient {
      * @example
      *     await client.customer.messaging.messages.send({
      *         conversation: "550e8400-e29b-41d4-a716-446655440000",
-     *         content: "Hello! I have a question about your menu."
+     *         content: "content"
      *     })
      */
     public send(
-        request: FiveOneEat.customer.messaging.SendMessagesRequest,
+        request: FiveOneEat.customer.messaging.AppHttpRequestsApiV1CustomerMessagingStoreMessageRequest,
         requestOptions?: MessagesClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.customer.messaging.SendMessagesResponse> {
         return core.HttpResponsePromise.fromPromise(this.__send(request, requestOptions));
     }
 
     private async __send(
-        request: FiveOneEat.customer.messaging.SendMessagesRequest,
+        request: FiveOneEat.customer.messaging.AppHttpRequestsApiV1CustomerMessagingStoreMessageRequest,
         requestOptions?: MessagesClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.customer.messaging.SendMessagesResponse>> {
         const { conversation, ..._body } = request;

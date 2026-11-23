@@ -4,6 +4,6 @@ export interface CustomerMenuItemModifier {
     id: string;
     name: string;
     description: string | null;
-    price: number | null;
+    price: number;
     is_default: boolean;
 }

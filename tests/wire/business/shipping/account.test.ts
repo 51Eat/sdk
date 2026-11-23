@@ -14,11 +14,11 @@ describe("AccountClient", () => {
                 id: "id",
                 ship_from_name: "ship_from_name",
                 ship_from_phone: "ship_from_phone",
-                is_active: "is_active",
-                live_rates_enabled: "live_rates_enabled",
+                is_active: true,
+                live_rates_enabled: true,
                 card: "card",
-                created_at: "created_at",
-                updated_at: "updated_at",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
         };
 
@@ -174,11 +174,11 @@ describe("AccountClient", () => {
                 id: "id",
                 ship_from_name: "ship_from_name",
                 ship_from_phone: "ship_from_phone",
-                is_active: "is_active",
-                live_rates_enabled: "live_rates_enabled",
+                is_active: true,
+                live_rates_enabled: true,
                 card: "card",
-                created_at: "created_at",
-                updated_at: "updated_at",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
         };
 

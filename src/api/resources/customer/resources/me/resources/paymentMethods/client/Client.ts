@@ -168,6 +168,79 @@ export class PaymentMethodsClient {
     }
 
     /**
+     * Returns the Stripe customer id and a CustomerSession client secret. Pass these to the
+     * Stripe mobile SDK's `initPaymentSheet` as `customerId` and
+     * `customerSessionClientSecret`. Use this instead of the ephemeral key when the sheet
+     * is built with `confirmationTokenConfirmHandler` (a deferred intent), which Stripe
+     * does not allow with an ephemeral key.
+     *
+     * @param {PaymentMethodsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     *
+     * @example
+     *     await client.customer.me.paymentMethods.customerSession()
+     */
+    public customerSession(
+        requestOptions?: PaymentMethodsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.customer.me.CustomerSessionPaymentMethodsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__customerSession(requestOptions));
+    }
+
+    private async __customerSession(
+        requestOptions?: PaymentMethodsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.customer.me.CustomerSessionPaymentMethodsResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                "customer/payment-methods/customer-session",
+            ),
+            method: "POST",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.customer.me.CustomerSessionPaymentMethodsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/customer/payment-methods/customer-session",
+        );
+    }
+
+    /**
      * Returns all saved cards for the authenticated user.
      *
      * @param {PaymentMethodsClient.RequestOptions} requestOptions - Request-specific configuration.

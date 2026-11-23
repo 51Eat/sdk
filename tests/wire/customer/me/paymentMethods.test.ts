@@ -79,6 +79,46 @@ describe("PaymentMethodsClient", () => {
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
 
+    test("customerSession (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            customer_id: "customer_id",
+            customer_session_client_secret: "customer_session_client_secret",
+        };
+
+        server
+            .mockEndpoint()
+            .post("/customer/payment-methods/customer-session")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customer.me.paymentMethods.customerSession();
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("customerSession (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/payment-methods/customer-session")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.me.paymentMethods.customerSession();
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });

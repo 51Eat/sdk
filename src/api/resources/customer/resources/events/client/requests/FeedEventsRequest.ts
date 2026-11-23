@@ -2,18 +2,11 @@
 
 /**
  * @example
- *     {
- *         date_from: "2026-05-01",
- *         date_to: "2026-05-31"
- *     }
+ *     {}
  */
 export interface FeedEventsRequest {
-    /** Lower bound for event start date (ISO 8601). Defaults to now. */
-    date_from?: string;
-    /** Upper bound for event start date (ISO 8601). */
-    date_to?: string;
-    /** Number of events per page */
-    per_page?: number;
-    /** Page number */
-    page?: number;
+    date_from?: string | null;
+    date_to?: string | null;
+    per_page?: number | null;
+    page?: number | null;
 }

@@ -8,16 +8,20 @@ export interface CustomerBusinessProfile {
     handle: string;
     description: string | null;
     bio: string | null;
-    email: string | null;
     phone: string | null;
     website: string | null;
+    /** Null when `has_location` is false. */
     address: string | null;
     city: string | null;
     state: string | null;
+    /** Null when `has_location` is false. */
     zip: string | null;
     country: string | null;
+    /** Null when `has_location` is false. */
     latitude: number | null;
+    /** Null when `has_location` is false. */
     longitude: number | null;
+    /** False when the business does not show its street address or a map pin. */
     has_location: boolean;
     facebook_url: string | null;
     instagram_url: string | null;

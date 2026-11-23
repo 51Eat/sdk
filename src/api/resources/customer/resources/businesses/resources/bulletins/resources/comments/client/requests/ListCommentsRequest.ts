@@ -12,8 +12,6 @@ export interface ListCommentsRequest {
     business: string;
     /** The bulletin ID */
     bulletin: string;
-    /** Page number for pagination */
-    page?: number;
-    /** Number of comments per page */
-    per_page?: number;
+    page?: number | null;
+    per_page?: number | null;
 }

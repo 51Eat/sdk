@@ -123,7 +123,7 @@ export class ConversationsClient {
      *
      * @example
      *     await client.business.messaging.conversations.search({
-     *         q: "john"
+     *         q: "q"
      *     })
      */
     public search(

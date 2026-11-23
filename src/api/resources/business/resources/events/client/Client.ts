@@ -358,6 +358,8 @@ export class EventsClient {
     }
 
     /**
+     * An event with ticket sales can't be deleted (422); unpublish it instead.
+     *
      * @param {FiveOneEat.business.DeleteEventsRequest} request
      * @param {EventsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -883,7 +885,8 @@ export class EventsClient {
 
     /**
      * Returns aggregated sales totals: gross revenue, refunds, tickets sold,
-     * and a per-ticket-type breakdown.
+     * and a per-ticket-type breakdown. Gross revenue counts every paid order,
+     * including those refunded since; refunds are subtracted once for net.
      *
      * @param {FiveOneEat.business.SalesSummaryEventsRequest} request
      * @param {EventsClient.RequestOptions} requestOptions - Request-specific configuration.

@@ -73,27 +73,6 @@ describe("MessagesClient", () => {
             .mockEndpoint()
             .get("/business/messaging/conversations/conversation/messages")
             .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.business.messaging.messages.list({
-                conversation: "conversation",
-            });
-        }).rejects.toThrow(FiveOneEat.ForbiddenError);
-    });
-
-    test("list (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/business/messaging/conversations/conversation/messages")
-            .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();

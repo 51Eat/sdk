@@ -119,7 +119,7 @@ export class CheckInClient {
 
     /**
      * Decodes the base64 QR payload, validates the ticket's current status, marks it as used,
-     * and broadcasts the `ticket.checked-in` event via Reverb.
+     * and broadcasts the `ticket.checked-in` event via Pusher.
      *
      * Returns `409` if the ticket has already been checked in, `400` for refunded or otherwise
      * invalid tickets.

@@ -92,6 +92,43 @@ describe("TicketingClient", () => {
             .post("/customer/events/eventId/ticket-holds")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.events.ticketing.holdTickets({
+                eventId: "eventId",
+                tickets: [
+                    {
+                        ticket_type_id: "ticket_type_id",
+                        quantity: 10,
+                    },
+                    {
+                        ticket_type_id: "ticket_type_id",
+                        quantity: 10,
+                    },
+                ],
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("holdTickets (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            tickets: [
+                { ticket_type_id: "ticket_type_id", quantity: 10 },
+                { ticket_type_id: "ticket_type_id", quantity: 10 },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/events/eventId/ticket-holds")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(404)
             .jsonBody(rawResponseBody)
             .build();
@@ -113,7 +150,7 @@ describe("TicketingClient", () => {
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
 
-    test("holdTickets (4)", async () => {
+    test("holdTickets (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -576,8 +613,8 @@ describe("TicketingClient", () => {
                     customer_name: "customer_name",
                     customer_email: "customer_email",
                     stripe_payment_intent_id: "stripe_payment_intent_id",
-                    payment_completed_at: "payment_completed_at",
-                    refunded_at: "refunded_at",
+                    payment_completed_at: "2024-01-15T09:30:00Z",
+                    refunded_at: "2024-01-15T09:30:00Z",
                     refund_reason: "refund_reason",
                 },
                 tickets: [
@@ -633,6 +670,29 @@ describe("TicketingClient", () => {
     });
 
     test("confirmOrder (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { payment_intent_id: "payment_intent_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/events/eventId/ticket-orders")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.events.ticketing.confirmOrder({
+                eventId: "eventId",
+                payment_intent_id: "payment_intent_id",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("confirmOrder (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { payment_intent_id: "payment_intent_id" };

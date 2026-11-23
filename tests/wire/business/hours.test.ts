@@ -13,8 +13,24 @@ describe("HoursClient", () => {
             data: {
                 is_open_now: true,
                 next_open_at: "next_open_at",
-                schedule: [{ key: "value" }],
-                exceptions: [{ key: "value" }],
+                schedule: [
+                    {
+                        day: "day",
+                        slots: [{ opens_at: "opens_at", closes_at: "closes_at", label: null, sort_order: 1 }],
+                    },
+                ],
+                exceptions: [
+                    {
+                        id: "id",
+                        starts_on: "starts_on",
+                        ends_on: null,
+                        is_closed: true,
+                        opens_at: null,
+                        closes_at: null,
+                        label: null,
+                        message: null,
+                    },
+                ],
             },
         };
 
@@ -45,8 +61,24 @@ describe("HoursClient", () => {
             data: {
                 is_open_now: true,
                 next_open_at: "next_open_at",
-                schedule: [{ key: "value" }],
-                exceptions: [{ key: "value" }],
+                schedule: [
+                    {
+                        day: "day",
+                        slots: [{ opens_at: "opens_at", closes_at: "closes_at", label: null, sort_order: 1 }],
+                    },
+                ],
+                exceptions: [
+                    {
+                        id: "id",
+                        starts_on: "starts_on",
+                        ends_on: null,
+                        is_closed: true,
+                        opens_at: null,
+                        closes_at: null,
+                        label: null,
+                        message: null,
+                    },
+                ],
             },
         };
 

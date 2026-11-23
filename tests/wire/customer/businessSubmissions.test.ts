@@ -190,6 +190,44 @@ describe("BusinessSubmissionsClient", () => {
             .post("/customer/business-submissions")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.businessSubmissions.create({
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                country: "xy",
+                latitude: 90,
+                longitude: 180,
+            });
+        }).rejects.toThrow(FiveOneEat.ConflictError);
+    });
+
+    test("create (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "name",
+            address: "address",
+            city: "city",
+            state: "state",
+            zipcode: "zipcode",
+            country: "xy",
+            latitude: 90,
+            longitude: 180,
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/customer/business-submissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();

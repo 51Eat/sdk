@@ -96,10 +96,16 @@ export class BusinessSubmissionsClient {
     }
 
     /**
+     * When it matches unclaimed listings already on the map (same phone,
+     * website domain, or name within 2 km), nothing is submitted and the
+     * response is 409 with those listings in `existing_listings`: show them,
+     * offer the owner the claim flow, or send `submit_anyway: true`.
+     *
      * @param {FiveOneEat.customer.StoreBusinessSubmissionRequest} request
      * @param {BusinessSubmissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ConflictError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -161,6 +167,8 @@ export class BusinessSubmissionsClient {
             switch (_response.error.statusCode) {
                 case 401:
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,

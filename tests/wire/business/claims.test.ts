@@ -193,6 +193,29 @@ describe("ClaimsClient", () => {
             .post("/business/claim-requests")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.claims.requestClaim({
+                business_id: "business_id",
+                message: "strawberry",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("requestClaim (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { business_id: "business_id", message: "strawberry" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/claim-requests")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(409)
             .jsonBody(rawResponseBody)
             .build();
@@ -205,7 +228,7 @@ describe("ClaimsClient", () => {
         }).rejects.toThrow(FiveOneEat.ConflictError);
     });
 
-    test("requestClaim (4)", async () => {
+    test("requestClaim (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { business_id: "business_id", message: "strawberry" };
@@ -279,5 +302,68 @@ describe("ClaimsClient", () => {
                 token: "token",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("claimViaToken (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/claim-token/token")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.claims.claimViaToken({
+                token: "token",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("claimViaToken (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/claim-token/token")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.claims.claimViaToken({
+                token: "token",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("claimViaToken (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/claim-token/token")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.claims.claimViaToken({
+                token: "token",
+            });
+        }).rejects.toThrow(FiveOneEat.ConflictError);
     });
 });

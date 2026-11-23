@@ -3,15 +3,11 @@
 /**
  * @example
  *     {
- *         bounds: "43.5000,42.5000,-73.5000,-76.5000",
- *         categories: "food-trucks,bakeries"
+ *         bounds: "bounds"
  *     }
  */
 export interface BusinessesExploreRequest {
-    /** Map bounds in format "north,south,east,west" */
     bounds: string;
-    /** Map zoom level for optimization */
-    zoom_level?: number;
-    /** Comma-separated category slugs to filter results */
-    categories?: string;
+    zoom_level?: number | null;
+    categories?: string | null;
 }

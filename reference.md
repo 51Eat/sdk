@@ -29,11 +29,7 @@ appear per section. Optionally filter by category, city, or geo radius.
 
 ```typescript
 await client.customer.search({
-    q: "wings",
-    categories: "restaurant,bakery",
-    city: "Buffalo",
-    cuisines: "italian,mexican",
-    certifications: "kosher,halal"
+    q: "q"
 });
 
 ```
@@ -469,7 +465,7 @@ await client.business.auth.me();
 </dl>
 </details>
 
-<details><summary><code>client.business.auth.<a href="/src/api/resources/business/resources/auth/client/Client.ts">logout</a>({ ...params }) -> FiveOneEat.LogoutAuthResponse</code></summary>
+<details><summary><code>client.business.auth.<a href="/src/api/resources/business/resources/auth/client/Client.ts">logout</a>() -> FiveOneEat.LogoutAuthResponse</code></summary>
 <dl>
 <dd>
 
@@ -508,14 +504,6 @@ await client.business.auth.logout();
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.LogoutAuthRequest` 
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -1084,6 +1072,12 @@ await client.business.businesses.list();
 
 Create a new business owned by the authenticated user. The newly created
 business is automatically set as the user's active business.
+
+When the business matches unclaimed listings already on 51Eat (same
+phone, website domain, or name within 2 km), nothing is created and the
+response is 409 with those listings in `existing_listings`: offer to
+claim one (`POST /claim-requests`), or send `create_anyway: true` to
+create it regardless.
 </dd>
 </dl>
 </dd>
@@ -1283,7 +1277,9 @@ await client.business.businesses.update({
 <dl>
 <dd>
 
-Delete a business owned by the authenticated user.
+Delete a business owned by the authenticated user. A business with
+market history (dues or market-day attendance), or one that has taken
+payments, can't be deleted (422).
 </dd>
 </dl>
 </dd>
@@ -1768,6 +1764,21 @@ await client.business.productOrders.markPickedUp({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+For a label bought elsewhere: records it as a shipment, marks the order
+sent and sends the tracking to the customer.
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -1797,7 +1808,7 @@ await client.business.productOrders.addTracking({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.business.AddTrackingProductOrdersRequest` 
+**request:** `FiveOneEat.business.StoreTrackingRequest` 
     
 </dd>
 </dl>
@@ -1894,6 +1905,22 @@ await client.business.productOrders.refund({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A 422 has the body `{"error": "..."}`, not the usual validation shape:
+"Shipping account not configured." when the business has no active
+shipping account, or "Order has no shipping address."
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -1945,6 +1972,22 @@ await client.business.productOrders.getLabelRates({
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Buys a label at the chosen rate, records it as a shipment, marks the
+order sent and sends the tracking to the customer. Nothing is bought
+when the order is refused.
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -1973,7 +2016,7 @@ await client.business.productOrders.purchaseLabel({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.business.PurchaseLabelProductOrdersRequest` 
+**request:** `FiveOneEat.business.PurchaseLabelRequest` 
     
 </dd>
 </dl>
@@ -1982,457 +2025,6 @@ await client.business.productOrders.purchaseLabel({
 <dd>
 
 **requestOptions:** `ProductOrdersClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business PriceLists
-<details><summary><code>client.business.priceLists.<a href="/src/api/resources/business/resources/priceLists/client/Client.ts">list</a>() -> FiveOneEat.ListPriceListsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.priceLists.list();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `PriceListsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.priceLists.<a href="/src/api/resources/business/resources/priceLists/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreatePriceListsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.priceLists.create({
-    name: "name"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.StorePriceListRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PriceListsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.priceLists.<a href="/src/api/resources/business/resources/priceLists/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.priceLists.delete({
-    priceList: "priceList"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.DeletePriceListsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PriceListsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business Products
-<details><summary><code>client.business.products.<a href="/src/api/resources/business/resources/products/client/Client.ts">list</a>() -> FiveOneEat.ListProductsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.list();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.<a href="/src/api/resources/business/resources/products/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreateProductsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.create({
-    name: "name",
-    tax_code: "tax_code"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.StoreProductRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.<a href="/src/api/resources/business/resources/products/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetProductsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.get({
-    product: "product"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.GetProductsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.<a href="/src/api/resources/business/resources/products/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateProductsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.update({
-    product: "product",
-    name: "name",
-    tax_code: "tax_code"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.UpdateProductRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.<a href="/src/api/resources/business/resources/products/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.delete({
-    product: "product"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.DeleteProductsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business TaxCodes
-<details><summary><code>client.business.taxCodes.<a href="/src/api/resources/business/resources/taxCodes/client/Client.ts">list</a>() -> FiveOneEat.ListTaxCodesResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Stripe's full product tax code catalog. A product's `tax_code` must be
-one where `allowed_on_products` is true; a paid ticket type's must be
-one where `allowed_on_ticket_types` is true.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.taxCodes.list();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `TaxCodesClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2658,6 +2250,20 @@ await client.business.events.update({
 <details><summary><code>client.business.events.<a href="/src/api/resources/business/resources/events/client/Client.ts">delete</a>({ ...params }) -> FiveOneEat.DeleteEventsResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An event with ticket sales can't be deleted (422); unpublish it instead.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -3018,7 +2624,8 @@ await client.business.events.listAttendees({
 <dd>
 
 Returns aggregated sales totals: gross revenue, refunds, tickets sold,
-and a per-ticket-type breakdown.
+and a per-ticket-type breakdown. Gross revenue counts every paid order,
+including those refunded since; refunds are subtracted once for net.
 </dd>
 </dl>
 </dd>
@@ -4456,10 +4063,20 @@ await client.business.stands.syncProducts({
 <dl>
 <dd>
 
-Returns the current Stripe Connect connection for the active business,
-creating a new Express account on Stripe if one does not yet exist.
-Also returns the publishable key and derived flags that the mobile
-client uses to decide whether to present onboarding or the management UI.
+Connect with `POST /api/v1/business/stripe-connect` instead.
+This endpoint returns the active business's Stripe Connect connection,
+still creating a new Express account on Stripe if it has none, along with
+the publishable key and the flags the mobile client uses to decide whether
+to present onboarding or the management UI. Opening an account on a GET
+leaves a new Express account behind every time a disconnected business
+opens the screen, so once the app connects with POST this endpoint will
+only read the existing connection.
+
+A 409 with a message means a parallel connect raced this one and
+its connection was disconnected meanwhile: ask the owner to try again.
+
+A 403 with a message means 51Eat hasn't approved the business to sell
+yet; nothing is opened on Stripe until it has.
 </dd>
 </dl>
 </dd>
@@ -4502,6 +4119,72 @@ await client.business.stripeConnect.status();
 </dl>
 </details>
 
+<details><summary><code>client.business.stripeConnect.<a href="/src/api/resources/business/resources/stripeConnect/client/Client.ts">connect</a>() -> FiveOneEat.ConnectStripeConnectResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Opens a new Express account on Stripe for the active business when it
+has no live connection (none yet, or it was disconnected), and returns
+the connection in the same shape as the status endpoint. A business that
+is already connected gets its existing connection back, with its status
+refreshed from Stripe. Call this when the owner chooses to connect, then
+request an account session for onboarding.
+
+A 409 with a message means a parallel connect raced this one and
+its connection was disconnected meanwhile: ask the owner to try again.
+
+A 403 with a message means 51Eat hasn't approved the business to sell
+yet; nothing is opened on Stripe until it has.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.stripeConnect.connect();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `StripeConnectClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.business.stripeConnect.<a href="/src/api/resources/business/resources/stripeConnect/client/Client.ts">disconnect</a>() -> FiveOneEat.DisconnectStripeConnectResponse</code></summary>
 <dl>
 <dd>
@@ -4514,9 +4197,9 @@ await client.business.stripeConnect.status();
 <dl>
 <dd>
 
-Deletes the local StripeConnection record. The Stripe account itself is
-not deleted; it becomes orphaned from the business and can be reconnected
-later by calling the status endpoint.
+Deauthorizes the business's StripeConnection; the row stays as history.
+The Stripe account itself is not deleted. Connecting again opens a new
+account.
 </dd>
 </dl>
 </dd>
@@ -5590,6 +5273,754 @@ await client.business.bulletins.comments.create({
 </dl>
 </details>
 
+## Business Commerce Locations
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">list</a>() -> FiveOneEat.ListLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Every store and stand of the business, main store first and then by
+name, including ones switched off, blocked by the plan or archived.
+For the order list's store filter and the stock screen.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.list();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Business Commerce Orders
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">list</a>({ ...params }) -> FiveOneEat.ListOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The business's orders, newest first, 25 to a page: `open`, `completed`,
+`cancelled` and `no_show` ones. An order still waiting on its payment,
+or whose payment never went through, isn't listed. Each order carries
+its store, the copy made when it was placed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.list();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.ListOrdersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+With its store, buyer, lines (ordered, handed over, cancelled, still
+open and refunded), payments and event log. A 404 for an order that
+isn't listed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.get({
+    order: "order"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.GetOrdersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">markReady</a>({ ...params }) -> FiveOneEat.MarkReadyOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Only an open pickup order that isn't ready yet. The buyer is told.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.markReady({
+    "Idempotency-Key": "Idempotency-Key",
+    order: "order"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.MarkReadyOrdersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">markPickedUp</a>({ ...params }) -> FiveOneEat.MarkPickedUpOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send `lines` (the quantity collected, by order line ID) for a partial
+pickup, or nothing for everything still open. The order is `completed`
+once nothing is left.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.markPickedUp({
+    "Idempotency-Key": "Idempotency-Key",
+    order: "order"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.PickUpOrderRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">cancel</a>({ ...params }) -> FiveOneEat.CancelOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send `lines` to cancel some, or nothing for everything still open. A
+line already handed over can't be cancelled. Paid lines are refunded
+in the same step, with 51Eat's fee share back, unless the buyer has
+disputed the payment.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.cancel({
+    "Idempotency-Key": "Idempotency-Key",
+    order: "order",
+    reason: "business_cancelled"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.CancelOrderLinesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">markNoShow</a>({ ...params }) -> FiveOneEat.MarkNoShowOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Only once the pickup slot has ended (`pickup.ends_at`). What is still
+open is cancelled and its stock returned. Nothing is refunded: refund
+part or all of it, or keep the payment.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.markNoShow({
+    "Idempotency-Key": "Idempotency-Key",
+    order: "order"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.MarkNoShowOrdersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">keepPayment</a>({ ...params }) -> FiveOneEat.KeepPaymentOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The business keeps the money rather than refund it. It's recorded as a
+`payment_kept` event; no money moves, and a refund is still possible
+later. Doing it twice changes nothing.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.keepPayment({
+    "Idempotency-Key": "Idempotency-Key",
+    order: "order"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.KeepPaymentOrdersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.orders.<a href="/src/api/resources/business/resources/commerce/resources/orders/client/Client.ts">refund</a>({ ...params }) -> FiveOneEat.RefundOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A quantity of each line to refund, why, and per line a store to put the
+returned units back on hand. For `oversell`, `business_cancelled`,
+`unavailable` and `platform_error` the buyer gets 51Eat's fee share
+back too; for `changed_mind`, `no_show` and `other` 51Eat keeps it.
+Nothing can be refunded while the payment is disputed.
+
+A retry with the same `Idempotency-Key` returns the refund already
+made, with the same status, and never refunds twice.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.orders.refund({
+    "Idempotency-Key": "Idempotency-Key",
+    order: "order",
+    lines: [{
+            order_item_id: "order_item_id",
+            quantity: "quantity"
+        }],
+    reason: "oversell"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.RefundOrderLinesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Business Commerce Stock
+<details><summary><code>client.business.commerce.stock.<a href="/src/api/resources/business/resources/commerce/resources/stock/client/Client.ts">list</a>({ ...params }) -> FiveOneEat.ListStockResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Each option the business counts, alphabetically by product, 100 to a
+page: on hand, committed, available, and whether a recount is needed.
+An option nobody has counted here reads as zero.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.stock.list({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.ListStockRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `StockClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.stock.<a href="/src/api/resources/business/resources/commerce/resources/stock/client/Client.ts">adjust</a>({ ...params }) -> FiveOneEat.AdjustStockResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send `count` (what's on the shelf now; it clears the recount flag) or
+`delta` (whole items added or taken away), never both, and an optional
+`note`. The option must count its stock, and the location must keep
+stock and not be archived.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.stock.adjust({
+    "Idempotency-Key": "Idempotency-Key",
+    location: "location",
+    variant: "variant"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.AdjustLocationStockRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `StockClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Business Events TicketTypes
 <details><summary><code>client.business.events.ticketTypes.<a href="/src/api/resources/business/resources/events/resources/ticketTypes/client/Client.ts">list</a>({ ...params }) -> FiveOneEat.ListTicketTypesResponse</code></summary>
 <dl>
@@ -6048,7 +6479,7 @@ await client.business.events.checkIn.lookup({
 <dd>
 
 Decodes the base64 QR payload, validates the ticket's current status, marks it as used,
-and broadcasts the `ticket.checked-in` event via Reverb.
+and broadcasts the `ticket.checked-in` event via Pusher.
 
 Returns `409` if the ticket has already been checked in, `400` for refunded or otherwise
 invalid tickets.
@@ -7596,7 +8027,7 @@ await client.business.messaging.conversations.list();
 
 ```typescript
 await client.business.messaging.conversations.search({
-    q: "john"
+    q: "q"
 });
 
 ```
@@ -7962,737 +8393,6 @@ await client.business.messaging.messages.unreadCount({
 </dl>
 </details>
 
-## Business Products Variants
-<details><summary><code>client.business.products.variants.<a href="/src/api/resources/business/resources/products/resources/variants/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreateVariantsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.create({
-    product: "product",
-    name: "name"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.StoreVariantRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `VariantsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.variants.<a href="/src/api/resources/business/resources/products/resources/variants/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateVariantsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.update({
-    variant: "variant",
-    name: "name"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.UpdateVariantRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `VariantsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.variants.<a href="/src/api/resources/business/resources/products/resources/variants/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.delete({
-    variant: "variant"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.DeleteVariantsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `VariantsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business Products Inventory
-<details><summary><code>client.business.products.inventory.<a href="/src/api/resources/business/resources/products/resources/inventory/client/Client.ts">summary</a>({ ...params }) -> FiveOneEat.SummaryInventoryResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.inventory.summary({
-    product: "product"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.SummaryInventoryRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `InventoryClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business Products Images
-<details><summary><code>client.business.products.images.<a href="/src/api/resources/business/resources/products/resources/images/client/Client.ts">upload</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.images.upload({
-    product: "product"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.UploadImagesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ImagesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.images.<a href="/src/api/resources/business/resources/products/resources/images/client/Client.ts">reorder</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.images.reorder({
-    product: "product"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.ReorderImagesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ImagesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.images.<a href="/src/api/resources/business/resources/products/resources/images/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.images.delete({
-    product: "product",
-    image: "image"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.DeleteImagesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ImagesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business Products Variants Prices
-<details><summary><code>client.business.products.variants.prices.<a href="/src/api/resources/business/resources/products/resources/variants/resources/prices/client/Client.ts">set</a>({ ...params }) -> FiveOneEat.SetPricesResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.prices.set({
-    product: "product",
-    variant: "variant",
-    priceList: "priceList",
-    amount_cents: 1
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.variants.SetPriceRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PricesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business Products Variants Inventory
-<details><summary><code>client.business.products.variants.inventory.<a href="/src/api/resources/business/resources/products/resources/variants/resources/inventory/client/Client.ts">adjust</a>({ ...params }) -> FiveOneEat.AdjustInventoryResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.inventory.adjust({
-    variant: "variant",
-    sales_channel_id: "sales_channel_id",
-    adjustment: 1
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.variants.AdjustInventoryRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `InventoryClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.variants.inventory.<a href="/src/api/resources/business/resources/products/resources/variants/resources/inventory/client/Client.ts">updateTracking</a>({ ...params }) -> FiveOneEat.UpdateTrackingInventoryResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.inventory.updateTracking({
-    variant: "variant",
-    sales_channel_id: "sales_channel_id",
-    tracks_inventory: true
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.variants.UpdateTrackingInventoryRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `InventoryClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.variants.inventory.<a href="/src/api/resources/business/resources/products/resources/variants/resources/inventory/client/Client.ts">history</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.inventory.history({
-    variant: "variant"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.variants.HistoryInventoryRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `InventoryClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Business Products Variants Images
-<details><summary><code>client.business.products.variants.images.<a href="/src/api/resources/business/resources/products/resources/variants/resources/images/client/Client.ts">upload</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.images.upload({
-    variant: "variant"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.variants.UploadImagesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ImagesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.variants.images.<a href="/src/api/resources/business/resources/products/resources/variants/resources/images/client/Client.ts">reorder</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.images.reorder({
-    variant: "variant"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.variants.ReorderImagesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ImagesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.products.variants.images.<a href="/src/api/resources/business/resources/products/resources/variants/resources/images/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.products.variants.images.delete({
-    variant: "variant",
-    image: "image"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.products.variants.DeleteImagesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ImagesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Business Profile Logo
 <details><summary><code>client.business.profile.logo.<a href="/src/api/resources/business/resources/profile/resources/logo/client/Client.ts">upload</a>({ ...params }) -> FiveOneEat.UploadLogoResponse</code></summary>
 <dl>
@@ -8925,8 +8625,8 @@ await client.business.shipping.account.setupIntent();
 <dl>
 <dd>
 
-Creates a Stripe Customer for label billing, attaches the provided
-payment method, and upserts the ShippingAccount record.
+Uses the business's Stripe Customer for label billing (created on first
+use), attaches the provided payment method, and activates the account.
 </dd>
 </dl>
 </dd>
@@ -9031,6 +8731,22 @@ await client.business.shipping.account.update();
 <details><summary><code>client.business.shipping.account.<a href="/src/api/resources/business/resources/shipping/resources/account/client/Client.ts">delete</a>() -> void</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Removes the billing card, turns shipping off and stops the online store
+offering it (a ship-only store falls back to pickup). The Stripe customer
+is kept for the next setup.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -9243,6 +8959,852 @@ await client.business.shipping.rates.delete({
 <dd>
 
 **requestOptions:** `RatesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Commerce Carts
+<details><summary><code>client.commerce.carts.<a href="/src/api/resources/commerce/resources/carts/client/Client.ts">open</a>({ ...params }) -> FiveOneEat.OpenCartsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A signed-in buyer gets their open cart at the business for that
+channel, made when they have none. A guest always gets a new cart.
+The answer is the only one that shows the cart's `token`: send it as
+`X-Cart-Token` on every other cart request. An `in_person` cart needs
+a stand that sells in person; an `online` cart may name the store to
+pick up from now or later. 404 for a business that isn't public.
+422 `checkout_off` while the cart's checkout surface (web, app or
+stand) is switched off.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.carts.open({
+    business: "business",
+    channel: "online"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.OpenCartRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CartsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.carts.<a href="/src/api/resources/commerce/resources/carts/client/Client.ts">getCurrent</a>({ ...params }) -> FiveOneEat.GetCurrentCartsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The open cart `X-Cart-Token` names, with its lines flagged where they
+can't be bought as the cart stands. `data` is null when the token
+names no open cart, such as one whose order was paid. While selling is
+paused the answer is always that.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.carts.getCurrent({
+    "X-Cart-Token": "X-Cart-Token"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.GetCurrentCartsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CartsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.carts.<a href="/src/api/resources/commerce/resources/carts/client/Client.ts">updateCurrent</a>({ ...params }) -> FiveOneEat.UpdateCurrentCartsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Any of: the store or stand (`location_id`), which clears the pickup
+time when it changes and leaves lines not offered there flagged; the
+pickup time (`pickup_at`, a slot's `starts_at`, or null); the buyer's
+details; the note. Applied in that order. An online cart takes a
+location that offers pickup now, an in-person cart a stand that sells
+in person now.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.carts.updateCurrent({
+    "X-Cart-Token": "X-Cart-Token"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.UpdateCartRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CartsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.carts.<a href="/src/api/resources/commerce/resources/carts/client/Client.ts">listPickupSlots</a>({ ...params }) -> FiveOneEat.CatalogPickupSlots</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The pickup slots at the cart's location from `from` to `until`, on the
+location's own clock: a week from today unless asked otherwise, and
+at most 14 days. Each says how many places are left. A location that
+doesn't take pickup orders at the moment has none. 422 for a cart with
+no location yet, or an in-person cart.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.carts.listPickupSlots({
+    "X-Cart-Token": "X-Cart-Token"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.ListPickupSlotsCartsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CartsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Commerce Checkout
+<details><summary><code>client.commerce.checkout.<a href="/src/api/resources/commerce/resources/checkout/client/Client.ts">quote</a>({ ...params }) -> FiveOneEat.QuoteCheckoutResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What the cart costs now, with sales tax per line and the service fee,
+worked out at the chosen store. Show `total_cents` and send it to Pay
+as `shown_total_cents`. `blocker` says why the cart can't be paid as
+it stands. 503 `tax_unavailable` when sales tax can't be worked out
+right now. 422 `checkout_off` while the cart's checkout surface (web,
+app or stand) is switched off.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.checkout.quote({
+    "X-Cart-Token": "X-Cart-Token"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.QuoteCheckoutRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CheckoutClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.checkout.<a href="/src/api/resources/commerce/resources/checkout/client/Client.ts">pay</a>({ ...params }) -> FiveOneEat.PayResult</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Re-checks the store, re-prices the cart, takes the stock and the pickup
+slot, and charges the confirmation token. `status` is `succeeded` (the
+order is placed), `requires_action` (call `stripe.handleNextAction()`
+with `client_secret`, then the payment result), `processing` (Stripe
+is still taking the money) or `unconfirmed` (Stripe didn't answer; show
+`message`).
+
+A refusal has a `code` and a `message`: `selling_paused`,
+`checkout_off` (the cart's checkout surface is switched off) and
+`selling_blocked` (with `blocker`) 422, `total_changed` 409 (with the
+new `quote`), `line_unavailable` 409 (with `line_ids`), `sold_out` 409
+(with `line_id` and `available`), `slot_full` and `slot_unavailable`
+409, `tax_not_collected` 422, `tax_unavailable` 503, `below_minimum`
+422, `payment_in_progress` 409, `captcha_required` 428 (render
+Turnstile with action `checkout` and send `captcha_token`),
+`too_many_unfinished_orders` 429, and `payment_failed` 402.
+
+Send a new `Idempotency-Key` for each tap: a retry with the same key
+gets the first answer back.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.checkout.pay({
+    "X-Cart-Token": "X-Cart-Token",
+    "Idempotency-Key": "Idempotency-Key",
+    shown_total_cents: 1
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.PayRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CheckoutClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.checkout.<a href="/src/api/resources/commerce/resources/checkout/client/Client.ts">settlePayment</a>({ ...params }) -> FiveOneEat.PayResult</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+After `stripe.handleNextAction()`: reads the payment at Stripe and
+places or cancels the order to match. Answers as Pay does;
+`payment_failed` 402 when it didn't go through. Its cart's token or
+its signed-in buyer may ask.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.checkout.settlePayment({
+    "Idempotency-Key": "Idempotency-Key",
+    order: "order"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.SettlePaymentCheckoutRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CheckoutClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Commerce Orders
+<details><summary><code>client.commerce.orders.<a href="/src/api/resources/commerce/resources/orders/client/Client.ts">list</a>({ ...params }) -> FiveOneEat.ListOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The signed-in buyer's orders, newest first, 24 to a page. An order
+whose payment is still in flight or never went through isn't listed.
+While selling is paused the list is empty.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.orders.list();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.ListOrdersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.orders.<a href="/src/api/resources/commerce/resources/orders/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetOrdersResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+One order, for its signed-in buyer, for whoever holds a signed link to
+it (`signature` and the rest of the link's query, which never expires;
+a guest's link shows only their own order), or for whoever holds the
+token of the cart it was placed from.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.orders.get({
+    order: "order"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.GetOrdersRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Commerce Carts Lines
+<details><summary><code>client.commerce.carts.lines.<a href="/src/api/resources/commerce/resources/carts/resources/lines/client/Client.ts">add</a>({ ...params }) -> FiveOneEat.AddLinesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Puts a variant in the cart, or adds to its line when it's there. The
+variant has to be the business's, for sale, and offered at the cart's
+location the cart's way (before a location is chosen, at any of the
+business's locations). The quantity is in the variant's unit, a whole
+number of its `quantity_step`, from 1 to 1000 steps. Answers with the
+cart.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.carts.lines.add({
+    "X-Cart-Token": "X-Cart-Token",
+    variant_id: "variant_id",
+    quantity: "quantity"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.carts.CartLineRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LinesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.carts.lines.<a href="/src/api/resources/commerce/resources/carts/resources/lines/client/Client.ts">remove</a>({ ...params }) -> FiveOneEat.RemoveLinesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Answers with the cart.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.carts.lines.remove({
+    "X-Cart-Token": "X-Cart-Token",
+    line: "line"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.carts.RemoveLinesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LinesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.commerce.carts.lines.<a href="/src/api/resources/commerce/resources/carts/resources/lines/client/Client.ts">change</a>({ ...params }) -> FiveOneEat.ChangeLinesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The quantity follows the same rules as adding. Answers with the cart.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.commerce.carts.lines.change({
+    "X-Cart-Token": "X-Cart-Token",
+    line: "line",
+    quantity: "quantity"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.commerce.carts.ChangeCartLineRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LinesClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -9724,8 +10286,9 @@ await client.customer.auth.me();
 <dl>
 <dd>
 
-Update name, email, and/or password. All fields are optional. To change the
+Update name, email, phone, and/or password. All fields are optional. Send `phone: null` to clear it. To change the
 password, `current_password` must be provided alongside `password` and `password_confirmation`.
+Changing the email clears its verification.
 </dd>
 </dl>
 </dd>
@@ -9856,7 +10419,7 @@ await client.customer.auth.deleteAccount({
 <dl>
 <dd>
 
-Upload and replace the avatar for the authenticated customer. Any existing avatar file will be deleted.
+Upload and replace the avatar for the authenticated customer. The previous avatar file is deleted once the new one is stored.
 </dd>
 </dl>
 </dd>
@@ -9964,7 +10527,7 @@ await client.customer.auth.deleteAvatar();
 </dl>
 </details>
 
-<details><summary><code>client.customer.auth.<a href="/src/api/resources/customer/resources/auth/client/Client.ts">logout</a>({ ...params }) -> FiveOneEat.LogoutAuthResponse</code></summary>
+<details><summary><code>client.customer.auth.<a href="/src/api/resources/customer/resources/auth/client/Client.ts">logout</a>() -> FiveOneEat.LogoutAuthResponse</code></summary>
 <dl>
 <dd>
 
@@ -10003,14 +10566,6 @@ await client.customer.auth.logout();
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.LogoutAuthRequest` 
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -10127,6 +10682,23 @@ await client.customer.businessSubmissions.list();
 <details><summary><code>client.customer.businessSubmissions.<a href="/src/api/resources/customer/resources/businessSubmissions/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreateBusinessSubmissionsResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+When it matches unclaimed listings already on the map (same phone,
+website domain, or name within 2 km), nothing is submitted and the
+response is 409 with those listings in `existing_listings`: show them,
+offer the owner the claim flow, or send `submit_anyway: true`.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -10506,7 +11078,16 @@ await client.customer.businesses.listTemporaryLocations({
 <dl>
 <dd>
 
-Returns available pickup timeslots for a business on a given date.
+Returns the pickup timeslots still open at a business's main store on a
+given date, as `HH:MM` start times in the store's local time. Kept for
+older app builds until the relaunch replaces it.
+
+- A slot is listed only when it starts before its pickup window closes,
+  so the closing time itself is not a slot.
+- Full slots (every place taken) are left out.
+- Days the store is closed or has no pickup, and slots inside its
+  preparation time, return no slots.
+- A business without a main store gets `"timeslots": []`.
 </dd>
 </dl>
 </dd>
@@ -10690,59 +11271,8 @@ await client.customer.businesses.unfavorite({
 </dl>
 </details>
 
-## Customer Cart
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetCartResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.cart.get({
-    business: "business"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.GetCartRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CartClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">addItem</a>({ ...params }) -> FiveOneEat.AddItemCartResponse</code></summary>
+## Customer Catalog
+<details><summary><code>client.customer.catalog.<a href="/src/api/resources/customer/resources/catalog/client/Client.ts">listLocations</a>({ ...params }) -> FiveOneEat.ListLocationsCatalogResponse</code></summary>
 <dl>
 <dd>
 
@@ -10754,9 +11284,10 @@ await client.customer.cart.get({
 <dl>
 <dd>
 
-Only a variant this shop sells is accepted: its product is active,
-published and on the storefront, and the variant has a storefront price.
-Anything else is a 422 on `variant_id` ("That item isn't available here.").
+The stores and stands buyers can use: the main store first, then the
+other stores and the stands by name. Switched-off and archived
+locations are left out, and so are extra stores the owner's plan
+doesn't cover. 404 unless the business is public.
 </dd>
 </dl>
 </dd>
@@ -10771,12 +11302,8 @@ Anything else is a 422 on `variant_id` ("That item isn't available here.").
 <dd>
 
 ```typescript
-await client.customer.cart.addItem({
-    business: "business",
-    body: {
-        variant_id: "variant_id",
-        quantity: 1
-    }
+await client.customer.catalog.listLocations({
+    business: "katzs-deli"
 });
 
 ```
@@ -10793,7 +11320,7 @@ await client.customer.cart.addItem({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.AddItemCartRequest` 
+**request:** `FiveOneEat.customer.ListLocationsCatalogRequest` 
     
 </dd>
 </dl>
@@ -10801,58 +11328,7 @@ await client.customer.cart.addItem({
 <dl>
 <dd>
 
-**requestOptions:** `CartClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">clear</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.cart.clear({
-    business: "business"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.ClearCartRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CartClient.RequestOptions` 
+**requestOptions:** `CatalogClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -10864,7 +11340,7 @@ await client.customer.cart.clear({
 </dl>
 </details>
 
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">updateItem</a>({ ...params }) -> FiveOneEat.UpdateItemCartResponse</code></summary>
+<details><summary><code>client.customer.catalog.<a href="/src/api/resources/customer/resources/catalog/client/Client.ts">listProducts</a>({ ...params }) -> FiveOneEat.ListProductsCatalogResponse</code></summary>
 <dl>
 <dd>
 
@@ -10876,8 +11352,12 @@ await client.customer.cart.clear({
 <dl>
 <dd>
 
-An item this shop no longer sells can't be changed, only removed: 422 on
-`variant_id` ("That item isn't available here.").
+The products on offer at one location, 24 to a page: at the main store
+unless `location` says otherwise, bought online (pickup) unless
+`channel` says otherwise. `location=any` lists what's offered online
+at any listed store. Prices are the public price, whoever asks. A
+location that isn't listed is a 404, as is a business that isn't
+public.
 </dd>
 </dl>
 </dd>
@@ -10892,9 +11372,8 @@ An item this shop no longer sells can't be changed, only removed: 422 on
 <dd>
 
 ```typescript
-await client.customer.cart.updateItem({
-    cartItem: "cartItem",
-    quantity: 1
+await client.customer.catalog.listProducts({
+    business: "katzs-deli"
 });
 
 ```
@@ -10911,7 +11390,7 @@ await client.customer.cart.updateItem({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.UpdateCartItemRequest` 
+**request:** `FiveOneEat.customer.ListProductsCatalogRequest` 
     
 </dd>
 </dl>
@@ -10919,58 +11398,7 @@ await client.customer.cart.updateItem({
 <dl>
 <dd>
 
-**requestOptions:** `CartClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">removeItem</a>({ ...params }) -> FiveOneEat.RemoveItemCartResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.cart.removeItem({
-    cartItem: "cartItem"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.RemoveItemCartRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CartClient.RequestOptions` 
+**requestOptions:** `CatalogClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -10982,7 +11410,7 @@ await client.customer.cart.removeItem({
 </dl>
 </details>
 
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">createPaymentIntent</a>({ ...params }) -> FiveOneEat.CreatePaymentIntentCartResponse</code></summary>
+<details><summary><code>client.customer.catalog.<a href="/src/api/resources/customer/resources/catalog/client/Client.ts">getProduct</a>({ ...params }) -> FiveOneEat.GetProductCatalogResponse</code></summary>
 <dl>
 <dd>
 
@@ -10994,15 +11422,8 @@ await client.customer.cart.removeItem({
 <dl>
 <dd>
 
-Refused with a 422 and a message while the order can't be priced yet: no
-fulfillment method chosen (when the shop offers several), a shipped order
-with no shipping address, or calculated shipping with no option chosen.
-The message is also in the cart's `fulfillment.checkout_blocker`.
-
-A 409 `{status: "paid", message, payment_intent_id}` means the cart's
-payment already went through (never a second payment): finish checkout
-with that id. A 409 `{status: "processing", message}` means the payment
-is still in flight: don't pay again, check back later.
+One product, as the list shows it. 404 when it isn't offered at that
+location this way.
 </dd>
 </dl>
 </dd>
@@ -11017,8 +11438,9 @@ is still in flight: don't pay again, check back later.
 <dd>
 
 ```typescript
-await client.customer.cart.createPaymentIntent({
-    business: "business"
+await client.customer.catalog.getProduct({
+    business: "katzs-deli",
+    product: "pasture-raised-eggs"
 });
 
 ```
@@ -11035,7 +11457,7 @@ await client.customer.cart.createPaymentIntent({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.CreatePaymentIntentCartRequest` 
+**request:** `FiveOneEat.customer.GetProductCatalogRequest` 
     
 </dd>
 </dl>
@@ -11043,7 +11465,7 @@ await client.customer.cart.createPaymentIntent({
 <dl>
 <dd>
 
-**requestOptions:** `CartClient.RequestOptions` 
+**requestOptions:** `CatalogClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -11055,7 +11477,7 @@ await client.customer.cart.createPaymentIntent({
 </dl>
 </details>
 
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">refreshPaymentIntent</a>({ ...params }) -> FiveOneEat.RefreshPaymentIntentCartResponse</code></summary>
+<details><summary><code>client.customer.catalog.<a href="/src/api/resources/customer/resources/catalog/client/Client.ts">listCategories</a>({ ...params }) -> FiveOneEat.ListCategoriesCatalogResponse</code></summary>
 <dl>
 <dd>
 
@@ -11067,22 +11489,8 @@ await client.customer.cart.createPaymentIntent({
 <dl>
 <dd>
 
-Call immediately before presenting or confirming the payment sheet. The
-cart may have changed since its payment intent was created (another
-device, a changed address or shipping option), so it is re-priced and
-the intent brought up to date. Send `amount`, the total in cents the
-buyer is looking at.
-
-- `total_changed: false` — pay with the returned `client_secret`.
-- `total_changed: true` — show "Your total changed to $X", re-initialise
-  the payment sheet with the returned `client_secret` (it carries the new
-  amount), and let the buyer confirm again.
-- 422 with a message — the order can't be priced yet (the same message
-  as `fulfillment.checkout_blocker`); the old intent is cancelled.
-- 409 `status: paid` with `payment_intent_id` — the payment already went
-  through; call checkout with that id instead.
-- 409 `status: processing` — the payment is still processing; don't pay
-  again, check back later.
+The categories with at least one product on offer where the list of
+products would look, with the same `location` and `channel` filters.
 </dd>
 </dl>
 </dd>
@@ -11097,9 +11505,8 @@ buyer is looking at.
 <dd>
 
 ```typescript
-await client.customer.cart.refreshPaymentIntent({
-    business: "business",
-    amount: 1
+await client.customer.catalog.listCategories({
+    business: "katzs-deli"
 });
 
 ```
@@ -11116,7 +11523,7 @@ await client.customer.cart.refreshPaymentIntent({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.RefreshCartPaymentRequest` 
+**request:** `FiveOneEat.customer.ListCategoriesCatalogRequest` 
     
 </dd>
 </dl>
@@ -11124,7 +11531,7 @@ await client.customer.cart.refreshPaymentIntent({
 <dl>
 <dd>
 
-**requestOptions:** `CartClient.RequestOptions` 
+**requestOptions:** `CatalogClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -11136,7 +11543,7 @@ await client.customer.cart.refreshPaymentIntent({
 </dl>
 </details>
 
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">checkout</a>({ ...params }) -> FiveOneEat.CheckoutCartResponse</code></summary>
+<details><summary><code>client.customer.catalog.<a href="/src/api/resources/customer/resources/catalog/client/Client.ts">listPickupSlots</a>({ ...params }) -> FiveOneEat.CatalogPickupSlots</code></summary>
 <dl>
 <dd>
 
@@ -11148,10 +11555,11 @@ await client.customer.cart.refreshPaymentIntent({
 <dl>
 <dd>
 
-Not gated on commerce readiness: the customer has already paid, so a
-lapsed readiness check must not stop the order from being recorded.
-A 409 means the cart changed after the payment was priced: the payment
-was refunded in full and no order was placed — re-check and pay again.
+The pickup slots from a day, `days` of them (7 by default, 14 at most),
+each with whether every place is taken. Times are on the location's
+own clock. A location that doesn't take pickup orders at the moment
+has no slots. 404 unless the location is listed and its business is
+public.
 </dd>
 </dl>
 </dd>
@@ -11166,11 +11574,8 @@ was refunded in full and no order was placed — re-check and pay again.
 <dd>
 
 ```typescript
-await client.customer.cart.checkout({
-    business: "business",
-    body: {
-        payment_intent_id: "payment_intent_id"
-    }
+await client.customer.catalog.listPickupSlots({
+    location: "location"
 });
 
 ```
@@ -11187,7 +11592,7 @@ await client.customer.cart.checkout({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.CheckoutCartRequest` 
+**request:** `FiveOneEat.customer.ListPickupSlotsCatalogRequest` 
     
 </dd>
 </dl>
@@ -11195,277 +11600,7 @@ await client.customer.cart.checkout({
 <dl>
 <dd>
 
-**requestOptions:** `CartClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">setFulfillment</a>({ ...params }) -> FiveOneEat.SetFulfillmentCartResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Switching away from shipping clears the saved shipping address and option.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.cart.setFulfillment({
-    business: "business",
-    fulfillment_method: "ship"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.ChooseFulfillmentMethodRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CartClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">setShippingAddress</a>({ ...params }) -> FiveOneEat.SetShippingAddressCartResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Sales tax on a shipped order is worked out from this address. Saving a
-different address clears the chosen shipping option.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.cart.setShippingAddress({
-    business: "business",
-    address: {
-        line1: "line1",
-        city: "city",
-        state: "state",
-        postal_code: "postal_code"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.ShippingAddressRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CartClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">listShippingOptions</a>({ ...params }) -> FiveOneEat.ListShippingOptionsCartResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Options are held for 30 minutes; choose one by its `provider_rate_id`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.cart.listShippingOptions({
-    business: "business"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.ListShippingOptionsCartRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CartClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.cart.<a href="/src/api/resources/customer/resources/cart/client/Client.ts">selectShippingOption</a>({ ...params }) -> FiveOneEat.SelectShippingOptionCartResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Send only the `provider_rate_id` from the shipping options. The price is
-the one quoted; an option older than 30 minutes is refused with a 422.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.cart.selectShippingOption({
-    business: "business",
-    provider_rate_id: "provider_rate_id"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.SelectShippingRateRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CartClient.RequestOptions` 
+**requestOptions:** `CatalogClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -11507,9 +11642,7 @@ Supports optional filtering by search term, cuisines, and certifications.
 <dd>
 
 ```typescript
-await client.customer.discovery.feed({
-    search: "organic"
-});
+await client.customer.discovery.feed();
 
 ```
 </dd>
@@ -11863,8 +11996,7 @@ Results are optimized for list display.
 
 ```typescript
 await client.customer.discovery.categoryBusinesses({
-    category: "restaurant",
-    search: "coffee"
+    category: "restaurant"
 });
 
 ```
@@ -11931,8 +12063,7 @@ Results are optimized for map display with essential business information.
 
 ```typescript
 await client.customer.explore.businesses({
-    bounds: "43.5000,42.5000,-73.5000,-76.5000",
-    categories: "food-trucks,bakeries"
+    bounds: "bounds"
 });
 
 ```
@@ -12121,10 +12252,7 @@ Optionally filter by a date range using date_from and date_to.
 <dd>
 
 ```typescript
-await client.customer.events.feed({
-    date_from: "2026-05-01",
-    date_to: "2026-05-31"
-});
+await client.customer.events.feed();
 
 ```
 </dd>
@@ -12378,9 +12506,7 @@ Retrieve the authenticated user's event RSVPs with pagination.
 <dd>
 
 ```typescript
-await client.customer.me.rsvps({
-    status: "attending"
-});
+await client.customer.me.rsvps();
 
 ```
 </dd>
@@ -12641,163 +12767,8 @@ await client.customer.pushNotifications.unregister({
 </dl>
 </details>
 
-## Customer Shop
-<details><summary><code>client.customer.shop.<a href="/src/api/resources/customer/resources/shop/client/Client.ts">listProducts</a>({ ...params }) -> FiveOneEat.ListProductsShopResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.shop.listProducts({
-    business: "business"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.ListProductsShopRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ShopClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.shop.<a href="/src/api/resources/customer/resources/shop/client/Client.ts">getProduct</a>({ ...params }) -> FiveOneEat.GetProductShopResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.shop.getProduct({
-    business: "business",
-    product: "product"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.GetProductShopRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ShopClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.shop.<a href="/src/api/resources/customer/resources/shop/client/Client.ts">listCategories</a>({ ...params }) -> FiveOneEat.ListCategoriesShopResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.shop.listCategories({
-    business: "business"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.ListCategoriesShopRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ShopClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Customer Stands
-<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">scan</a>({ ...params }) -> FiveOneEat.ScanStandsResponse</code></summary>
+<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">notice</a>({ ...params }) -> FiveOneEat.NoticeStandsResponse</code></summary>
 <dl>
 <dd>
 
@@ -12809,8 +12780,9 @@ await client.customer.shop.listCategories({
 <dl>
 <dd>
 
-Logs the scan (user id captured when authenticated) and returns the
-stand, its business, and the business's published products.
+What the app shows for a stand link or the "You're at a stand" card
+instead of stand checkout: the stand, its business, and a title and
+message the server sets. Doesn't log a scan.
 </dd>
 </dl>
 </dd>
@@ -12825,7 +12797,7 @@ stand, its business, and the business's published products.
 <dd>
 
 ```typescript
-await client.customer.stands.scan({
+await client.customer.stands.notice({
     stand: "stand"
 });
 
@@ -12843,7 +12815,7 @@ await client.customer.stands.scan({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.ScanStandsRequest` 
+**request:** `FiveOneEat.customer.NoticeStandsRequest` 
     
 </dd>
 </dl>
@@ -12914,284 +12886,6 @@ await client.customer.stands.nearby({
 <dd>
 
 **request:** `FiveOneEat.customer.NearbyStandsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `StandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">getCart</a>({ ...params }) -> FiveOneEat.GetCartStandsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.stands.getCart({
-    stand: "stand"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.GetCartStandsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `StandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">addCartItem</a>({ ...params }) -> FiveOneEat.AddCartItemStandsResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Only a variant this stand sells is accepted: its product is active,
-published and on the stand, and the variant has a stand price. Anything
-else is a 422 on `variant_id` ("That item isn't available here.").
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.stands.addCartItem({
-    stand: "stand",
-    body: {
-        variant_id: "variant_id",
-        quantity: 1
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.AddCartItemStandsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `StandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">clearCart</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.stands.clearCart({
-    stand: "stand"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.ClearCartStandsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `StandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">createPaymentIntent</a>({ ...params }) -> FiveOneEat.CreatePaymentIntentStandsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.stands.createPaymentIntent({
-    stand: "stand"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.CreatePaymentIntentStandsRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `StandsClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.customer.stands.<a href="/src/api/resources/customer/resources/stands/client/Client.ts">checkout</a>({ ...params }) -> FiveOneEat.CheckoutStandsResponse</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.customer.stands.checkout({
-    stand: "stand",
-    body: {
-        payment_intent_id: "payment_intent_id"
-    }
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.customer.CheckoutStandsRequest` 
     
 </dd>
 </dl>
@@ -13648,6 +13342,7 @@ await client.customer.businesses.events.get({
 <dd>
 
 Create or update the authenticated user's RSVP for a business event.
+Ticketed events and events that have ended take no RSVPs (404).
 </dd>
 </dl>
 </dd>
@@ -14051,6 +13746,9 @@ await client.customer.businesses.bulletins.comments.reply({
 <dd>
 
 Place a temporary hold on tickets for the specified event. Holds expire after 10 minutes.
+A 403 means no ticket type is on sale, or a requested one isn't (inactive, or outside its
+sales window). A sold-out
+event answers 422, like any hold that asks for more tickets than are left.
 </dd>
 </dl>
 </dd>
@@ -14119,7 +13817,8 @@ await client.customer.events.ticketing.holdTickets({
 <dl>
 <dd>
 
-Release the TicketCart holds for the authenticated user and event.
+Release the TicketCart holds for the authenticated user and event. Allowed whatever the
+event's sales state; another buyer's cart, or one already gone, is left alone (204).
 </dd>
 </dl>
 </dd>
@@ -15482,6 +15181,65 @@ await client.customer.me.paymentMethods.ephemeralKey();
 </dl>
 </details>
 
+<details><summary><code>client.customer.me.paymentMethods.<a href="/src/api/resources/customer/resources/me/resources/paymentMethods/client/Client.ts">customerSession</a>() -> FiveOneEat.CustomerSessionPaymentMethodsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Returns the Stripe customer id and a CustomerSession client secret. Pass these to the
+Stripe mobile SDK's `initPaymentSheet` as `customerId` and
+`customerSessionClientSecret`. Use this instead of the ephemeral key when the sheet
+is built with `confirmationTokenConfirmHandler` (a deferred intent), which Stripe
+does not allow with an ephemeral key.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.me.paymentMethods.customerSession();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `PaymentMethodsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.customer.me.paymentMethods.<a href="/src/api/resources/customer/resources/me/resources/paymentMethods/client/Client.ts">list</a>() -> FiveOneEat.PaymentMethod[]</code></summary>
 <dl>
 <dd>
@@ -16015,7 +15773,7 @@ await client.customer.messaging.conversations.list();
 
 ```typescript
 await client.customer.messaging.conversations.search({
-    q: "pizza"
+    q: "q"
 });
 
 ```
@@ -16347,7 +16105,7 @@ as sent by the authenticated customer.
 ```typescript
 await client.customer.messaging.messages.send({
     conversation: "550e8400-e29b-41d4-a716-446655440000",
-    content: "Hello! I have a question about your menu."
+    content: "content"
 });
 
 ```
@@ -16364,7 +16122,7 @@ await client.customer.messaging.messages.send({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.customer.messaging.SendMessagesRequest` 
+**request:** `FiveOneEat.customer.messaging.AppHttpRequestsApiV1CustomerMessagingStoreMessageRequest` 
     
 </dd>
 </dl>

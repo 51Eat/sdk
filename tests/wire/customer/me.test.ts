@@ -61,7 +61,6 @@ describe("MeClient", () => {
                         handle: "handle",
                         description: null,
                         bio: null,
-                        email: null,
                         phone: null,
                         website: null,
                         address: null,
@@ -199,9 +198,7 @@ describe("MeClient", () => {
 
         server.mockEndpoint().get("/customer/rsvps").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.customer.me.rsvps({
-            status: "attending",
-        });
+        const response = await client.customer.me.rsvps();
         expect(response).toEqual(rawResponseBody);
     });
 

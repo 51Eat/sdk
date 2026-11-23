@@ -381,8 +381,9 @@ export class AuthClient {
     }
 
     /**
-     * Update name, email, and/or password. All fields are optional. To change the
+     * Update name, email, phone, and/or password. All fields are optional. Send `phone: null` to clear it. To change the
      * password, `current_password` must be provided alongside `password` and `password_confirmation`.
+     * Changing the email clears its verification.
      *
      * @param {FiveOneEat.customer.UpdateUserRequest} request
      * @param {AuthClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -539,7 +540,7 @@ export class AuthClient {
     }
 
     /**
-     * Upload and replace the avatar for the authenticated customer. Any existing avatar file will be deleted.
+     * Upload and replace the avatar for the authenticated customer. The previous avatar file is deleted once the new one is stored.
      *
      * @param {FiveOneEat.customer.UploadAvatarRequest} request
      * @param {AuthClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -683,7 +684,6 @@ export class AuthClient {
     /**
      * Revoke the current API token and log out the user.
      *
-     * @param {FiveOneEat.customer.LogoutAuthRequest} request
      * @param {AuthClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -692,14 +692,12 @@ export class AuthClient {
      *     await client.customer.auth.logout()
      */
     public logout(
-        request: FiveOneEat.customer.LogoutAuthRequest = {},
         requestOptions?: AuthClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.customer.LogoutAuthResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__logout(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__logout(requestOptions));
     }
 
     private async __logout(
-        request: FiveOneEat.customer.LogoutAuthRequest = {},
         requestOptions?: AuthClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.customer.LogoutAuthResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -717,10 +715,7 @@ export class AuthClient {
             ),
             method: "POST",
             headers: _headers,
-            contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

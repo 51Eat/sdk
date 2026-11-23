@@ -16,7 +16,6 @@ describe("BusinessesClient", () => {
                 handle: "handle",
                 description: "description",
                 bio: "bio",
-                email: "email",
                 phone: "phone",
                 website: "website",
                 address: "address",
@@ -81,8 +80,8 @@ describe("BusinessesClient", () => {
                         latitude: null,
                         longitude: null,
                         hours: { key: { isOpen: true, openTime: "openTime", closeTime: "closeTime" } },
-                        starts_at: "starts_at",
-                        ends_at: "ends_at",
+                        starts_at: "2024-01-15T09:30:00Z",
+                        ends_at: "2024-01-15T09:30:00Z",
                     },
                 ],
             },
@@ -127,13 +126,7 @@ describe("BusinessesClient", () => {
                                         image: null,
                                         allergens: null,
                                         modifiers: [
-                                            {
-                                                id: "id",
-                                                name: "name",
-                                                description: null,
-                                                price: null,
-                                                is_default: true,
-                                            },
+                                            { id: "id", name: "name", description: null, price: 1.1, is_default: true },
                                         ],
                                         variations: [
                                             {
@@ -254,8 +247,8 @@ describe("BusinessesClient", () => {
                     latitude: 1.1,
                     longitude: 1.1,
                     hours: { key: { isOpen: true, openTime: "openTime", closeTime: "closeTime" } },
-                    starts_at: "starts_at",
-                    ends_at: "ends_at",
+                    starts_at: "2024-01-15T09:30:00Z",
+                    ends_at: "2024-01-15T09:30:00Z",
                 },
             ],
         };

@@ -9,8 +9,6 @@
 export interface ListMessagesRequest {
     /** The conversation ID */
     conversation: string;
-    /** Page number for pagination */
-    page?: number;
-    /** Number of messages per page */
-    per_page?: number;
+    page?: number | null;
+    per_page?: number | null;
 }

@@ -159,8 +159,8 @@ export class AccountClient {
     }
 
     /**
-     * Creates a Stripe Customer for label billing, attaches the provided
-     * payment method, and upserts the ShippingAccount record.
+     * Uses the business's Stripe Customer for label billing (created on first
+     * use), attaches the provided payment method, and activates the account.
      *
      * @param {FiveOneEat.business.shipping.SetupShippingAccountRequest} request
      * @param {AccountClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -315,6 +315,10 @@ export class AccountClient {
     }
 
     /**
+     * Removes the billing card, turns shipping off and stops the online store
+     * offering it (a ship-only store falls back to pickup). The Stripe customer
+     * is kept for the next setup.
+     *
      * @param {AccountClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}

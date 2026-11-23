@@ -1,6 +1,6 @@
 {
     "name": "@51eat/sdk",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -109,39 +109,6 @@
                 "default": "./dist/cjs/api/resources/business/resources/productOrders/exports.js"
             },
             "default": "./dist/cjs/api/resources/business/resources/productOrders/exports.js"
-        },
-        "./business/priceLists": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/priceLists/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/priceLists/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/priceLists/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/priceLists/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/priceLists/exports.js"
-        },
-        "./business/products": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/products/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/products/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/products/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/products/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/products/exports.js"
-        },
-        "./business/taxCodes": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/taxCodes/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/taxCodes/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/taxCodes/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/taxCodes/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/taxCodes/exports.js"
         },
         "./business/events": {
             "import": {
@@ -330,6 +297,50 @@
             },
             "default": "./dist/cjs/api/resources/business/resources/bulletins/resources/comments/exports.js"
         },
+        "./business/commerce": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/exports.js"
+        },
+        "./business/commerce/locations": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/resources/locations/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/resources/locations/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/resources/locations/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/resources/locations/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/resources/locations/exports.js"
+        },
+        "./business/commerce/orders": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/resources/orders/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/resources/orders/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/resources/orders/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/resources/orders/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/resources/orders/exports.js"
+        },
+        "./business/commerce/stock": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/resources/stock/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/resources/stock/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/resources/stock/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/resources/stock/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/resources/stock/exports.js"
+        },
         "./business/events/ticketTypes": {
             "import": {
                 "types": "./dist/esm/api/resources/business/resources/events/resources/ticketTypes/exports.d.mts",
@@ -440,72 +451,6 @@
             },
             "default": "./dist/cjs/api/resources/business/resources/messaging/resources/messages/exports.js"
         },
-        "./business/products/variants": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/products/resources/variants/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/products/resources/variants/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/products/resources/variants/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/exports.js"
-        },
-        "./business/products/inventory": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/products/resources/inventory/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/products/resources/inventory/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/products/resources/inventory/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/products/resources/inventory/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/products/resources/inventory/exports.js"
-        },
-        "./business/products/images": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/products/resources/images/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/products/resources/images/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/products/resources/images/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/products/resources/images/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/products/resources/images/exports.js"
-        },
-        "./business/products/variants/prices": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/products/resources/variants/resources/prices/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/products/resources/variants/resources/prices/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/prices/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/prices/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/prices/exports.js"
-        },
-        "./business/products/variants/inventory": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/products/resources/variants/resources/inventory/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/products/resources/variants/resources/inventory/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/inventory/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/inventory/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/inventory/exports.js"
-        },
-        "./business/products/variants/images": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/products/resources/variants/resources/images/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/products/resources/variants/resources/images/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/images/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/images/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/products/resources/variants/resources/images/exports.js"
-        },
         "./business/profile/logo": {
             "import": {
                 "types": "./dist/esm/api/resources/business/resources/profile/resources/logo/exports.d.mts",
@@ -549,6 +494,61 @@
                 "default": "./dist/cjs/api/resources/business/resources/shipping/resources/rates/exports.js"
             },
             "default": "./dist/cjs/api/resources/business/resources/shipping/resources/rates/exports.js"
+        },
+        "./commerce": {
+            "import": {
+                "types": "./dist/esm/api/resources/commerce/exports.d.mts",
+                "default": "./dist/esm/api/resources/commerce/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/commerce/exports.d.ts",
+                "default": "./dist/cjs/api/resources/commerce/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/commerce/exports.js"
+        },
+        "./commerce/carts": {
+            "import": {
+                "types": "./dist/esm/api/resources/commerce/resources/carts/exports.d.mts",
+                "default": "./dist/esm/api/resources/commerce/resources/carts/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/commerce/resources/carts/exports.d.ts",
+                "default": "./dist/cjs/api/resources/commerce/resources/carts/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/commerce/resources/carts/exports.js"
+        },
+        "./commerce/checkout": {
+            "import": {
+                "types": "./dist/esm/api/resources/commerce/resources/checkout/exports.d.mts",
+                "default": "./dist/esm/api/resources/commerce/resources/checkout/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/commerce/resources/checkout/exports.d.ts",
+                "default": "./dist/cjs/api/resources/commerce/resources/checkout/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/commerce/resources/checkout/exports.js"
+        },
+        "./commerce/orders": {
+            "import": {
+                "types": "./dist/esm/api/resources/commerce/resources/orders/exports.d.mts",
+                "default": "./dist/esm/api/resources/commerce/resources/orders/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/commerce/resources/orders/exports.d.ts",
+                "default": "./dist/cjs/api/resources/commerce/resources/orders/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/commerce/resources/orders/exports.js"
+        },
+        "./commerce/carts/lines": {
+            "import": {
+                "types": "./dist/esm/api/resources/commerce/resources/carts/resources/lines/exports.d.mts",
+                "default": "./dist/esm/api/resources/commerce/resources/carts/resources/lines/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/commerce/resources/carts/resources/lines/exports.d.ts",
+                "default": "./dist/cjs/api/resources/commerce/resources/carts/resources/lines/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/commerce/resources/carts/resources/lines/exports.js"
         },
         "./customer/ads": {
             "import": {
@@ -594,16 +594,16 @@
             },
             "default": "./dist/cjs/api/resources/customer/resources/businesses/exports.js"
         },
-        "./customer/cart": {
+        "./customer/catalog": {
             "import": {
-                "types": "./dist/esm/api/resources/customer/resources/cart/exports.d.mts",
-                "default": "./dist/esm/api/resources/customer/resources/cart/exports.mjs"
+                "types": "./dist/esm/api/resources/customer/resources/catalog/exports.d.mts",
+                "default": "./dist/esm/api/resources/customer/resources/catalog/exports.mjs"
             },
             "require": {
-                "types": "./dist/cjs/api/resources/customer/resources/cart/exports.d.ts",
-                "default": "./dist/cjs/api/resources/customer/resources/cart/exports.js"
+                "types": "./dist/cjs/api/resources/customer/resources/catalog/exports.d.ts",
+                "default": "./dist/cjs/api/resources/customer/resources/catalog/exports.js"
             },
-            "default": "./dist/cjs/api/resources/customer/resources/cart/exports.js"
+            "default": "./dist/cjs/api/resources/customer/resources/catalog/exports.js"
         },
         "./customer/discovery": {
             "import": {
@@ -692,17 +692,6 @@
                 "default": "./dist/cjs/api/resources/customer/resources/pushNotifications/exports.js"
             },
             "default": "./dist/cjs/api/resources/customer/resources/pushNotifications/exports.js"
-        },
-        "./customer/shop": {
-            "import": {
-                "types": "./dist/esm/api/resources/customer/resources/shop/exports.d.mts",
-                "default": "./dist/esm/api/resources/customer/resources/shop/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/customer/resources/shop/exports.d.ts",
-                "default": "./dist/cjs/api/resources/customer/resources/shop/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/customer/resources/shop/exports.js"
         },
         "./customer/stands": {
             "import": {

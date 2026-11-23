@@ -383,7 +383,6 @@ export class AuthClient {
     /**
      * Revoke the current API token and log out the business user.
      *
-     * @param {FiveOneEat.business.LogoutAuthRequest} request
      * @param {AuthClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -392,14 +391,12 @@ export class AuthClient {
      *     await client.business.auth.logout()
      */
     public logout(
-        request: FiveOneEat.business.LogoutAuthRequest = {},
         requestOptions?: AuthClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.business.LogoutAuthResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__logout(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__logout(requestOptions));
     }
 
     private async __logout(
-        request: FiveOneEat.business.LogoutAuthRequest = {},
         requestOptions?: AuthClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.LogoutAuthResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -417,10 +414,7 @@ export class AuthClient {
             ),
             method: "POST",
             headers: _headers,
-            contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

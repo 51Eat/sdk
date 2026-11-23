@@ -6,5 +6,5 @@ export interface BusinessListItem {
     id: string;
     note: string | null;
     business: FiveOneEat.DiscoveryBusiness;
-    created_at: string;
+    created_at: string | null;
 }
