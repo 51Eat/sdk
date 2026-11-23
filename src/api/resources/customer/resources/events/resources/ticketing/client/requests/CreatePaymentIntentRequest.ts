@@ -16,6 +16,8 @@
 export interface CreatePaymentIntentRequest {
     eventId: string;
     billing_address: CreatePaymentIntentRequest.BillingAddress;
+    /** The buyer ticked "Save this card for next time". Without it the card isn't saved. */
+    save_card?: boolean;
 }
 
 export namespace CreatePaymentIntentRequest {

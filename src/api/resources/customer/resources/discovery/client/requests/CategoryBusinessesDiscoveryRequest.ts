@@ -3,17 +3,13 @@
 /**
  * @example
  *     {
- *         category: "restaurant",
- *         search: "coffee"
+ *         category: "restaurant"
  *     }
  */
 export interface CategoryBusinessesDiscoveryRequest {
     /** The business category to filter by */
     category: string;
-    /** Page number for pagination */
-    page?: number;
-    /** Number of businesses per page */
-    per_page?: number;
-    /** Search term for business name or description */
-    search?: string;
+    page?: number | null;
+    per_page?: number | null;
+    search?: string | null;
 }

@@ -18,7 +18,15 @@ describe("AuthClient", () => {
         const rawResponseBody = {
             data: {
                 token: "token",
-                user: { id: "id", name: "name", email: "email", role: "role", avatar_url: "avatar_url" },
+                user: {
+                    id: "id",
+                    name: "name",
+                    email: "email",
+                    phone: "phone",
+                    role: "role",
+                    avatar_url: "avatar_url",
+                    features: { markets: true, wholesale: true },
+                },
             },
         };
 
@@ -80,7 +88,15 @@ describe("AuthClient", () => {
         const rawResponseBody = {
             data: {
                 token: "token",
-                user: { id: "id", name: "name", email: "email", role: "role", avatar_url: "avatar_url" },
+                user: {
+                    id: "id",
+                    name: "name",
+                    email: "email",
+                    phone: "phone",
+                    role: "role",
+                    avatar_url: "avatar_url",
+                    features: { markets: true, wholesale: true },
+                },
             },
         };
 
@@ -232,7 +248,15 @@ describe("AuthClient", () => {
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            data: { id: "id", name: "name", email: "email", role: "role", avatar_url: "avatar_url" },
+            data: {
+                id: "id",
+                name: "name",
+                email: "email",
+                phone: "phone",
+                role: "role",
+                avatar_url: "avatar_url",
+                features: { markets: true, wholesale: true },
+            },
         };
 
         server.mockEndpoint().get("/customer/user").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -259,7 +283,15 @@ describe("AuthClient", () => {
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
-            data: { id: "id", name: "name", email: "email", role: "role", avatar_url: "avatar_url" },
+            data: {
+                id: "id",
+                name: "name",
+                email: "email",
+                phone: "phone",
+                role: "role",
+                avatar_url: "avatar_url",
+                features: { markets: true, wholesale: true },
+            },
         };
 
         server
@@ -385,7 +417,15 @@ describe("AuthClient", () => {
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { avatar: "avatar" };
         const rawResponseBody = {
-            data: { id: "id", name: "name", email: "email", role: "role", avatar_url: "avatar_url" },
+            data: {
+                id: "id",
+                name: "name",
+                email: "email",
+                phone: "phone",
+                role: "role",
+                avatar_url: "avatar_url",
+                features: { markets: true, wholesale: true },
+            },
         };
 
         server
@@ -452,7 +492,15 @@ describe("AuthClient", () => {
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            data: { id: "id", name: "name", email: "email", role: "role", avatar_url: "avatar_url" },
+            data: {
+                id: "id",
+                name: "name",
+                email: "email",
+                phone: "phone",
+                role: "role",
+                avatar_url: "avatar_url",
+                features: { markets: true, wholesale: true },
+            },
         };
 
         server
@@ -489,17 +537,10 @@ describe("AuthClient", () => {
     test("logout (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
+
         const rawResponseBody = { message: "Successfully logged out" };
 
-        server
-            .mockEndpoint()
-            .post("/customer/logout")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().post("/customer/logout").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.customer.auth.logout();
         expect(response).toEqual(rawResponseBody);
@@ -508,17 +549,10 @@ describe("AuthClient", () => {
     test("logout (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
+
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint()
-            .post("/customer/logout")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().post("/customer/logout").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.customer.auth.logout();

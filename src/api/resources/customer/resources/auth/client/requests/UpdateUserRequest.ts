@@ -7,6 +7,8 @@
 export interface UpdateUserRequest {
     name?: string;
     email?: string;
+    /** The buyer's phone, checked as at checkout. Null clears it. */
+    phone?: string | null;
     current_password?: string;
     password?: string;
     password_confirmation?: string;

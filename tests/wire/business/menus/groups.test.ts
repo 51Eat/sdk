@@ -15,8 +15,18 @@ describe("GroupsClient", () => {
                 menu_id: "menu_id",
                 name: "name",
                 description: "description",
-                sort_order: "sort_order",
-                items: [{ key: "value" }],
+                sort_order: 1,
+                items: [
+                    {
+                        id: "id",
+                        menu_group_id: "menu_group_id",
+                        name: "name",
+                        description: null,
+                        price: null,
+                        is_available: true,
+                        sort_order: 1,
+                    },
+                ],
             },
         };
 
@@ -128,8 +138,18 @@ describe("GroupsClient", () => {
                 menu_id: "menu_id",
                 name: "name",
                 description: "description",
-                sort_order: "sort_order",
-                items: [{ key: "value" }],
+                sort_order: 1,
+                items: [
+                    {
+                        id: "id",
+                        menu_group_id: "menu_group_id",
+                        name: "name",
+                        description: null,
+                        price: null,
+                        is_available: true,
+                        sort_order: 1,
+                    },
+                ],
             },
         };
 
@@ -251,8 +271,18 @@ describe("GroupsClient", () => {
                 menu_id: "menu_id",
                 name: "name",
                 description: "description",
-                sort_order: "sort_order",
-                items: [{ key: "value" }],
+                sort_order: 1,
+                items: [
+                    {
+                        id: "id",
+                        menu_group_id: "menu_group_id",
+                        name: "name",
+                        description: null,
+                        price: null,
+                        is_available: true,
+                        sort_order: 1,
+                    },
+                ],
             },
         };
 
@@ -369,8 +399,18 @@ describe("GroupsClient", () => {
                 menu_id: "menu_id",
                 name: "name",
                 description: "description",
-                sort_order: "sort_order",
-                items: [{ key: "value" }],
+                sort_order: 1,
+                items: [
+                    {
+                        id: "id",
+                        menu_group_id: "menu_group_id",
+                        name: "name",
+                        description: null,
+                        price: null,
+                        is_available: true,
+                        sort_order: 1,
+                    },
+                ],
             },
         };
 

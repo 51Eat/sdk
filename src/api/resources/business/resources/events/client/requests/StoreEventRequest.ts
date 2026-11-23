@@ -22,7 +22,6 @@ export interface StoreEventRequest {
     starts_at: string;
     ends_at: string;
     is_all_day?: boolean;
-    is_featured?: boolean;
     ticket_sales_enabled?: boolean;
     is_published?: boolean;
     sort_order?: number | null;

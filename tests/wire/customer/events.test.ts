@@ -59,10 +59,7 @@ describe("EventsClient", () => {
 
         server.mockEndpoint().get("/customer/events").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.customer.events.feed({
-            date_from: "2026-05-01",
-            date_to: "2026-05-31",
-        });
+        const response = await client.customer.events.feed();
         expect(response).toEqual(rawResponseBody);
     });
 

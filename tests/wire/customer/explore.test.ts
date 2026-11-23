@@ -56,6 +56,7 @@ describe("ExploreClient", () => {
                 stands: [
                     { id: "id", name: "name", address: null, city: null, state: null, latitude: 1.1, longitude: 1.1 },
                 ],
+                truncated: true,
                 bounds: { north: "north", south: "south", east: "east", west: "west" },
             },
         };
@@ -69,8 +70,7 @@ describe("ExploreClient", () => {
             .build();
 
         const response = await client.customer.explore.businesses({
-            bounds: "43.5000,42.5000,-73.5000,-76.5000",
-            categories: "food-trucks,bakeries",
+            bounds: "bounds",
         });
         expect(response).toEqual(rawResponseBody);
     });

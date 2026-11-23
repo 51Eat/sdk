@@ -4,7 +4,6 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClie
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
 import { mergeHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
-import { toJson } from "../../../../core/json.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
@@ -13,7 +12,7 @@ import { AdsClient } from "../resources/ads/client/Client.js";
 import { AuthClient } from "../resources/auth/client/Client.js";
 import { BusinessesClient } from "../resources/businesses/client/Client.js";
 import { BusinessSubmissionsClient } from "../resources/businessSubmissions/client/Client.js";
-import { CartClient } from "../resources/cart/client/Client.js";
+import { CatalogClient } from "../resources/catalog/client/Client.js";
 import { DiscoveryClient } from "../resources/discovery/client/Client.js";
 import { EditorialsClient } from "../resources/editorials/client/Client.js";
 import { EventsClient } from "../resources/events/client/Client.js";
@@ -22,7 +21,6 @@ import { MeClient } from "../resources/me/client/Client.js";
 import { MessagingClient } from "../resources/messaging/client/Client.js";
 import { ProductOrdersClient } from "../resources/productOrders/client/Client.js";
 import { PushNotificationsClient } from "../resources/pushNotifications/client/Client.js";
-import { ShopClient } from "../resources/shop/client/Client.js";
 import { StandsClient } from "../resources/stands/client/Client.js";
 
 export declare namespace CustomerClient {
@@ -37,7 +35,7 @@ export class CustomerClient {
     protected _auth: AuthClient | undefined;
     protected _businessSubmissions: BusinessSubmissionsClient | undefined;
     protected _businesses: BusinessesClient | undefined;
-    protected _cart: CartClient | undefined;
+    protected _catalog: CatalogClient | undefined;
     protected _discovery: DiscoveryClient | undefined;
     protected _explore: ExploreClient | undefined;
     protected _editorials: EditorialsClient | undefined;
@@ -46,7 +44,6 @@ export class CustomerClient {
     protected _me: MeClient | undefined;
     protected _productOrders: ProductOrdersClient | undefined;
     protected _pushNotifications: PushNotificationsClient | undefined;
-    protected _shop: ShopClient | undefined;
     protected _stands: StandsClient | undefined;
 
     constructor(options: CustomerClient.Options = {}) {
@@ -69,8 +66,8 @@ export class CustomerClient {
         return (this._businesses ??= new BusinessesClient(this._options));
     }
 
-    public get cart(): CartClient {
-        return (this._cart ??= new CartClient(this._options));
+    public get catalog(): CatalogClient {
+        return (this._catalog ??= new CatalogClient(this._options));
     }
 
     public get discovery(): DiscoveryClient {
@@ -105,10 +102,6 @@ export class CustomerClient {
         return (this._pushNotifications ??= new PushNotificationsClient(this._options));
     }
 
-    public get shop(): ShopClient {
-        return (this._shop ??= new ShopClient(this._options));
-    }
-
     public get stands(): StandsClient {
         return (this._stands ??= new StandsClient(this._options));
     }
@@ -124,11 +117,7 @@ export class CustomerClient {
      *
      * @example
      *     await client.customer.search({
-     *         q: "wings",
-     *         categories: "restaurant,bakery",
-     *         city: "Buffalo",
-     *         cuisines: "italian,mexican",
-     *         certifications: "kosher,halal"
+     *         q: "q"
      *     })
      */
     public search(
@@ -148,10 +137,10 @@ export class CustomerClient {
             city,
             cuisines,
             certifications,
-            radius_km: radiusKm,
-            per_type: perType,
             lat,
             lng,
+            radius_km: radiusKm,
+            per_type: perType,
         } = request;
         const _queryParams: Record<string, unknown> = {
             q,
@@ -159,10 +148,10 @@ export class CustomerClient {
             city,
             cuisines,
             certifications,
+            lat,
+            lng,
             radius_km: radiusKm,
             per_type: perType,
-            lat: lat != null ? toJson(lat) : undefined,
-            lng: lng != null ? toJson(lng) : undefined,
         };
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(this._options?.headers, requestOptions?.headers);
         const _response = await core.fetcher({

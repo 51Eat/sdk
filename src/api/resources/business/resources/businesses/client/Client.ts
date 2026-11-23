@@ -110,6 +110,12 @@ export class BusinessesClient {
      * Create a new business owned by the authenticated user. The newly created
      * business is automatically set as the user's active business.
      *
+     * When the business matches unclaimed listings already on 51Eat (same
+     * phone, website domain, or name within 2 km), nothing is created and the
+     * response is 409 with those listings in `existing_listings`: offer to
+     * claim one (`POST /claim-requests`), or send `create_anyway: true` to
+     * create it regardless.
+     *
      * @param {FiveOneEat.business.StoreBusinessRequest} request
      * @param {BusinessesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -362,7 +368,9 @@ export class BusinessesClient {
     }
 
     /**
-     * Delete a business owned by the authenticated user.
+     * Delete a business owned by the authenticated user. A business with
+     * market history (dues or market-day attendance), or one that has taken
+     * payments, can't be deleted (422).
      *
      * @param {FiveOneEat.business.DeleteBusinessesRequest} request
      * @param {BusinessesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -370,6 +378,7 @@ export class BusinessesClient {
      * @throws {@link FiveOneEat.UnauthorizedError}
      * @throws {@link FiveOneEat.ForbiddenError}
      * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
      *     await client.business.businesses.delete({
@@ -422,6 +431,11 @@ export class BusinessesClient {
                     throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.FiveOneEatError({
                         statusCode: _response.error.statusCode,

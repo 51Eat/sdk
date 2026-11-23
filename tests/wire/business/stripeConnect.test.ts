@@ -11,22 +11,22 @@ describe("StripeConnectClient", () => {
 
         const rawResponseBody = {
             data: {
-                id: "id",
+                id: 1,
                 stripe_account_id: "stripe_account_id",
-                charges_enabled: "charges_enabled",
-                payouts_enabled: "payouts_enabled",
-                details_submitted: "details_submitted",
-                is_ready: "is_ready",
-                is_active: "is_active",
-                requirements: "requirements",
-                capabilities: "capabilities",
+                charges_enabled: true,
+                payouts_enabled: true,
+                details_submitted: true,
+                is_ready: true,
+                is_active: true,
+                requirements: [{ key: "value" }],
+                capabilities: [{ key: "value" }],
                 country: "country",
                 default_currency: "default_currency",
                 email: "email",
-                deauthorized_at: "deauthorized_at",
-                stripe_updated_at: "stripe_updated_at",
-                created_at: "created_at",
-                updated_at: "updated_at",
+                deauthorized_at: "2024-01-15T09:30:00Z",
+                stripe_updated_at: "2024-01-15T09:30:00Z",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
             meta: { publishable_key: "publishable_key", onboarding_required: true, requires_action: "requires_action" },
         };
@@ -72,12 +72,164 @@ describe("StripeConnectClient", () => {
             .mockEndpoint()
             .get("/business/stripe-connect")
             .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.stripeConnect.status();
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("status (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/stripe-connect")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.stripeConnect.status();
+        }).rejects.toThrow(FiveOneEat.ConflictError);
+    });
+
+    test("status (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/stripe-connect")
+            .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
             return await client.business.stripeConnect.status();
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("connect (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            data: {
+                id: 1,
+                stripe_account_id: "stripe_account_id",
+                charges_enabled: true,
+                payouts_enabled: true,
+                details_submitted: true,
+                is_ready: true,
+                is_active: true,
+                requirements: [{ key: "value" }],
+                capabilities: [{ key: "value" }],
+                country: "country",
+                default_currency: "default_currency",
+                email: "email",
+                deauthorized_at: "2024-01-15T09:30:00Z",
+                stripe_updated_at: "2024-01-15T09:30:00Z",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
+            },
+            meta: { publishable_key: "publishable_key", onboarding_required: true, requires_action: "requires_action" },
+        };
+
+        server
+            .mockEndpoint()
+            .post("/business/stripe-connect")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.stripeConnect.connect();
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("connect (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/stripe-connect")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.stripeConnect.connect();
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("connect (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/stripe-connect")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.stripeConnect.connect();
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("connect (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/stripe-connect")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.stripeConnect.connect();
+        }).rejects.toThrow(FiveOneEat.ConflictError);
+    });
+
+    test("connect (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/stripe-connect")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.stripeConnect.connect();
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
 
@@ -234,6 +386,42 @@ describe("StripeConnectClient", () => {
             .post("/business/stripe-connect/account-session")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.stripeConnect.createAccountSession({
+                components: [
+                    {
+                        enabled: true,
+                        features: ["features", "features"],
+                    },
+                    {
+                        enabled: true,
+                        features: ["features", "features"],
+                    },
+                ],
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("createAccountSession (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            components: [
+                { enabled: true, features: ["features", "features"] },
+                { enabled: true, features: ["features", "features"] },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/stripe-connect/account-session")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
@@ -260,22 +448,22 @@ describe("StripeConnectClient", () => {
 
         const rawResponseBody = {
             data: {
-                id: "id",
+                id: 1,
                 stripe_account_id: "stripe_account_id",
-                charges_enabled: "charges_enabled",
-                payouts_enabled: "payouts_enabled",
-                details_submitted: "details_submitted",
-                is_ready: "is_ready",
-                is_active: "is_active",
-                requirements: "requirements",
-                capabilities: "capabilities",
+                charges_enabled: true,
+                payouts_enabled: true,
+                details_submitted: true,
+                is_ready: true,
+                is_active: true,
+                requirements: [{ key: "value" }],
+                capabilities: [{ key: "value" }],
                 country: "country",
                 default_currency: "default_currency",
                 email: "email",
-                deauthorized_at: "deauthorized_at",
-                stripe_updated_at: "stripe_updated_at",
-                created_at: "created_at",
-                updated_at: "updated_at",
+                deauthorized_at: "2024-01-15T09:30:00Z",
+                stripe_updated_at: "2024-01-15T09:30:00Z",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
             meta: { publishable_key: "publishable_key", onboarding_required: true, requires_action: "requires_action" },
         };

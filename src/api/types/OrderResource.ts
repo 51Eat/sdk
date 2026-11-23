@@ -6,6 +6,11 @@ export interface OrderResource {
     id: string;
     order_number: string;
     status: string;
+    /**
+     * `ready_for_pickup` for a pickup order set out: the business app
+     * reads this path, so it keeps the old value until C12's new
+     * paths, which answer `ready`, replace it.
+     */
     fulfillment_status: string;
     fulfillment_method: string;
     /** The buyer's pickup day (Y-m-d) for a pickup order, when they chose one. */

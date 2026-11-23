@@ -1,3 +1,4 @@
+export * from "./ConnectStripeConnectResponse.js";
 export * from "./CreateAccountSessionStripeConnectResponse.js";
 export * from "./DisconnectStripeConnectResponse.js";
 export * from "./RefreshStripeConnectResponse.js";

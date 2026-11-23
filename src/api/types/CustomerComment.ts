@@ -4,10 +4,10 @@ import type * as FiveOneEat from "../index.js";
 
 export interface CustomerComment {
     id: string;
-    parent_id: string;
+    parent_id: string | null;
     body: string;
     user: CustomerComment.User;
-    created_at: string;
+    created_at: string | null;
     replies?: FiveOneEat.CustomerBulletinCommentReply[] | undefined;
 }
 

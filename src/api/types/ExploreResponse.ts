@@ -7,6 +7,11 @@ export interface ExploreResponse {
     temporary_locations: FiveOneEat.ExploreTemporaryLocation[];
     events: FiveOneEat.ExploreEvent[];
     stands: FiveOneEat.ExploreStand[];
+    /**
+     * More businesses matched than were returned; only the most-saved
+     * came back. Zooming in narrows the bounds.
+     */
+    truncated: boolean;
     bounds: ExploreResponse.Bounds;
 }
 

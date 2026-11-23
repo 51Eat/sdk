@@ -2,10 +2,10 @@
 
 export interface OrderItemResource {
     id: string;
-    variant_id: string;
-    product_name?: (string | null) | undefined;
-    variant_name?: string | undefined;
-    sku?: string | undefined;
+    variant_id: string | null;
+    product_name?: string | undefined;
+    variant_name?: (string | null) | undefined;
+    sku?: (string | null) | undefined;
     quantity: number;
     unit_price_cents: number;
     total_cents: number;

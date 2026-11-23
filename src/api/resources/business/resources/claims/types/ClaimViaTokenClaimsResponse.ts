@@ -2,8 +2,6 @@
 
 import type * as FiveOneEat from "../../../../../index.js";
 
-export type ClaimViaTokenClaimsResponse =
-    | {
-          data: FiveOneEat.ClaimableBusiness;
-      }
-    | string;
+export interface ClaimViaTokenClaimsResponse {
+    data: FiveOneEat.ClaimableBusiness;
+}

@@ -15,7 +15,7 @@ describe("MessagesClient", () => {
                     id: "id",
                     conversation_id: "conversation_id",
                     sender_id: "sender_id",
-                    sender: { id: "id", name: "name", email: "email" },
+                    sender: { id: "id", name: "name" },
                     content: "content",
                     message_type: "message_type",
                     metadata: { key: "value" },
@@ -73,27 +73,6 @@ describe("MessagesClient", () => {
             .mockEndpoint()
             .get("/customer/messaging/conversations/conversation/messages")
             .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.customer.messaging.messages.list({
-                conversation: "conversation",
-            });
-        }).rejects.toThrow(FiveOneEat.ForbiddenError);
-    });
-
-    test("list (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/customer/messaging/conversations/conversation/messages")
-            .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
@@ -108,13 +87,13 @@ describe("MessagesClient", () => {
     test("send (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { content: "Hello! I have a question about your menu." };
+        const rawRequestBody = { content: "content" };
         const rawResponseBody = {
             data: {
                 id: "id",
                 conversation_id: "conversation_id",
                 sender_id: "sender_id",
-                sender: { id: "id", name: "name", email: "email" },
+                sender: { id: "id", name: "name" },
                 content: "content",
                 message_type: "message_type",
                 metadata: { key: "value" },
@@ -137,7 +116,7 @@ describe("MessagesClient", () => {
 
         const response = await client.customer.messaging.messages.send({
             conversation: "550e8400-e29b-41d4-a716-446655440000",
-            content: "Hello! I have a question about your menu.",
+            content: "content",
         });
         expect(response).toEqual(rawResponseBody);
     });

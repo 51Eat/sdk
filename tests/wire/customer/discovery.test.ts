@@ -41,9 +41,7 @@ describe("DiscoveryClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.customer.discovery.feed({
-            search: "organic",
-        });
+        const response = await client.customer.discovery.feed();
         expect(response).toEqual(rawResponseBody);
     });
 
@@ -236,7 +234,6 @@ describe("DiscoveryClient", () => {
 
         const response = await client.customer.discovery.categoryBusinesses({
             category: "restaurant",
-            search: "coffee",
         });
         expect(response).toEqual(rawResponseBody);
     });

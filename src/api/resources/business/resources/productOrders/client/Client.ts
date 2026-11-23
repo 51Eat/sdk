@@ -354,7 +354,10 @@ export class ProductOrdersClient {
     }
 
     /**
-     * @param {FiveOneEat.business.AddTrackingProductOrdersRequest} request
+     * For a label bought elsewhere: records it as a shipment, marks the order
+     * sent and sends the tracking to the customer.
+     *
+     * @param {FiveOneEat.business.StoreTrackingRequest} request
      * @param {ProductOrdersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -370,14 +373,14 @@ export class ProductOrdersClient {
      *     })
      */
     public addTracking(
-        request: FiveOneEat.business.AddTrackingProductOrdersRequest,
+        request: FiveOneEat.business.StoreTrackingRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.business.AddTrackingProductOrdersResponse> {
         return core.HttpResponsePromise.fromPromise(this.__addTracking(request, requestOptions));
     }
 
     private async __addTracking(
-        request: FiveOneEat.business.AddTrackingProductOrdersRequest,
+        request: FiveOneEat.business.StoreTrackingRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.AddTrackingProductOrdersResponse>> {
         const { order, ..._body } = request;
@@ -543,6 +546,10 @@ export class ProductOrdersClient {
     }
 
     /**
+     * A 422 has the body `{"error": "..."}`, not the usual validation shape:
+     * "Shipping account not configured." when the business has no active
+     * shipping account, or "Order has no shipping address."
+     *
      * @param {FiveOneEat.business.GetLabelRatesProductOrdersRequest} request
      * @param {ProductOrdersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -628,7 +635,11 @@ export class ProductOrdersClient {
     }
 
     /**
-     * @param {FiveOneEat.business.PurchaseLabelProductOrdersRequest} request
+     * Buys a label at the chosen rate, records it as a shipment, marks the
+     * order sent and sends the tracking to the customer. Nothing is bought
+     * when the order is refused.
+     *
+     * @param {FiveOneEat.business.PurchaseLabelRequest} request
      * @param {ProductOrdersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -643,14 +654,14 @@ export class ProductOrdersClient {
      *     })
      */
     public purchaseLabel(
-        request: FiveOneEat.business.PurchaseLabelProductOrdersRequest,
+        request: FiveOneEat.business.PurchaseLabelRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.business.PurchaseLabelProductOrdersResponse> {
         return core.HttpResponsePromise.fromPromise(this.__purchaseLabel(request, requestOptions));
     }
 
     private async __purchaseLabel(
-        request: FiveOneEat.business.PurchaseLabelProductOrdersRequest,
+        request: FiveOneEat.business.PurchaseLabelRequest,
         requestOptions?: ProductOrdersClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.PurchaseLabelProductOrdersResponse>> {
         const { order, ..._body } = request;

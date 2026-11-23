@@ -325,7 +325,16 @@ export class BusinessesClient {
     }
 
     /**
-     * Returns available pickup timeslots for a business on a given date.
+     * Returns the pickup timeslots still open at a business's main store on a
+     * given date, as `HH:MM` start times in the store's local time. Kept for
+     * older app builds until the relaunch replaces it.
+     *
+     * - A slot is listed only when it starts before its pickup window closes,
+     *   so the closing time itself is not a slot.
+     * - Full slots (every place taken) are left out.
+     * - Days the store is closed or has no pickup, and slots inside its
+     *   preparation time, return no slots.
+     * - A business without a main store gets `"timeslots": []`.
      *
      * @param {FiveOneEat.customer.GetPickupTimeslotsBusinessesRequest} request
      * @param {BusinessesClient.RequestOptions} requestOptions - Request-specific configuration.

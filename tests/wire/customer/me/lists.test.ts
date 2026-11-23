@@ -19,8 +19,8 @@ describe("ListsClient", () => {
                         slug: "slug",
                         is_public: true,
                         items_count: 1,
-                        created_at: "created_at",
-                        updated_at: "updated_at",
+                        created_at: null,
+                        updated_at: null,
                     },
                 ],
             },
@@ -58,8 +58,8 @@ describe("ListsClient", () => {
                 is_public: true,
                 items_count: 1,
                 cover_image: "cover_image",
-                created_at: "created_at",
-                updated_at: "updated_at",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
         };
 
@@ -212,7 +212,7 @@ describe("ListsClient", () => {
                             badges: { founding_partner: true, staff_pick: true },
                             created_at: "created_at",
                         },
-                        created_at: "created_at",
+                        created_at: null,
                     },
                 ],
                 created_at: "created_at",
@@ -289,8 +289,8 @@ describe("ListsClient", () => {
                 is_public: true,
                 items_count: 1,
                 cover_image: "cover_image",
-                created_at: "created_at",
-                updated_at: "updated_at",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
             },
         };
 

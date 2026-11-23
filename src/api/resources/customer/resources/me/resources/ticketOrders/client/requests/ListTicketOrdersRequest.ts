@@ -5,8 +5,6 @@
  *     {}
  */
 export interface ListTicketOrdersRequest {
-    /** Page number for pagination */
-    page?: number;
-    /** Number of orders per page */
-    per_page?: number;
+    page?: number | null;
+    per_page?: number | null;
 }

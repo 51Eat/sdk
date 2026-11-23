@@ -8,8 +8,8 @@
  *     }
  */
 export interface ChannelAuthMessagingRequest {
-    /** string */
+    /** The channel name to authenticate (e.g., private-conversation.123). */
     channel_name: string;
-    /** string */
+    /** The socket ID from Pusher. */
     socket_id: string;
 }

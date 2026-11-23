@@ -31,7 +31,7 @@ describe("PublicListsClient", () => {
                             badges: { founding_partner: true, staff_pick: true },
                             created_at: "created_at",
                         },
-                        created_at: "created_at",
+                        created_at: null,
                     },
                 ],
                 created_at: "created_at",

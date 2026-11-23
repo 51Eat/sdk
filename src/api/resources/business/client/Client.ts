@@ -9,22 +9,20 @@ import { BusinessesClient } from "../resources/businesses/client/Client.js";
 import { CategoriesClient } from "../resources/categories/client/Client.js";
 import { CertificationsClient } from "../resources/certifications/client/Client.js";
 import { ClaimsClient } from "../resources/claims/client/Client.js";
+import { CommerceClient } from "../resources/commerce/client/Client.js";
 import { CuisinesClient } from "../resources/cuisines/client/Client.js";
 import { EventsClient } from "../resources/events/client/Client.js";
 import { GalleryClient } from "../resources/gallery/client/Client.js";
 import { HoursClient } from "../resources/hours/client/Client.js";
 import { MenusClient } from "../resources/menus/client/Client.js";
 import { MessagingClient } from "../resources/messaging/client/Client.js";
-import { PriceListsClient } from "../resources/priceLists/client/Client.js";
 import { ProductCategoriesClient } from "../resources/productCategories/client/Client.js";
 import { ProductOrdersClient } from "../resources/productOrders/client/Client.js";
-import { ProductsClient } from "../resources/products/client/Client.js";
 import { ProfileClient } from "../resources/profile/client/Client.js";
 import { PushNotificationsClient } from "../resources/pushNotifications/client/Client.js";
 import { ShippingClient } from "../resources/shipping/client/Client.js";
 import { StandsClient } from "../resources/stands/client/Client.js";
 import { StripeConnectClient } from "../resources/stripeConnect/client/Client.js";
-import { TaxCodesClient } from "../resources/taxCodes/client/Client.js";
 import { TemporaryLocationsClient } from "../resources/temporaryLocations/client/Client.js";
 
 export declare namespace BusinessClient {
@@ -38,9 +36,6 @@ export class BusinessClient {
     protected _businesses: BusinessesClient | undefined;
     protected _claims: ClaimsClient | undefined;
     protected _productOrders: ProductOrdersClient | undefined;
-    protected _priceLists: PriceListsClient | undefined;
-    protected _products: ProductsClient | undefined;
-    protected _taxCodes: TaxCodesClient | undefined;
     protected _events: EventsClient | undefined;
     protected _gallery: GalleryClient | undefined;
     protected _hours: HoursClient | undefined;
@@ -56,6 +51,7 @@ export class BusinessClient {
     protected _allergens: AllergensClient | undefined;
     protected _temporaryLocations: TemporaryLocationsClient | undefined;
     protected _productCategories: ProductCategoriesClient | undefined;
+    protected _commerce: CommerceClient | undefined;
     protected _shipping: ShippingClient | undefined;
 
     constructor(options: BusinessClient.Options = {}) {
@@ -80,18 +76,6 @@ export class BusinessClient {
 
     public get productOrders(): ProductOrdersClient {
         return (this._productOrders ??= new ProductOrdersClient(this._options));
-    }
-
-    public get priceLists(): PriceListsClient {
-        return (this._priceLists ??= new PriceListsClient(this._options));
-    }
-
-    public get products(): ProductsClient {
-        return (this._products ??= new ProductsClient(this._options));
-    }
-
-    public get taxCodes(): TaxCodesClient {
-        return (this._taxCodes ??= new TaxCodesClient(this._options));
     }
 
     public get events(): EventsClient {
@@ -152,6 +136,10 @@ export class BusinessClient {
 
     public get productCategories(): ProductCategoriesClient {
         return (this._productCategories ??= new ProductCategoriesClient(this._options));
+    }
+
+    public get commerce(): CommerceClient {
+        return (this._commerce ??= new CommerceClient(this._options));
     }
 
     public get shipping(): ShippingClient {

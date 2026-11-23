@@ -33,9 +33,7 @@ export class DiscoveryClient {
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
-     *     await client.customer.discovery.feed({
-     *         search: "organic"
-     *     })
+     *     await client.customer.discovery.feed()
      */
     public feed(
         request: FiveOneEat.customer.FeedDiscoveryRequest = {},
@@ -408,8 +406,7 @@ export class DiscoveryClient {
      *
      * @example
      *     await client.customer.discovery.categoryBusinesses({
-     *         category: "restaurant",
-     *         search: "coffee"
+     *         category: "restaurant"
      *     })
      */
     public categoryBusinesses(

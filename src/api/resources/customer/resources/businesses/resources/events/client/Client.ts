@@ -173,6 +173,7 @@ export class EventsClient {
 
     /**
      * Create or update the authenticated user's RSVP for a business event.
+     * Ticketed events and events that have ended take no RSVPs (404).
      *
      * @param {FiveOneEat.customer.businesses.StoreEventRsvpRequest} request
      * @param {EventsClient.RequestOptions} requestOptions - Request-specific configuration.

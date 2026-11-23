@@ -5,8 +5,6 @@
  *     {}
  */
 export interface ListConversationsRequest {
-    /** Page number for pagination */
-    page?: number;
-    /** Number of conversations per page */
-    per_page?: number;
+    page?: number | null;
+    per_page?: number | null;
 }

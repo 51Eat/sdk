@@ -27,11 +27,15 @@ export class TicketingClient {
 
     /**
      * Place a temporary hold on tickets for the specified event. Holds expire after 10 minutes.
+     * A 403 means no ticket type is on sale, or a requested one isn't (inactive, or outside its
+     * sales window). A sold-out
+     * event answers 422, like any hold that asks for more tickets than are left.
      *
      * @param {FiveOneEat.customer.events.StoreTicketHoldRequest} request
      * @param {TicketingClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
      * @throws {@link FiveOneEat.NotFoundError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
@@ -92,6 +96,8 @@ export class TicketingClient {
             switch (_response.error.statusCode) {
                 case 401:
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
@@ -117,7 +123,8 @@ export class TicketingClient {
     }
 
     /**
-     * Release the TicketCart holds for the authenticated user and event.
+     * Release the TicketCart holds for the authenticated user and event. Allowed whatever the
+     * event's sales state; another buyer's cart, or one already gone, is left alone (204).
      *
      * @param {FiveOneEat.customer.events.ReleaseHoldTicketingRequest} request
      * @param {TicketingClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -390,6 +397,7 @@ export class TicketingClient {
      * @param {TicketingClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.NotFoundError}
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
@@ -446,6 +454,8 @@ export class TicketingClient {
             switch (_response.error.statusCode) {
                 case 401:
                     throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 422:
                     throw new FiveOneEat.UnprocessableEntityError(
                         _response.error.body as unknown,

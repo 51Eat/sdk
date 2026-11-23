@@ -3,14 +3,11 @@
 /**
  * @example
  *     {
- *         q: "john"
+ *         q: "q"
  *     }
  */
 export interface SearchConversationsRequest {
-    /** Customer name to search for */
     q: string;
-    /** Page number for pagination */
-    page?: number;
-    /** Number of conversations per page */
-    per_page?: number;
+    page?: number | null;
+    per_page?: number | null;
 }

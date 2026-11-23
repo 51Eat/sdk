@@ -2,17 +2,12 @@
 
 /**
  * @example
- *     {
- *         search: "organic"
- *     }
+ *     {}
  */
 export interface FeedDiscoveryRequest {
-    /** Page number for category pagination */
-    page?: number;
-    /** Number of categories per page (max 20) */
-    per_page?: number;
-    /** Search term to filter businesses within categories */
-    search?: string;
+    page?: number | null;
+    per_page?: number | null;
+    search?: string | null;
     /** Filter businesses by cuisine IDs */
     "cuisine_ids[]"?: number | number[];
     /** Filter businesses by certification IDs */

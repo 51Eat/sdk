@@ -39,10 +39,7 @@ export class EventsClient {
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
-     *     await client.customer.events.feed({
-     *         date_from: "2026-05-01",
-     *         date_to: "2026-05-31"
-     *     })
+     *     await client.customer.events.feed()
      */
     public feed(
         request: FiveOneEat.customer.FeedEventsRequest = {},
@@ -57,8 +54,8 @@ export class EventsClient {
     ): Promise<core.WithRawResponse<FiveOneEat.customer.FeedEventsResponse>> {
         const { date_from: dateFrom, date_to: dateTo, per_page: perPage, page } = request;
         const _queryParams: Record<string, unknown> = {
-            date_from: dateFrom,
-            date_to: dateTo,
+            date_from: dateFrom !== undefined ? dateFrom : undefined,
+            date_to: dateTo !== undefined ? dateTo : undefined,
             per_page: perPage,
             page,
         };

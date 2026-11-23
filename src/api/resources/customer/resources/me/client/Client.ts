@@ -221,9 +221,7 @@ export class MeClient {
      * @throws {@link FiveOneEat.UnprocessableEntityError}
      *
      * @example
-     *     await client.customer.me.rsvps({
-     *         status: "attending"
-     *     })
+     *     await client.customer.me.rsvps()
      */
     public rsvps(
         request: FiveOneEat.customer.RsvpsMeRequest = {},
@@ -240,7 +238,7 @@ export class MeClient {
         const _queryParams: Record<string, unknown> = {
             page,
             per_page: perPage,
-            status,
+            status: status !== undefined ? status : undefined,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(

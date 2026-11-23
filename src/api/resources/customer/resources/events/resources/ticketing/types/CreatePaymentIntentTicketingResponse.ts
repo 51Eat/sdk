@@ -19,8 +19,9 @@ export interface CreatePaymentIntentTicketingResponse {
     previous_payment_intent_id: string | null;
     previous_amount_cents: number | null;
     /**
-     * Whether the stored intent was pinned to another method or tax
-     * address, even at the same price (e.g. a flat-rate address change).
+     * Always false: only the retired product carts pinned an intent to a
+     * delivery method and tax address. The ticket payment API still
+     * returns the field, so app builds that read it keep working.
      */
     previous_destination_changed: boolean;
 }

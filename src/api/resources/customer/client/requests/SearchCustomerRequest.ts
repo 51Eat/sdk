@@ -3,30 +3,17 @@
 /**
  * @example
  *     {
- *         q: "wings",
- *         categories: "restaurant,bakery",
- *         city: "Buffalo",
- *         cuisines: "italian,mexican",
- *         certifications: "kosher,halal"
+ *         q: "q"
  *     }
  */
 export interface SearchCustomerRequest {
-    /** Search query */
     q: string;
-    /** Comma-separated category slugs to filter businesses by */
-    categories?: string;
-    /** Filter by city */
-    city?: string;
-    /** Comma-separated cuisine slugs to filter businesses by */
-    cuisines?: string;
-    /** Comma-separated certification slugs to filter businesses by */
-    certifications?: string;
-    /** Geo radius in kilometers (requires lat and lng) */
-    radius_km?: number;
-    /** Max results per type (default 5, max 20) */
-    per_type?: number;
-    /** Latitude for geo radius filter (requires lng and radius_km) */
-    lat?: Record<string, unknown>;
-    /** Longitude for geo radius filter (requires lat and radius_km) */
-    lng?: Record<string, unknown>;
+    categories?: string | null;
+    city?: string | null;
+    cuisines?: string | null;
+    certifications?: string | null;
+    lat?: number | null;
+    lng?: number | null;
+    radius_km?: number | null;
+    per_type?: number | null;
 }

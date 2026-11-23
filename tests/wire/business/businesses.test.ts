@@ -98,8 +98,8 @@ describe("BusinessesClient", () => {
                             latitude: null,
                             longitude: null,
                             hours: { key: { isOpen: true, openTime: "openTime", closeTime: "closeTime" } },
-                            starts_at: "starts_at",
-                            ends_at: "ends_at",
+                            starts_at: "2024-01-15T09:30:00Z",
+                            ends_at: "2024-01-15T09:30:00Z",
                         },
                     ],
                 },
@@ -335,8 +335,8 @@ describe("BusinessesClient", () => {
                         latitude: null,
                         longitude: null,
                         hours: { key: { isOpen: true, openTime: "openTime", closeTime: "closeTime" } },
-                        starts_at: "starts_at",
-                        ends_at: "ends_at",
+                        starts_at: "2024-01-15T09:30:00Z",
+                        ends_at: "2024-01-15T09:30:00Z",
                     },
                 ],
             },
@@ -503,8 +503,8 @@ describe("BusinessesClient", () => {
                         latitude: null,
                         longitude: null,
                         hours: { key: { isOpen: true, openTime: "openTime", closeTime: "closeTime" } },
-                        starts_at: "starts_at",
-                        ends_at: "ends_at",
+                        starts_at: "2024-01-15T09:30:00Z",
+                        ends_at: "2024-01-15T09:30:00Z",
                     },
                 ],
             },
@@ -701,5 +701,26 @@ describe("BusinessesClient", () => {
                 business: "business",
             });
         }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("delete (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/business/businesses/business")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.businesses.delete({
+                business: "business",
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
 });

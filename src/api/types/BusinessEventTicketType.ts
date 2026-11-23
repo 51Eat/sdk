@@ -4,18 +4,18 @@ export interface BusinessEventTicketType {
     id: string;
     event_id: string;
     name: string;
-    description: string;
-    price: string;
+    description: string | null;
+    price: number;
     /** Stripe tax code (txcd_…); one of EventTaxCodes::ALLOWED. Null for free tiers. */
     tax_code: string | null;
-    quantity_available: string;
-    quantity_sold: string;
+    quantity_available: number;
+    quantity_sold: number;
     remaining_quantity: string;
-    is_available_for_sale: string;
-    sales_start_at: string;
-    sales_end_at: string;
-    is_active: string;
-    sort_order: string;
-    created_at: string;
-    updated_at: string;
+    is_available_for_sale: boolean;
+    sales_start_at: string | null;
+    sales_end_at: string | null;
+    is_active: boolean;
+    sort_order: number;
+    created_at: string | null;
+    updated_at: string | null;
 }

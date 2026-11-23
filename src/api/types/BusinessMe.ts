@@ -9,4 +9,16 @@ export interface BusinessMe {
     role: string;
     active_business?: FiveOneEat.BusinessSummary | undefined;
     businesses?: FiveOneEat.BusinessSummary[] | undefined;
+    /** Release flags (Laravel Pennant), the same as the web's. */
+    features: BusinessMe.Features;
+}
+
+export namespace BusinessMe {
+    /**
+     * Release flags (Laravel Pennant), the same as the web's.
+     */
+    export interface Features {
+        markets: boolean;
+        wholesale: boolean;
+    }
 }

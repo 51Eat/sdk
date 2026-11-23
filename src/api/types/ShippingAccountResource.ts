@@ -3,10 +3,10 @@
 export interface ShippingAccountResource {
     id: string;
     ship_from_name: string;
-    ship_from_phone: string;
-    is_active: string;
-    live_rates_enabled: string;
+    ship_from_phone: string | null;
+    is_active: boolean;
+    live_rates_enabled: boolean;
     card?: string | undefined;
-    created_at: string;
-    updated_at: string;
+    created_at: string | null;
+    updated_at: string | null;
 }

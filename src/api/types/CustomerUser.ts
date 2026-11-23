@@ -4,6 +4,20 @@ export interface CustomerUser {
     id: string;
     name: string;
     email: string;
+    /** The phone checkout pre-fills, or null when none is saved. */
+    phone: string | null;
     role: string;
     avatar_url: string | null;
+    /** Release flags (Laravel Pennant), the same as the web's. */
+    features: CustomerUser.Features;
+}
+
+export namespace CustomerUser {
+    /**
+     * Release flags (Laravel Pennant), the same as the web's.
+     */
+    export interface Features {
+        markets: boolean;
+        wholesale: boolean;
+    }
 }
