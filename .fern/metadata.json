@@ -5,7 +5,7 @@
     "generatorConfig": {
         "namespaceExport": "FiveOneEat"
     },
-    "originGitCommit": "f93b4de802b483ce5c3a6f18ef2972dfa29e57e8",
+    "originGitCommit": "6c3defd943a075472d5adcd7ef44652024face41",
     "originGitCommitIsDirty": false,
     "invokedBy": "manual",
     "requestedVersion": "2.1.0",

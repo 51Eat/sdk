@@ -89,7 +89,16 @@ describe("LocationsClient", () => {
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { kind: "store" };
+        const rawRequestBody = {
+            kind: "store",
+            name: "name",
+            address: "address",
+            city: "city",
+            state: "state",
+            zipcode: "zipcode",
+            country: "country",
+            timezone: "America/Adak",
+        };
         const rawResponseBody = {
             data: {
                 id: "id",
@@ -128,6 +137,13 @@ describe("LocationsClient", () => {
         const response = await client.business.commerce.locations.create({
             "Idempotency-Key": "Idempotency-Key",
             kind: "store",
+            name: "name",
+            address: "address",
+            city: "city",
+            state: "state",
+            zipcode: "zipcode",
+            country: "country",
+            timezone: "America/Adak",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -135,7 +151,16 @@ describe("LocationsClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { kind: "store" };
+        const rawRequestBody = {
+            kind: "store",
+            name: "name",
+            address: "address",
+            city: "city",
+            state: "state",
+            zipcode: "zipcode",
+            country: "xy",
+            timezone: "America/Adak",
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -152,6 +177,13 @@ describe("LocationsClient", () => {
             return await client.business.commerce.locations.create({
                 "Idempotency-Key": "idempotencyKey",
                 kind: "store",
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                country: "xy",
+                timezone: "America/Adak",
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -159,7 +191,16 @@ describe("LocationsClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { kind: "store" };
+        const rawRequestBody = {
+            kind: "store",
+            name: "name",
+            address: "address",
+            city: "city",
+            state: "state",
+            zipcode: "zipcode",
+            country: "xy",
+            timezone: "America/Adak",
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -176,6 +217,13 @@ describe("LocationsClient", () => {
             return await client.business.commerce.locations.create({
                 "Idempotency-Key": "idempotencyKey",
                 kind: "store",
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                country: "xy",
+                timezone: "America/Adak",
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -183,7 +231,16 @@ describe("LocationsClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { kind: "store" };
+        const rawRequestBody = {
+            kind: "store",
+            name: "name",
+            address: "address",
+            city: "city",
+            state: "state",
+            zipcode: "zipcode",
+            country: "xy",
+            timezone: "America/Adak",
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -200,6 +257,13 @@ describe("LocationsClient", () => {
             return await client.business.commerce.locations.create({
                 "Idempotency-Key": "idempotencyKey",
                 kind: "store",
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                country: "xy",
+                timezone: "America/Adak",
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
@@ -1081,7 +1145,7 @@ describe("LocationsClient", () => {
             preparation_minutes: 1,
             pickup_slot_minutes: 1,
             windows: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at" }],
-            exceptions: ["exceptions"],
+            exceptions: [{ starts_on: "starts_on", is_closed: true }],
         };
         const rawResponseBody = {
             data: {
@@ -1146,7 +1210,12 @@ describe("LocationsClient", () => {
                     closes_at: "closes_at",
                 },
             ],
-            exceptions: ["exceptions"],
+            exceptions: [
+                {
+                    starts_on: "starts_on",
+                    is_closed: true,
+                },
+            ],
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -1162,7 +1231,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1193,7 +1265,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -1209,7 +1290,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1240,7 +1324,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -1256,7 +1349,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1287,7 +1383,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
@@ -1303,7 +1408,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1334,7 +1442,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
@@ -1347,7 +1464,7 @@ describe("LocationsClient", () => {
             preparation_minutes: 1,
             pickup_slot_minutes: 1,
             windows: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at" }],
-            exceptions: ["exceptions"],
+            exceptions: [{ starts_on: "starts_on", is_closed: true }],
         };
         const rawResponseBody = {
             data: [{ id: "id", number: 1, buyer_name: "buyer_name", pickup_at: "pickup_at", url: "url" }],
@@ -1374,7 +1491,12 @@ describe("LocationsClient", () => {
                     closes_at: "closes_at",
                 },
             ],
-            exceptions: ["exceptions"],
+            exceptions: [
+                {
+                    starts_on: "starts_on",
+                    is_closed: true,
+                },
+            ],
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -1390,7 +1512,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1421,7 +1546,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -1437,7 +1571,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1468,7 +1605,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -1484,7 +1630,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1515,7 +1664,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
@@ -1531,7 +1689,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1562,7 +1723,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
@@ -1674,7 +1844,7 @@ describe("LocationsClient", () => {
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             slots: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at" }],
-            exceptions: ["exceptions"],
+            exceptions: [{ starts_on: "starts_on", is_closed: true }],
         };
         const rawResponseBody = {
             data: {
@@ -1715,7 +1885,12 @@ describe("LocationsClient", () => {
                     closes_at: "closes_at",
                 },
             ],
-            exceptions: ["exceptions"],
+            exceptions: [
+                {
+                    starts_on: "starts_on",
+                    is_closed: true,
+                },
+            ],
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -1728,7 +1903,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1756,7 +1934,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.UnauthorizedError);
     });
@@ -1769,7 +1956,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1797,7 +1987,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
     });
@@ -1810,7 +2009,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1838,7 +2040,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.NotFoundError);
     });
@@ -1851,7 +2062,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1879,7 +2093,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.ConflictError);
     });
@@ -1892,7 +2115,10 @@ describe("LocationsClient", () => {
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
                 { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
             ],
-            exceptions: ["exceptions", "exceptions"],
+            exceptions: [
+                { starts_on: "starts_on", is_closed: true },
+                { starts_on: "starts_on", is_closed: true },
+            ],
         };
         const rawResponseBody = { key: "value" };
 
@@ -1920,7 +2146,16 @@ describe("LocationsClient", () => {
                         closes_at: "closes_at",
                     },
                 ],
-                exceptions: ["exceptions", "exceptions"],
+                exceptions: [
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                    {
+                        starts_on: "starts_on",
+                        is_closed: true,
+                    },
+                ],
             });
         }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });

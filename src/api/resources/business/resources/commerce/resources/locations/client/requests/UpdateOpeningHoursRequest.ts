@@ -9,14 +9,18 @@
  *                 opens_at: "opens_at",
  *                 closes_at: "closes_at"
  *             }],
- *         exceptions: ["exceptions"]
+ *         exceptions: [{
+ *                 starts_on: "starts_on",
+ *                 is_closed: true
+ *             }]
  *     }
  */
 export interface UpdateOpeningHoursRequest {
     /** The location ID */
     location: string;
     slots: UpdateOpeningHoursRequest.Slots.Item[];
-    exceptions: string[];
+    /** Dates the store closes or keeps other hours; send none to clear them. */
+    exceptions: UpdateOpeningHoursRequest.Exceptions.Item[];
 }
 
 export namespace UpdateOpeningHoursRequest {
@@ -29,6 +33,20 @@ export namespace UpdateOpeningHoursRequest {
             closes_at: string;
             label?: (string | null) | undefined;
             sort_order?: (number | null) | undefined;
+        }
+    }
+
+    export type Exceptions = Exceptions.Item[];
+
+    export namespace Exceptions {
+        export interface Item {
+            starts_on: string;
+            ends_on?: (string | null) | undefined;
+            is_closed: boolean;
+            opens_at?: (string | null) | undefined;
+            closes_at?: (string | null) | undefined;
+            label?: (string | null) | undefined;
+            message?: (string | null) | undefined;
         }
     }
 }

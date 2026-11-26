@@ -110,7 +110,14 @@ export class LocationsClient {
      * @example
      *     await client.business.commerce.locations.create({
      *         "Idempotency-Key": "Idempotency-Key",
-     *         kind: "store"
+     *         kind: "store",
+     *         name: "name",
+     *         address: "address",
+     *         city: "city",
+     *         state: "state",
+     *         zipcode: "zipcode",
+     *         country: "country",
+     *         timezone: "America/Adak"
      *     })
      */
     public create(
@@ -261,10 +268,15 @@ export class LocationsClient {
     }
 
     /**
-     * The main store saves only its name: its address, timezone and phone
-     * are the business's.
+     * The main store saves only its `name`: its address, timezone and phone
+     * are the business's, and any of those sent for it are ignored. An extra
+     * store or a stand needs its address, city, state, zipcode and timezone
+     * as well (422 on the one missing), and keeps every field it is sent
+     * as its new value, so send the whole form.
+     * `CommerceRequestBodiesDocumentedTest` keeps the fields below in step
+     * with `StoreLocationRequest::detailRules()`.
      *
-     * @param {FiveOneEat.business.commerce.UpdateLocationRequest} request
+     * @param {FiveOneEat.business.commerce.UpdateLocationsRequest} request
      * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link FiveOneEat.UnauthorizedError}
@@ -279,14 +291,14 @@ export class LocationsClient {
      *     })
      */
     public update(
-        request: FiveOneEat.business.commerce.UpdateLocationRequest,
+        request: FiveOneEat.business.commerce.UpdateLocationsRequest,
         requestOptions?: LocationsClient.RequestOptions,
     ): core.HttpResponsePromise<FiveOneEat.business.commerce.UpdateLocationsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: FiveOneEat.business.commerce.UpdateLocationRequest,
+        request: FiveOneEat.business.commerce.UpdateLocationsRequest,
         requestOptions?: LocationsClient.RequestOptions,
     ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.UpdateLocationsResponse>> {
         const { location, ..._body } = request;
@@ -881,7 +893,10 @@ export class LocationsClient {
      *                 opens_at: "opens_at",
      *                 closes_at: "closes_at"
      *             }],
-     *         exceptions: ["exceptions"]
+     *         exceptions: [{
+     *                 starts_on: "starts_on",
+     *                 is_closed: true
+     *             }]
      *     })
      */
     public updatePickup(
@@ -983,7 +998,10 @@ export class LocationsClient {
      *                 opens_at: "opens_at",
      *                 closes_at: "closes_at"
      *             }],
-     *         exceptions: ["exceptions"]
+     *         exceptions: [{
+     *                 starts_on: "starts_on",
+     *                 is_closed: true
+     *             }]
      *     })
      */
     public previewPickupAffectedOrders(
@@ -1165,7 +1183,10 @@ export class LocationsClient {
      *                 opens_at: "opens_at",
      *                 closes_at: "closes_at"
      *             }],
-     *         exceptions: ["exceptions"]
+     *         exceptions: [{
+     *                 starts_on: "starts_on",
+     *                 is_closed: true
+     *             }]
      *     })
      */
     public updateHours(

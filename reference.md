@@ -5363,7 +5363,14 @@ the main one: a second is refused with a form error on `kind`.
 ```typescript
 await client.business.commerce.locations.create({
     "Idempotency-Key": "Idempotency-Key",
-    kind: "store"
+    kind: "store",
+    name: "name",
+    address: "address",
+    city: "city",
+    state: "state",
+    zipcode: "zipcode",
+    country: "country",
+    timezone: "America/Adak"
 });
 
 ```
@@ -5463,8 +5470,13 @@ await client.business.commerce.locations.get({
 <dl>
 <dd>
 
-The main store saves only its name: its address, timezone and phone
-are the business's.
+The main store saves only its `name`: its address, timezone and phone
+are the business's, and any of those sent for it are ignored. An extra
+store or a stand needs its address, city, state, zipcode and timezone
+as well (422 on the one missing), and keeps every field it is sent
+as its new value, so send the whole form.
+`CommerceRequestBodiesDocumentedTest` keeps the fields below in step
+with `StoreLocationRequest::detailRules()`.
 </dd>
 </dl>
 </dd>
@@ -5498,7 +5510,7 @@ await client.business.commerce.locations.update({
 <dl>
 <dd>
 
-**request:** `FiveOneEat.business.commerce.UpdateLocationRequest` 
+**request:** `FiveOneEat.business.commerce.UpdateLocationsRequest` 
     
 </dd>
 </dl>
@@ -5942,7 +5954,10 @@ await client.business.commerce.locations.updatePickup({
             opens_at: "opens_at",
             closes_at: "closes_at"
         }],
-    exceptions: ["exceptions"]
+    exceptions: [{
+            starts_on: "starts_on",
+            is_closed: true
+        }]
 });
 
 ```
@@ -6019,7 +6034,10 @@ await client.business.commerce.locations.previewPickupAffectedOrders({
             opens_at: "opens_at",
             closes_at: "closes_at"
         }],
-    exceptions: ["exceptions"]
+    exceptions: [{
+            starts_on: "starts_on",
+            is_closed: true
+        }]
 });
 
 ```
@@ -6159,7 +6177,10 @@ await client.business.commerce.locations.updateHours({
             opens_at: "opens_at",
             closes_at: "closes_at"
         }],
-    exceptions: ["exceptions"]
+    exceptions: [{
+            starts_on: "starts_on",
+            is_closed: true
+        }]
 });
 
 ```

@@ -171,3 +171,4 @@ export * from "./TicketResponse.js";
 export * from "./Transaction.js";
 export * from "./UnauthorizedErrorBody.js";
 export * from "./UnprocessableEntityErrorBody.js";
+export * from "./UpdateLocationRequest.js";

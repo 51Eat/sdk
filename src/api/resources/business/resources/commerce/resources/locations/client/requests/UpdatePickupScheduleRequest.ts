@@ -12,7 +12,10 @@
  *                 opens_at: "opens_at",
  *                 closes_at: "closes_at"
  *             }],
- *         exceptions: ["exceptions"]
+ *         exceptions: [{
+ *                 starts_on: "starts_on",
+ *                 is_closed: true
+ *             }]
  *     }
  */
 export interface UpdatePickupScheduleRequest {
@@ -24,7 +27,8 @@ export interface UpdatePickupScheduleRequest {
     same_day_cutoff?: string | null;
     pickup_slot_minutes: number;
     windows: UpdatePickupScheduleRequest.Windows.Item[];
-    exceptions: string[];
+    /** Dates the schedule changes or closes; send none to clear them. */
+    exceptions: UpdatePickupScheduleRequest.Exceptions.Item[];
 }
 
 export namespace UpdatePickupScheduleRequest {
@@ -36,6 +40,19 @@ export namespace UpdatePickupScheduleRequest {
             opens_at: string;
             closes_at: string;
             slot_capacity?: (number | null) | undefined;
+        }
+    }
+
+    export type Exceptions = Exceptions.Item[];
+
+    export namespace Exceptions {
+        export interface Item {
+            starts_on: string;
+            ends_on?: (string | null) | undefined;
+            is_closed: boolean;
+            opens_at?: (string | null) | undefined;
+            closes_at?: (string | null) | undefined;
+            label?: (string | null) | undefined;
         }
     }
 }

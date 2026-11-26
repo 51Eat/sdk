@@ -6,13 +6,67 @@ import type * as FiveOneEat from "../../../../../../../../index.js";
  * @example
  *     {
  *         "Idempotency-Key": "Idempotency-Key",
- *         kind: "store"
+ *         kind: "store",
+ *         name: "name",
+ *         address: "address",
+ *         city: "city",
+ *         state: "state",
+ *         zipcode: "zipcode",
+ *         country: "country",
+ *         timezone: "America/Adak"
  *     }
  */
 export interface StoreLocationRequest {
     /** Required, 1–255 characters, new for each location you mean to add: a retry with the same key never adds twice. */
     "Idempotency-Key": string;
     kind: FiveOneEat.LocationKind;
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+    latitude?: number | null;
+    longitude?: number | null;
+    timezone: StoreLocationRequest.Timezone;
+    phone?: string | null;
+    notes?: string | null;
+    always_open?: boolean | null;
     is_active?: boolean | null;
     offer_main_store_products?: boolean | null;
+}
+
+export namespace StoreLocationRequest {
+    export const Timezone = {
+        AmericaAdak: "America/Adak",
+        AmericaAnchorage: "America/Anchorage",
+        AmericaBoise: "America/Boise",
+        AmericaChicago: "America/Chicago",
+        AmericaDenver: "America/Denver",
+        AmericaDetroit: "America/Detroit",
+        AmericaIndianaIndianapolis: "America/Indiana/Indianapolis",
+        AmericaIndianaKnox: "America/Indiana/Knox",
+        AmericaIndianaMarengo: "America/Indiana/Marengo",
+        AmericaIndianaPetersburg: "America/Indiana/Petersburg",
+        AmericaIndianaTellCity: "America/Indiana/Tell_City",
+        AmericaIndianaVevay: "America/Indiana/Vevay",
+        AmericaIndianaVincennes: "America/Indiana/Vincennes",
+        AmericaIndianaWinamac: "America/Indiana/Winamac",
+        AmericaJuneau: "America/Juneau",
+        AmericaKentuckyLouisville: "America/Kentucky/Louisville",
+        AmericaKentuckyMonticello: "America/Kentucky/Monticello",
+        AmericaLosAngeles: "America/Los_Angeles",
+        AmericaMenominee: "America/Menominee",
+        AmericaMetlakatla: "America/Metlakatla",
+        AmericaNewYork: "America/New_York",
+        AmericaNome: "America/Nome",
+        AmericaNorthDakotaBeulah: "America/North_Dakota/Beulah",
+        AmericaNorthDakotaCenter: "America/North_Dakota/Center",
+        AmericaNorthDakotaNewSalem: "America/North_Dakota/New_Salem",
+        AmericaPhoenix: "America/Phoenix",
+        AmericaSitka: "America/Sitka",
+        AmericaYakutat: "America/Yakutat",
+        PacificHonolulu: "Pacific/Honolulu",
+    } as const;
+    export type Timezone = (typeof Timezone)[keyof typeof Timezone];
 }
