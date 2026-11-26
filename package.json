@@ -1,6 +1,6 @@
 {
     "name": "@51eat/sdk",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -264,17 +264,6 @@
             },
             "default": "./dist/cjs/api/resources/business/resources/temporaryLocations/exports.js"
         },
-        "./business/productCategories": {
-            "import": {
-                "types": "./dist/esm/api/resources/business/resources/productCategories/exports.d.mts",
-                "default": "./dist/esm/api/resources/business/resources/productCategories/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/business/resources/productCategories/exports.d.ts",
-                "default": "./dist/cjs/api/resources/business/resources/productCategories/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/business/resources/productCategories/exports.js"
-        },
         "./business/auth/tokens": {
             "import": {
                 "types": "./dist/esm/api/resources/business/resources/auth/resources/tokens/exports.d.mts",
@@ -307,6 +296,17 @@
                 "default": "./dist/cjs/api/resources/business/resources/commerce/exports.js"
             },
             "default": "./dist/cjs/api/resources/business/resources/commerce/exports.js"
+        },
+        "./business/commerce/productCategories": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/resources/productCategories/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/resources/productCategories/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/resources/productCategories/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/resources/productCategories/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/resources/productCategories/exports.js"
         },
         "./business/commerce/locations": {
             "import": {
@@ -341,6 +341,17 @@
             },
             "default": "./dist/cjs/api/resources/business/resources/commerce/resources/products/exports.js"
         },
+        "./business/commerce/catalog": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/resources/catalog/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/resources/catalog/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/resources/catalog/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/resources/catalog/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/resources/catalog/exports.js"
+        },
         "./business/commerce/variants": {
             "import": {
                 "types": "./dist/esm/api/resources/business/resources/commerce/resources/variants/exports.d.mts",
@@ -351,6 +362,17 @@
                 "default": "./dist/cjs/api/resources/business/resources/commerce/resources/variants/exports.js"
             },
             "default": "./dist/cjs/api/resources/business/resources/commerce/resources/variants/exports.js"
+        },
+        "./business/commerce/productImages": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/resources/productImages/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/resources/productImages/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/resources/productImages/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/resources/productImages/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/resources/productImages/exports.js"
         },
         "./business/commerce/selling": {
             "import": {

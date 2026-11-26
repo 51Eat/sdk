@@ -291,7 +291,9 @@ describe("CatalogClient", () => {
         const server = mockServerPool.createServer();
         const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { data: [{ id: "id", name: "name", slug: "slug", sort_order: 1 }] };
+        const rawResponseBody = {
+            data: [{ id: "id", name: "name", slug: "slug", sort_order: 1, parent_id: "parent_id", products_count: 1 }],
+        };
 
         server
             .mockEndpoint()

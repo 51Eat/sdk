@@ -16,7 +16,6 @@ import { GalleryClient } from "../resources/gallery/client/Client.js";
 import { HoursClient } from "../resources/hours/client/Client.js";
 import { MenusClient } from "../resources/menus/client/Client.js";
 import { MessagingClient } from "../resources/messaging/client/Client.js";
-import { ProductCategoriesClient } from "../resources/productCategories/client/Client.js";
 import { ProductOrdersClient } from "../resources/productOrders/client/Client.js";
 import { ProfileClient } from "../resources/profile/client/Client.js";
 import { PushNotificationsClient } from "../resources/pushNotifications/client/Client.js";
@@ -50,7 +49,6 @@ export class BusinessClient {
     protected _categories: CategoriesClient | undefined;
     protected _allergens: AllergensClient | undefined;
     protected _temporaryLocations: TemporaryLocationsClient | undefined;
-    protected _productCategories: ProductCategoriesClient | undefined;
     protected _commerce: CommerceClient | undefined;
     protected _shipping: ShippingClient | undefined;
 
@@ -132,10 +130,6 @@ export class BusinessClient {
 
     public get temporaryLocations(): TemporaryLocationsClient {
         return (this._temporaryLocations ??= new TemporaryLocationsClient(this._options));
-    }
-
-    public get productCategories(): ProductCategoriesClient {
-        return (this._productCategories ??= new ProductCategoriesClient(this._options));
     }
 
     public get commerce(): CommerceClient {

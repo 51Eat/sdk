@@ -6,6 +6,7 @@
  *         productCategory: "productCategory"
  *     }
  */
-export interface UpdateProductCategoriesRequest {
+export interface DeleteProductCategoriesRequest {
+    /** The product category ID */
     productCategory: string;
 }

@@ -2,8 +2,11 @@
 
 import type { BaseClientOptions } from "../../../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../../../BaseClient.js";
+import { CatalogClient } from "../resources/catalog/client/Client.js";
 import { LocationsClient } from "../resources/locations/client/Client.js";
 import { OrdersClient } from "../resources/orders/client/Client.js";
+import { ProductCategoriesClient } from "../resources/productCategories/client/Client.js";
+import { ProductImagesClient } from "../resources/productImages/client/Client.js";
 import { ProductsClient } from "../resources/products/client/Client.js";
 import { SellingClient } from "../resources/selling/client/Client.js";
 import { StockClient } from "../resources/stock/client/Client.js";
@@ -15,15 +18,22 @@ export declare namespace CommerceClient {
 
 export class CommerceClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<CommerceClient.Options>;
+    protected _productCategories: ProductCategoriesClient | undefined;
     protected _locations: LocationsClient | undefined;
     protected _orders: OrdersClient | undefined;
     protected _products: ProductsClient | undefined;
+    protected _catalog: CatalogClient | undefined;
     protected _variants: VariantsClient | undefined;
+    protected _productImages: ProductImagesClient | undefined;
     protected _selling: SellingClient | undefined;
     protected _stock: StockClient | undefined;
 
     constructor(options: CommerceClient.Options = {}) {
         this._options = normalizeClientOptionsWithAuth(options);
+    }
+
+    public get productCategories(): ProductCategoriesClient {
+        return (this._productCategories ??= new ProductCategoriesClient(this._options));
     }
 
     public get locations(): LocationsClient {
@@ -38,8 +48,16 @@ export class CommerceClient {
         return (this._products ??= new ProductsClient(this._options));
     }
 
+    public get catalog(): CatalogClient {
+        return (this._catalog ??= new CatalogClient(this._options));
+    }
+
     public get variants(): VariantsClient {
         return (this._variants ??= new VariantsClient(this._options));
+    }
+
+    public get productImages(): ProductImagesClient {
+        return (this._productImages ??= new ProductImagesClient(this._options));
     }
 
     public get selling(): SellingClient {

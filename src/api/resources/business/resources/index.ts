@@ -33,8 +33,6 @@ export * as menus from "./menus/index.js";
 export * from "./menus/types/index.js";
 export * from "./messaging/client/requests/index.js";
 export * as messaging from "./messaging/index.js";
-export * from "./productCategories/client/requests/index.js";
-export * as productCategories from "./productCategories/index.js";
 export * from "./productOrders/client/requests/index.js";
 export * as productOrders from "./productOrders/index.js";
 export * from "./productOrders/types/index.js";

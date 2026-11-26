@@ -4848,191 +4848,6 @@ await client.business.temporaryLocations.delete({
 </dl>
 </details>
 
-## Business ProductCategories
-<details><summary><code>client.business.productCategories.<a href="/src/api/resources/business/resources/productCategories/client/Client.ts">list</a>() -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.productCategories.list();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductCategoriesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.productCategories.<a href="/src/api/resources/business/resources/productCategories/client/Client.ts">create</a>() -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.productCategories.create();
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductCategoriesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.productCategories.<a href="/src/api/resources/business/resources/productCategories/client/Client.ts">update</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.productCategories.update({
-    productCategory: "productCategory"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.UpdateProductCategoriesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductCategoriesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.business.productCategories.<a href="/src/api/resources/business/resources/productCategories/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.business.productCategories.delete({
-    productCategory: "productCategory"
-});
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `FiveOneEat.business.DeleteProductCategoriesRequest` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ProductCategoriesClient.RequestOptions` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## Business Auth Tokens
 <details><summary><code>client.business.auth.tokens.<a href="/src/api/resources/business/resources/auth/resources/tokens/client/Client.ts">list</a>() -> FiveOneEat.ListTokensResponse</code></summary>
 <dl>
@@ -5273,6 +5088,247 @@ await client.business.bulletins.comments.create({
 </dl>
 </details>
 
+## Business Commerce ProductCategories
+<details><summary><code>client.business.commerce.productCategories.<a href="/src/api/resources/business/resources/commerce/resources/productCategories/client/Client.ts">list</a>() -> FiveOneEat.ListProductCategoriesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+In their order, flat (a child names its parent in `parent_id`), each
+with `products_count`, the products filed directly under it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productCategories.list();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductCategoriesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.productCategories.<a href="/src/api/resources/business/resources/commerce/resources/productCategories/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreateProductCategoriesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Answers 201.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productCategories.create({
+    "Idempotency-Key": "Idempotency-Key",
+    name: "name"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.StoreProductCategoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductCategoriesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.productCategories.<a href="/src/api/resources/business/resources/commerce/resources/productCategories/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateProductCategoriesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productCategories.update({
+    productCategory: "productCategory",
+    name: "name"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdateProductCategoryRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductCategoriesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.productCategories.<a href="/src/api/resources/business/resources/commerce/resources/productCategories/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Its children become top-level categories and its products, and theirs,
+are left uncategorised.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productCategories.delete({
+    productCategory: "productCategory"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.DeleteProductCategoriesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductCategoriesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Business Commerce Locations
 <details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">list</a>() -> FiveOneEat.ListLocationsResponse</code></summary>
 <dl>
@@ -5388,6 +5444,147 @@ await client.business.commerce.locations.create({
 <dd>
 
 **request:** `FiveOneEat.business.commerce.StoreLocationRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">getProducts</a>({ ...params }) -> FiveOneEat.GetProductsLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Every product of the business, by name, and the IDs of those sold here
+(`selected`): online, for pickup, at a store; in person at a stand
+(`channel`). `location.sells_this_way` is false while the location
+doesn't sell that way at all, and nothing can be added there.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.getProducts({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.GetProductsLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">setProducts</a>({ ...params }) -> FiveOneEat.SetProductsLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Sells exactly `product_ids` here, the way the location sells; an empty
+list takes them all off. Each product's other stores and stands stay
+as they are. Saving replaces what is there, so a retry is safe.
+`active: true` switches the location on before adding, `active: false`
+off after taking off. A product added where the location can't sell it
+(switched off, archived, or not taking pickup orders or selling in
+person) is refused with a form error on `availability`, and one that
+isn't the business's on `product_ids.*`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.setProducts({
+    location: "location",
+    product_ids: ["product_ids"]
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.SetLocationProductsRequest` 
     
 </dd>
 </dl>
@@ -7110,6 +7307,66 @@ await client.business.commerce.products.delete({
 </dl>
 </details>
 
+## Business Commerce Catalog
+<details><summary><code>client.business.commerce.catalog.<a href="/src/api/resources/business/resources/commerce/resources/catalog/client/Client.ts">getOptions</a>() -> FiveOneEat.GetOptionsCatalogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The units an option is sold in, the tax codes the business's products
+may use (a restaurant seller's are food and drink, with
+`prepared_food_tax_code` as the default; everyone else's are general
+goods), its categories and unarchived locations, and whether it can
+sell, take payments and put a product on sale (`readiness`).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.catalog.getOptions();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `CatalogClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Business Commerce Variants
 <details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">list</a>({ ...params }) -> FiveOneEat.ListVariantsResponse</code></summary>
 <dl>
@@ -7581,6 +7838,250 @@ await client.business.commerce.variants.archive({
 <dd>
 
 **requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Business Commerce ProductImages
+<details><summary><code>client.business.commerce.productImages.<a href="/src/api/resources/business/resources/commerce/resources/productImages/client/Client.ts">upload</a>({ ...params }) -> FiveOneEat.UploadProductImagesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Multipart, with the photo in `image` (up to 10 MB) and optional
+`alt_text`. Answers 201. It goes after the product's other photos.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productImages.upload({
+    image: fs.createReadStream("/path/to/your/file"),
+    "Idempotency-Key": "Idempotency-Key",
+    product: "product"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.StoreProductImageRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductImagesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.productImages.<a href="/src/api/resources/business/resources/commerce/resources/productImages/client/Client.ts">reorder</a>({ ...params }) -> FiveOneEat.ReorderProductImagesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Sets each listed photo's `sort_order`; the first is the product's main
+photo. A listed photo of another product is left alone. Answers with
+all the product's photos in their new order.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productImages.reorder({
+    product: "product",
+    images: [{
+            id: "id",
+            sort_order: 1
+        }]
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.ReorderProductImagesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductImagesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.productImages.<a href="/src/api/resources/business/resources/commerce/resources/productImages/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateProductImagesResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productImages.update({
+    product: "product",
+    image: "image"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdateProductImageRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductImagesClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.productImages.<a href="/src/api/resources/business/resources/commerce/resources/productImages/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.productImages.delete({
+    product: "product",
+    image: "image"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.DeleteProductImagesRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductImagesClient.RequestOptions` 
     
 </dd>
 </dl>

@@ -21,7 +21,7 @@ describe("ProductsClient", () => {
                     metadata: [],
                     product_category_id: "product_category_id",
                     tax_code: "tax_code",
-                    category: { id: "id", name: "name", slug: "slug", sort_order: 1 },
+                    category: { id: "id", name: "name", slug: "slug", sort_order: 1, parent_id: null },
                     images: [{ id: "id", url: null, srcset: null, alt_text: null, sort_order: 1 }],
                     variants: [
                         {
@@ -173,7 +173,14 @@ describe("ProductsClient", () => {
                 metadata: [{ key: "value" }],
                 product_category_id: "product_category_id",
                 tax_code: "tax_code",
-                category: { id: "id", name: "name", slug: "slug", sort_order: 1 },
+                category: {
+                    id: "id",
+                    name: "name",
+                    slug: "slug",
+                    sort_order: 1,
+                    parent_id: "parent_id",
+                    products_count: 1,
+                },
                 images: [{ id: "id", url: null, srcset: null, alt_text: null, sort_order: 1 }],
                 variants: [
                     {
@@ -347,7 +354,14 @@ describe("ProductsClient", () => {
                 metadata: [{ key: "value" }],
                 product_category_id: "product_category_id",
                 tax_code: "tax_code",
-                category: { id: "id", name: "name", slug: "slug", sort_order: 1 },
+                category: {
+                    id: "id",
+                    name: "name",
+                    slug: "slug",
+                    sort_order: 1,
+                    parent_id: "parent_id",
+                    products_count: 1,
+                },
                 images: [{ id: "id", url: null, srcset: null, alt_text: null, sort_order: 1 }],
                 variants: [
                     {
@@ -505,7 +519,14 @@ describe("ProductsClient", () => {
                 metadata: [{ key: "value" }],
                 product_category_id: "product_category_id",
                 tax_code: "tax_code",
-                category: { id: "id", name: "name", slug: "slug", sort_order: 1 },
+                category: {
+                    id: "id",
+                    name: "name",
+                    slug: "slug",
+                    sort_order: 1,
+                    parent_id: "parent_id",
+                    products_count: 1,
+                },
                 images: [{ id: "id", url: null, srcset: null, alt_text: null, sort_order: 1 }],
                 variants: [
                     {

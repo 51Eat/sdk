@@ -1,9 +1,17 @@
+export * as catalog from "./catalog/index.js";
+export * from "./catalog/types/index.js";
 export * from "./locations/client/requests/index.js";
 export * as locations from "./locations/index.js";
 export * from "./locations/types/index.js";
 export * from "./orders/client/requests/index.js";
 export * as orders from "./orders/index.js";
 export * from "./orders/types/index.js";
+export * from "./productCategories/client/requests/index.js";
+export * as productCategories from "./productCategories/index.js";
+export * from "./productCategories/types/index.js";
+export * from "./productImages/client/requests/index.js";
+export * as productImages from "./productImages/index.js";
+export * from "./productImages/types/index.js";
 export * from "./products/client/requests/index.js";
 export * as products from "./products/index.js";
 export * from "./products/types/index.js";

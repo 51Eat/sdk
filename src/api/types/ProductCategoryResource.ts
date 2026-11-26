@@ -7,5 +7,9 @@ export interface ProductCategoryResource {
     name: string;
     slug: string;
     sort_order: number;
+    /** The top-level category it's filed under; null for a top-level one. */
+    parent_id: string | null;
+    /** The products filed directly under it, on the owner's categories list. */
+    products_count?: number | undefined;
     parent?: (FiveOneEat.ProductCategoryResource | null) | undefined;
 }
