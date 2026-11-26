@@ -24,11 +24,15 @@ export class LinesClient {
 
     /**
      * Puts a variant in the cart, or adds to its line when it's there. The
-     * variant has to be the business's, for sale, and offered at the cart's
-     * location the cart's way (before a location is chosen, at any of the
-     * business's locations). The quantity is in the variant's unit, a whole
-     * number of its `quantity_step`, from 1 to 1000 steps. Answers with the
-     * cart.
+     * variant has to be the business's and for sale. An in-person cart takes
+     * what its stand sells. An online cart takes what any of the business's
+     * locations offers for pickup: when the cart's own store doesn't, a cart
+     * with items keeps its store and the line comes back with `offered_here`
+     * false (the quote blocks it until the buyer removes it or switches to a
+     * store that offers it), and a cart with no items drops its store, so
+     * `location` is null and the buyer chooses one. The quantity is in the
+     * variant's unit, a whole number of its `quantity_step`, from 1 to 1000
+     * steps. Answers with the cart.
      *
      * @param {FiveOneEat.commerce.carts.CartLineRequest} request
      * @param {LinesClient.RequestOptions} requestOptions - Request-specific configuration.

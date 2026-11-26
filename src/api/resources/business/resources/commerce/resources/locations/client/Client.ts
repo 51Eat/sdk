@@ -5,7 +5,7 @@ import {
     type NormalizedClientOptionsWithAuth,
     normalizeClientOptionsWithAuth,
 } from "../../../../../../../../BaseClient.js";
-import { mergeHeaders } from "../../../../../../../../core/headers.js";
+import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../../../core/headers.js";
 import * as core from "../../../../../../../../core/index.js";
 import * as environments from "../../../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../../../errors/handleNonStatusCodeError.js";
@@ -28,7 +28,9 @@ export class LocationsClient {
     /**
      * Every store and stand of the business, main store first and then by
      * name, including ones switched off, blocked by the plan or archived.
-     * For the order list's store filter and the stock screen.
+     * Each carries why it can't sell yet (`blocker`) and its open pickup
+     * orders still to come (`affected_orders`), the same as the web's list.
+     * `can_add_store` says whether the plan has room for another store.
      *
      * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -92,5 +94,1153 @@ export class LocationsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/business/commerce/locations");
+    }
+
+    /**
+     * Answers 201. `kind` is `store` or `stand`. A Free plan has one store,
+     * the main one: a second is refused with a form error on `kind`.
+     *
+     * @param {FiveOneEat.business.commerce.StoreLocationRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.commerce.locations.create({
+     *         "Idempotency-Key": "Idempotency-Key",
+     *         kind: "store"
+     *     })
+     */
+    public create(
+        request: FiveOneEat.business.commerce.StoreLocationRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.CreateLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
+    }
+
+    private async __create(
+        request: FiveOneEat.business.commerce.StoreLocationRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.CreateLocationsResponse>> {
+        const { "Idempotency-Key": idempotencyKey, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ "Idempotency-Key": idempotencyKey }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                "business/commerce/locations",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.CreateLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/business/commerce/locations");
+    }
+
+    /**
+     * @param {FiveOneEat.business.commerce.GetLocationsRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     *
+     * @example
+     *     await client.business.commerce.locations.get({
+     *         location: "location"
+     *     })
+     */
+    public get(
+        request: FiveOneEat.business.commerce.GetLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.GetLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
+    }
+
+    private async __get(
+        request: FiveOneEat.business.commerce.GetLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.GetLocationsResponse>> {
+        const { location } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.GetLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/business/commerce/locations/{location}",
+        );
+    }
+
+    /**
+     * The main store saves only its name: its address, timezone and phone
+     * are the business's.
+     *
+     * @param {FiveOneEat.business.commerce.UpdateLocationRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.commerce.locations.update({
+     *         location: "location",
+     *         name: "name"
+     *     })
+     */
+    public update(
+        request: FiveOneEat.business.commerce.UpdateLocationRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.UpdateLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
+    }
+
+    private async __update(
+        request: FiveOneEat.business.commerce.UpdateLocationRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.UpdateLocationsResponse>> {
+        const { location, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.UpdateLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PUT",
+            "/business/commerce/locations/{location}",
+        );
+    }
+
+    /**
+     * Only one that never sold anything and holds no stock: otherwise 409,
+     * and it is archived instead. The main store can't be deleted.
+     *
+     * @param {FiveOneEat.business.commerce.DeleteLocationsRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     *
+     * @example
+     *     await client.business.commerce.locations.delete({
+     *         location: "location"
+     *     })
+     */
+    public delete(
+        request: FiveOneEat.business.commerce.DeleteLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<number> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
+    }
+
+    private async __delete(
+        request: FiveOneEat.business.commerce.DeleteLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<number>> {
+        const { location } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as number, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/business/commerce/locations/{location}",
+        );
+    }
+
+    /**
+     * @param {FiveOneEat.business.commerce.SetLocationActiveRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.commerce.locations.setActive({
+     *         location: "location",
+     *         active: true
+     *     })
+     */
+    public setActive(
+        request: FiveOneEat.business.commerce.SetLocationActiveRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.SetActiveLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__setActive(request, requestOptions));
+    }
+
+    private async __setActive(
+        request: FiveOneEat.business.commerce.SetLocationActiveRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.SetActiveLocationsResponse>> {
+        const { location, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/active`,
+            ),
+            method: "PATCH",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.SetActiveLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PATCH",
+            "/business/commerce/locations/{location}/active",
+        );
+    }
+
+    /**
+     * Hides it and stops it taking orders, keeping its history and freeing
+     * its name and, for a store, its place in the plan's limit. The main
+     * store can't be archived.
+     *
+     * @param {FiveOneEat.business.commerce.ArchiveLocationsRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     *
+     * @example
+     *     await client.business.commerce.locations.archive({
+     *         location: "location"
+     *     })
+     */
+    public archive(
+        request: FiveOneEat.business.commerce.ArchiveLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.ArchiveLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__archive(request, requestOptions));
+    }
+
+    private async __archive(
+        request: FiveOneEat.business.commerce.ArchiveLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.ArchiveLocationsResponse>> {
+        const { location } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/archive`,
+            ),
+            method: "POST",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.ArchiveLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/business/commerce/locations/{location}/archive",
+        );
+    }
+
+    /**
+     * A download link that works for a few minutes. `url` is null while the
+     * flyer is still being generated. Only a stand has a flyer.
+     *
+     * @param {FiveOneEat.business.commerce.FlyerLocationsRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     *
+     * @example
+     *     await client.business.commerce.locations.flyer({
+     *         location: "location"
+     *     })
+     */
+    public flyer(
+        request: FiveOneEat.business.commerce.FlyerLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.FlyerLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__flyer(request, requestOptions));
+    }
+
+    private async __flyer(
+        request: FiveOneEat.business.commerce.FlyerLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.FlyerLocationsResponse>> {
+        const { location } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/flyer`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.FlyerLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/business/commerce/locations/{location}/flyer",
+        );
+    }
+
+    /**
+     * Offers, for pickup, every product the main store offers; those already
+     * offered are left as they are. Only an extra store takes products this
+     * way. `added` is how many it added, so a second call adds none.
+     *
+     * @param {FiveOneEat.business.commerce.OfferMainStoreProductsLocationsRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.commerce.locations.offerMainStoreProducts({
+     *         location: "location"
+     *     })
+     */
+    public offerMainStoreProducts(
+        request: FiveOneEat.business.commerce.OfferMainStoreProductsLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.OfferMainStoreProductsLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__offerMainStoreProducts(request, requestOptions));
+    }
+
+    private async __offerMainStoreProducts(
+        request: FiveOneEat.business.commerce.OfferMainStoreProductsLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.OfferMainStoreProductsLocationsResponse>> {
+        const { location } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/offer-main-store-products`,
+            ),
+            method: "POST",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.OfferMainStoreProductsLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/business/commerce/locations/{location}/offer-main-store-products",
+        );
+    }
+
+    /**
+     * Its pickup settings, weekly windows with slot capacity and date
+     * exceptions, and whether the plan lets it take pickup orders
+     * (`can_offer_pickup`: a stand needs Pro).
+     *
+     * @param {FiveOneEat.business.commerce.GetPickupLocationsRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     *
+     * @example
+     *     await client.business.commerce.locations.getPickup({
+     *         location: "location"
+     *     })
+     */
+    public getPickup(
+        request: FiveOneEat.business.commerce.GetPickupLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.GetPickupLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getPickup(request, requestOptions));
+    }
+
+    private async __getPickup(
+        request: FiveOneEat.business.commerce.GetPickupLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.GetPickupLocationsResponse>> {
+        const { location } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/pickup`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.GetPickupLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/business/commerce/locations/{location}/pickup",
+        );
+    }
+
+    /**
+     * Replaces the whole schedule. A window never runs past midnight and
+     * two windows on a day can't overlap. Turning pickup on at a stand on a
+     * Free plan is refused with a form error on `offers_pickup`.
+     *
+     * @param {FiveOneEat.business.commerce.UpdatePickupScheduleRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.commerce.locations.updatePickup({
+     *         location: "location",
+     *         offers_pickup: true,
+     *         preparation_minutes: 1,
+     *         pickup_slot_minutes: 1,
+     *         windows: [{
+     *                 day_of_week: 1,
+     *                 opens_at: "opens_at",
+     *                 closes_at: "closes_at"
+     *             }],
+     *         exceptions: ["exceptions"]
+     *     })
+     */
+    public updatePickup(
+        request: FiveOneEat.business.commerce.UpdatePickupScheduleRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.UpdatePickupLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updatePickup(request, requestOptions));
+    }
+
+    private async __updatePickup(
+        request: FiveOneEat.business.commerce.UpdatePickupScheduleRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.UpdatePickupLocationsResponse>> {
+        const { location, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/pickup`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.UpdatePickupLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PUT",
+            "/business/commerce/locations/{location}/pickup",
+        );
+    }
+
+    /**
+     * Send the schedule you are about to save. The answer lists the open
+     * pickup orders it would leave outside its windows, so the owner can
+     * contact those buyers or cancel the orders first. It changes nothing,
+     * and so, unlike the writes, takes no `Idempotency-Key`.
+     *
+     * @param {FiveOneEat.business.commerce.PreviewPickupScheduleRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.commerce.locations.previewPickupAffectedOrders({
+     *         location: "location",
+     *         offers_pickup: true,
+     *         preparation_minutes: 1,
+     *         pickup_slot_minutes: 1,
+     *         windows: [{
+     *                 day_of_week: 1,
+     *                 opens_at: "opens_at",
+     *                 closes_at: "closes_at"
+     *             }],
+     *         exceptions: ["exceptions"]
+     *     })
+     */
+    public previewPickupAffectedOrders(
+        request: FiveOneEat.business.commerce.PreviewPickupScheduleRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.PreviewPickupAffectedOrdersLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__previewPickupAffectedOrders(request, requestOptions));
+    }
+
+    private async __previewPickupAffectedOrders(
+        request: FiveOneEat.business.commerce.PreviewPickupScheduleRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.PreviewPickupAffectedOrdersLocationsResponse>> {
+        const { location, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/pickup/affected-orders`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.PreviewPickupAffectedOrdersLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/business/commerce/locations/{location}/pickup/affected-orders",
+        );
+    }
+
+    /**
+     * Its weekly slots and exceptions, and whether it is open now. The main
+     * store and stands answer 404: the main store's hours are the business
+     * hours.
+     *
+     * @param {FiveOneEat.business.commerce.GetHoursLocationsRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     *
+     * @example
+     *     await client.business.commerce.locations.getHours({
+     *         location: "location"
+     *     })
+     */
+    public getHours(
+        request: FiveOneEat.business.commerce.GetHoursLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.GetHoursLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getHours(request, requestOptions));
+    }
+
+    private async __getHours(
+        request: FiveOneEat.business.commerce.GetHoursLocationsRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.GetHoursLocationsResponse>> {
+        const { location } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/hours`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.GetHoursLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/business/commerce/locations/{location}/hours",
+        );
+    }
+
+    /**
+     * Replaces the whole schedule, with the business hours' rules: a slot
+     * may close after midnight, and two slots on a day can't overlap. Send
+     * every slot and exception to keep; none to clear them.
+     *
+     * @param {FiveOneEat.business.commerce.UpdateOpeningHoursRequest} request
+     * @param {LocationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link FiveOneEat.UnauthorizedError}
+     * @throws {@link FiveOneEat.ForbiddenError}
+     * @throws {@link FiveOneEat.NotFoundError}
+     * @throws {@link FiveOneEat.ConflictError}
+     * @throws {@link FiveOneEat.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.business.commerce.locations.updateHours({
+     *         location: "location",
+     *         slots: [{
+     *                 day_of_week: 1,
+     *                 opens_at: "opens_at",
+     *                 closes_at: "closes_at"
+     *             }],
+     *         exceptions: ["exceptions"]
+     *     })
+     */
+    public updateHours(
+        request: FiveOneEat.business.commerce.UpdateOpeningHoursRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): core.HttpResponsePromise<FiveOneEat.business.commerce.UpdateHoursLocationsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updateHours(request, requestOptions));
+    }
+
+    private async __updateHours(
+        request: FiveOneEat.business.commerce.UpdateOpeningHoursRequest,
+        requestOptions?: LocationsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<FiveOneEat.business.commerce.UpdateHoursLocationsResponse>> {
+        const { location, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.FiveOneEatEnvironment.Production,
+                `business/commerce/locations/${core.url.encodePathParam(location)}/hours`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as FiveOneEat.business.commerce.UpdateHoursLocationsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new FiveOneEat.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new FiveOneEat.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new FiveOneEat.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new FiveOneEat.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 422:
+                    throw new FiveOneEat.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.FiveOneEatError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PUT",
+            "/business/commerce/locations/{location}/hours",
+        );
     }
 }

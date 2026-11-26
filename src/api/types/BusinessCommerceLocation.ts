@@ -4,13 +4,30 @@ export interface BusinessCommerceLocation {
     id: string;
     /** `store` or `stand`. */
     kind: BusinessCommerceLocation.Kind;
-    name: string;
     /** True for the business's main store only. */
     is_main: boolean;
-    /** Whether the location keeps stock; only these take a stock count. */
-    holds_stock: boolean;
+    name: string;
+    /** Null for the main store, which reads the business's address. */
+    address: string | null;
+    city: string | null;
+    state: string | null;
+    zipcode: string | null;
+    /** The address on one line; null for the main store, which shows the business's. */
+    address_line: string | null;
+    notes: string | null;
+    offers_pickup: boolean;
+    always_open: boolean;
     /** False when the owner switched it off. */
     is_active: boolean;
+    archived_at: string | null;
+    /** Null until a stand's flyer job has run. */
+    flyer_path: string | null;
+    /** Open pickup orders still to come, listed before it's switched off or archived (51EAT-283). */
+    affected_orders: BusinessCommerceLocation.AffectedOrders.Item[];
+    /** Why it can't sell yet; null when it can, is switched off or is archived. */
+    blocker: BusinessCommerceLocation.Blocker | null;
+    /** Whether the location keeps stock; only these take a stock count. */
+    holds_stock: boolean;
     /** An archived location takes no new orders or stock changes, but its orders stay. */
     archived: boolean;
 }
@@ -22,4 +39,23 @@ export namespace BusinessCommerceLocation {
         Stand: "stand",
     } as const;
     export type Kind = (typeof Kind)[keyof typeof Kind];
+    export type AffectedOrders = AffectedOrders.Item[];
+
+    export namespace AffectedOrders {
+        export interface Item {
+            id: string;
+            number: number | null;
+            buyer_name: string | null;
+            pickup_at: string;
+            url: string;
+        }
+    }
+
+    /**
+     * Why it can't sell yet; null when it can, is switched off or is archived.
+     */
+    export interface Blocker {
+        reason: string;
+        message: string;
+    }
 }

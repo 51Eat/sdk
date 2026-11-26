@@ -4,4 +4,5 @@ import type * as FiveOneEat from "../../../../../../../index.js";
 
 export interface ListLocationsResponse {
     data: FiveOneEat.BusinessCommerceLocation[];
+    can_add_store: boolean;
 }

@@ -14,13 +14,26 @@ describe("LocationsClient", () => {
                 {
                     id: "id",
                     kind: "store",
-                    name: "name",
                     is_main: true,
-                    holds_stock: true,
+                    name: "name",
+                    address: "address",
+                    city: "city",
+                    state: "state",
+                    zipcode: "zipcode",
+                    address_line: "address_line",
+                    notes: "notes",
+                    offers_pickup: true,
+                    always_open: true,
                     is_active: true,
+                    archived_at: "archived_at",
+                    flyer_path: "flyer_path",
+                    affected_orders: [{ id: "id", number: null, buyer_name: null, pickup_at: "pickup_at", url: "url" }],
+                    blocker: { reason: "reason", message: "message" },
+                    holds_stock: true,
                     archived: true,
                 },
             ],
+            can_add_store: true,
         };
 
         server
@@ -71,5 +84,1844 @@ describe("LocationsClient", () => {
         await expect(async () => {
             return await client.business.commerce.locations.list();
         }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("create (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { kind: "store" };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                kind: "store",
+                is_main: true,
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                address_line: "address_line",
+                notes: "notes",
+                offers_pickup: true,
+                always_open: true,
+                is_active: true,
+                archived_at: "archived_at",
+                flyer_path: "flyer_path",
+                latitude: 1.1,
+                longitude: 1.1,
+                country: "country",
+                phone: "phone",
+                timezone: "timezone",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations")
+            .header("Idempotency-Key", "Idempotency-Key")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.create({
+            "Idempotency-Key": "Idempotency-Key",
+            kind: "store",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("create (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { kind: "store" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations")
+            .header("Idempotency-Key", "idempotencyKey")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.create({
+                "Idempotency-Key": "idempotencyKey",
+                kind: "store",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("create (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { kind: "store" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations")
+            .header("Idempotency-Key", "idempotencyKey")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.create({
+                "Idempotency-Key": "idempotencyKey",
+                kind: "store",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("create (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { kind: "store" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations")
+            .header("Idempotency-Key", "idempotencyKey")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.create({
+                "Idempotency-Key": "idempotencyKey",
+                kind: "store",
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("get (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                kind: "store",
+                is_main: true,
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                address_line: "address_line",
+                notes: "notes",
+                offers_pickup: true,
+                always_open: true,
+                is_active: true,
+                archived_at: "archived_at",
+                flyer_path: "flyer_path",
+                latitude: 1.1,
+                longitude: 1.1,
+                country: "country",
+                phone: "phone",
+                timezone: "timezone",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.get({
+            location: "location",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("get (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.get({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("get (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.get({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.get({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("update (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                kind: "store",
+                is_main: true,
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                address_line: "address_line",
+                notes: "notes",
+                offers_pickup: true,
+                always_open: true,
+                is_active: true,
+                archived_at: "archived_at",
+                flyer_path: "flyer_path",
+                latitude: 1.1,
+                longitude: 1.1,
+                country: "country",
+                phone: "phone",
+                timezone: "timezone",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.update({
+            location: "location",
+            name: "name",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("update (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.update({
+                location: "location",
+                name: "name",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("update (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.update({
+                location: "location",
+                name: "name",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("update (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.update({
+                location: "location",
+                name: "name",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("update (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.update({
+                location: "location",
+                name: "name",
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("delete (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = 1;
+
+        server
+            .mockEndpoint()
+            .delete("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.delete({
+            location: "location",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("delete (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.delete({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("delete (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.delete({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("delete (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/business/commerce/locations/location")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.delete({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("setActive (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { active: true };
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                kind: "store",
+                is_main: true,
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                address_line: "address_line",
+                notes: "notes",
+                offers_pickup: true,
+                always_open: true,
+                is_active: true,
+                archived_at: "archived_at",
+                flyer_path: "flyer_path",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .patch("/business/commerce/locations/location/active")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.setActive({
+            location: "location",
+            active: true,
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("setActive (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { active: true };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/business/commerce/locations/location/active")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.setActive({
+                location: "location",
+                active: true,
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("setActive (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { active: true };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/business/commerce/locations/location/active")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.setActive({
+                location: "location",
+                active: true,
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("setActive (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { active: true };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/business/commerce/locations/location/active")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.setActive({
+                location: "location",
+                active: true,
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("setActive (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { active: true };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/business/commerce/locations/location/active")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.setActive({
+                location: "location",
+                active: true,
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("archive (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            data: {
+                id: "id",
+                kind: "store",
+                is_main: true,
+                name: "name",
+                address: "address",
+                city: "city",
+                state: "state",
+                zipcode: "zipcode",
+                address_line: "address_line",
+                notes: "notes",
+                offers_pickup: true,
+                always_open: true,
+                is_active: true,
+                archived_at: "archived_at",
+                flyer_path: "flyer_path",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/archive")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.archive({
+            location: "location",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("archive (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/archive")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.archive({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("archive (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/archive")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.archive({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("archive (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/archive")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.archive({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("flyer (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { data: { url: "url", message: "message" } };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/flyer")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.flyer({
+            location: "location",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("flyer (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/flyer")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.flyer({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("flyer (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/flyer")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.flyer({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("flyer (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/flyer")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.flyer({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("offerMainStoreProducts (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { data: { added: 1 } };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/offer-main-store-products")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.offerMainStoreProducts({
+            location: "location",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("offerMainStoreProducts (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/offer-main-store-products")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.offerMainStoreProducts({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("offerMainStoreProducts (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/offer-main-store-products")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.offerMainStoreProducts({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("offerMainStoreProducts (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/offer-main-store-products")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.offerMainStoreProducts({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("offerMainStoreProducts (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/offer-main-store-products")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.offerMainStoreProducts({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("getPickup (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            data: {
+                location: {
+                    id: "id",
+                    kind: "store",
+                    is_main: true,
+                    name: "name",
+                    timezone: "timezone",
+                    address_is_private: true,
+                },
+                schedule: {
+                    offers_pickup: true,
+                    pickup_instructions: "pickup_instructions",
+                    preparation_minutes: 1,
+                    same_day_cutoff: "same_day_cutoff",
+                    pickup_slot_minutes: 1,
+                    windows: [
+                        {
+                            day_of_week: 1,
+                            opens_at: "opens_at",
+                            closes_at: "closes_at",
+                            slot_capacity: null,
+                            sort_order: 1,
+                        },
+                    ],
+                    exceptions: [
+                        {
+                            id: "id",
+                            starts_on: "starts_on",
+                            ends_on: null,
+                            is_closed: true,
+                            opens_at: null,
+                            closes_at: null,
+                            label: null,
+                            message: null,
+                        },
+                    ],
+                },
+                can_offer_pickup: true,
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/pickup")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.getPickup({
+            location: "location",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("getPickup (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/pickup")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.getPickup({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("getPickup (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/pickup")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.getPickup({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("getPickup (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/pickup")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.getPickup({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("updatePickup (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 1,
+            pickup_slot_minutes: 1,
+            windows: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at" }],
+            exceptions: ["exceptions"],
+        };
+        const rawResponseBody = {
+            data: {
+                location: {
+                    id: "id",
+                    kind: "store",
+                    is_main: true,
+                    name: "name",
+                    timezone: "timezone",
+                    address_is_private: true,
+                },
+                schedule: {
+                    offers_pickup: true,
+                    pickup_instructions: "pickup_instructions",
+                    preparation_minutes: 1,
+                    same_day_cutoff: "same_day_cutoff",
+                    pickup_slot_minutes: 1,
+                    windows: [
+                        {
+                            day_of_week: 1,
+                            opens_at: "opens_at",
+                            closes_at: "closes_at",
+                            slot_capacity: null,
+                            sort_order: 1,
+                        },
+                    ],
+                    exceptions: [
+                        {
+                            id: "id",
+                            starts_on: "starts_on",
+                            ends_on: null,
+                            is_closed: true,
+                            opens_at: null,
+                            closes_at: null,
+                            label: null,
+                            message: null,
+                        },
+                    ],
+                },
+                can_offer_pickup: true,
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/pickup")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.updatePickup({
+            location: "location",
+            offers_pickup: true,
+            preparation_minutes: 1,
+            pickup_slot_minutes: 1,
+            windows: [
+                {
+                    day_of_week: 1,
+                    opens_at: "opens_at",
+                    closes_at: "closes_at",
+                },
+            ],
+            exceptions: ["exceptions"],
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("updatePickup (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/pickup")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updatePickup({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("updatePickup (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/pickup")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updatePickup({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("updatePickup (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/pickup")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updatePickup({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("updatePickup (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/pickup")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updatePickup({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("previewPickupAffectedOrders (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 1,
+            pickup_slot_minutes: 1,
+            windows: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at" }],
+            exceptions: ["exceptions"],
+        };
+        const rawResponseBody = {
+            data: [{ id: "id", number: 1, buyer_name: "buyer_name", pickup_at: "pickup_at", url: "url" }],
+        };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/pickup/affected-orders")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.previewPickupAffectedOrders({
+            location: "location",
+            offers_pickup: true,
+            preparation_minutes: 1,
+            pickup_slot_minutes: 1,
+            windows: [
+                {
+                    day_of_week: 1,
+                    opens_at: "opens_at",
+                    closes_at: "closes_at",
+                },
+            ],
+            exceptions: ["exceptions"],
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("previewPickupAffectedOrders (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/pickup/affected-orders")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.previewPickupAffectedOrders({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("previewPickupAffectedOrders (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/pickup/affected-orders")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.previewPickupAffectedOrders({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("previewPickupAffectedOrders (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/pickup/affected-orders")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.previewPickupAffectedOrders({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("previewPickupAffectedOrders (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            offers_pickup: true,
+            preparation_minutes: 10080,
+            pickup_slot_minutes: 1,
+            windows: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/business/commerce/locations/location/pickup/affected-orders")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.previewPickupAffectedOrders({
+                location: "location",
+                offers_pickup: true,
+                preparation_minutes: 10080,
+                pickup_slot_minutes: 1,
+                windows: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
+    });
+
+    test("getHours (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            data: {
+                location: { id: "id", name: "name", timezone: "timezone" },
+                slots: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at", label: null, sort_order: 1 }],
+                exceptions: [
+                    {
+                        id: "id",
+                        starts_on: "starts_on",
+                        ends_on: null,
+                        is_closed: true,
+                        opens_at: null,
+                        closes_at: null,
+                        label: null,
+                        message: null,
+                    },
+                ],
+                is_open_now: true,
+                next_open_at: "next_open_at",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/hours")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.getHours({
+            location: "location",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("getHours (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/hours")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.getHours({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("getHours (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/hours")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.getHours({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("getHours (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/business/commerce/locations/location/hours")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.getHours({
+                location: "location",
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("updateHours (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            slots: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at" }],
+            exceptions: ["exceptions"],
+        };
+        const rawResponseBody = {
+            data: {
+                location: { id: "id", name: "name", timezone: "timezone" },
+                slots: [{ day_of_week: 1, opens_at: "opens_at", closes_at: "closes_at", label: null, sort_order: 1 }],
+                exceptions: [
+                    {
+                        id: "id",
+                        starts_on: "starts_on",
+                        ends_on: null,
+                        is_closed: true,
+                        opens_at: null,
+                        closes_at: null,
+                        label: null,
+                        message: null,
+                    },
+                ],
+                is_open_now: true,
+                next_open_at: "next_open_at",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/hours")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.business.commerce.locations.updateHours({
+            location: "location",
+            slots: [
+                {
+                    day_of_week: 1,
+                    opens_at: "opens_at",
+                    closes_at: "closes_at",
+                },
+            ],
+            exceptions: ["exceptions"],
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("updateHours (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            slots: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/hours")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updateHours({
+                location: "location",
+                slots: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.UnauthorizedError);
+    });
+
+    test("updateHours (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            slots: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/hours")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updateHours({
+                location: "location",
+                slots: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.ForbiddenError);
+    });
+
+    test("updateHours (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            slots: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/hours")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updateHours({
+                location: "location",
+                slots: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.NotFoundError);
+    });
+
+    test("updateHours (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            slots: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/hours")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updateHours({
+                location: "location",
+                slots: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.ConflictError);
+    });
+
+    test("updateHours (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new FiveOneEatClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            slots: [
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+                { day_of_week: 6, opens_at: "opens_at", closes_at: "closes_at" },
+            ],
+            exceptions: ["exceptions", "exceptions"],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/business/commerce/locations/location/hours")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.business.commerce.locations.updateHours({
+                location: "location",
+                slots: [
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                    {
+                        day_of_week: 6,
+                        opens_at: "opens_at",
+                        closes_at: "closes_at",
+                    },
+                ],
+                exceptions: ["exceptions", "exceptions"],
+            });
+        }).rejects.toThrow(FiveOneEat.UnprocessableEntityError);
     });
 });

@@ -4,7 +4,14 @@ export interface CustomerEventTicketType {
     id: string;
     name: string;
     description: string | null;
+    /** The organizer's price, before 51Eat's booking fee. */
     price: string;
+    /**
+     * What one ticket costs the buyer before tax, 51Eat's booking fee
+     * included. Show this as the ticket's price: an order never costs
+     * more than this times the quantity, plus tax.
+     */
+    all_in_price: string;
     remaining_quantity: number | null;
     is_available_for_sale: boolean;
     sales_start_at: string | null;

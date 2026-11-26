@@ -22,6 +22,8 @@ export interface BusinessEvent {
     ticket_sales_enabled: boolean;
     is_published: boolean;
     published_at: string | null;
+    /** When the organizer cancelled the event; null while it's on. */
+    cancelled_at: string | null;
     sort_order: number;
     image?: string | undefined;
     ticket_types?: FiveOneEat.BusinessEventTicketType[] | undefined;

@@ -31,6 +31,7 @@ describe("EventsClient", () => {
                     ticket_sales_enabled: true,
                     is_published: true,
                     published_at: "2024-01-15T09:30:00Z",
+                    cancelled_at: "2024-01-15T09:30:00Z",
                     sort_order: 1,
                     image: "image",
                     ticket_types: [
@@ -132,6 +133,7 @@ describe("EventsClient", () => {
                 ticket_sales_enabled: true,
                 is_published: true,
                 published_at: "2024-01-15T09:30:00Z",
+                cancelled_at: "2024-01-15T09:30:00Z",
                 sort_order: 1,
                 image: "image",
                 ticket_types: [
@@ -276,6 +278,7 @@ describe("EventsClient", () => {
                 ticket_sales_enabled: true,
                 is_published: true,
                 published_at: "2024-01-15T09:30:00Z",
+                cancelled_at: "2024-01-15T09:30:00Z",
                 sort_order: 1,
                 image: "image",
                 ticket_types: [
@@ -429,6 +432,7 @@ describe("EventsClient", () => {
                 ticket_sales_enabled: true,
                 is_published: true,
                 published_at: "2024-01-15T09:30:00Z",
+                cancelled_at: "2024-01-15T09:30:00Z",
                 sort_order: 1,
                 image: "image",
                 ticket_types: [
@@ -691,6 +695,7 @@ describe("EventsClient", () => {
                 ticket_sales_enabled: true,
                 is_published: true,
                 published_at: "2024-01-15T09:30:00Z",
+                cancelled_at: "2024-01-15T09:30:00Z",
                 sort_order: 1,
                 image: "image",
                 ticket_types: [

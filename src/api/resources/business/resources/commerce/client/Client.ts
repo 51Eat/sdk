@@ -4,6 +4,7 @@ import type { BaseClientOptions } from "../../../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../../../BaseClient.js";
 import { LocationsClient } from "../resources/locations/client/Client.js";
 import { OrdersClient } from "../resources/orders/client/Client.js";
+import { SellingClient } from "../resources/selling/client/Client.js";
 import { StockClient } from "../resources/stock/client/Client.js";
 
 export declare namespace CommerceClient {
@@ -14,6 +15,7 @@ export class CommerceClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<CommerceClient.Options>;
     protected _locations: LocationsClient | undefined;
     protected _orders: OrdersClient | undefined;
+    protected _selling: SellingClient | undefined;
     protected _stock: StockClient | undefined;
 
     constructor(options: CommerceClient.Options = {}) {
@@ -26,6 +28,10 @@ export class CommerceClient {
 
     public get orders(): OrdersClient {
         return (this._orders ??= new OrdersClient(this._options));
+    }
+
+    public get selling(): SellingClient {
+        return (this._selling ??= new SellingClient(this._options));
     }
 
     public get stock(): StockClient {

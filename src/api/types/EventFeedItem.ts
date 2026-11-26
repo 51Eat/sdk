@@ -19,7 +19,13 @@ export interface EventFeedItem {
     rsvp_count: number;
     user_rsvp_status?: (string | null) | undefined;
     user_has_tickets?: boolean | undefined;
+    /**
+     * The cheapest ticket's all-in price: before tax, 51Eat's booking fee included.
+     * Absent once the event is cancelled.
+     */
     ticket_price_from?: string | undefined;
+    /** The organizer cancelled the event: tickets aren't sold and every buyer is refunded in full. */
+    is_cancelled: boolean;
     business: EventFeedItem.Business;
 }
 

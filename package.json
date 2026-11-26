@@ -1,6 +1,6 @@
 {
     "name": "@51eat/sdk",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -329,6 +329,17 @@
                 "default": "./dist/cjs/api/resources/business/resources/commerce/resources/orders/exports.js"
             },
             "default": "./dist/cjs/api/resources/business/resources/commerce/resources/orders/exports.js"
+        },
+        "./business/commerce/selling": {
+            "import": {
+                "types": "./dist/esm/api/resources/business/resources/commerce/resources/selling/exports.d.mts",
+                "default": "./dist/esm/api/resources/business/resources/commerce/resources/selling/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/business/resources/commerce/resources/selling/exports.d.ts",
+                "default": "./dist/cjs/api/resources/business/resources/commerce/resources/selling/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/business/resources/commerce/resources/selling/exports.js"
         },
         "./business/commerce/stock": {
             "import": {

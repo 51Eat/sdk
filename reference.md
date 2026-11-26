@@ -5288,7 +5288,9 @@ await client.business.bulletins.comments.create({
 
 Every store and stand of the business, main store first and then by
 name, including ones switched off, blocked by the plan or archived.
-For the order list's store filter and the stock screen.
+Each carries why it can't sell yet (`blocker`) and its open pickup
+orders still to come (`affected_orders`), the same as the web's list.
+`can_add_store` says whether the plan has room for another store.
 </dd>
 </dl>
 </dd>
@@ -5315,6 +5317,869 @@ await client.business.commerce.locations.list();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreateLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Answers 201. `kind` is `store` or `stand`. A Free plan has one store,
+the main one: a second is refused with a form error on `kind`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.create({
+    "Idempotency-Key": "Idempotency-Key",
+    kind: "store"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.StoreLocationRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.get({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.GetLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The main store saves only its name: its address, timezone and phone
+are the business's.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.update({
+    location: "location",
+    name: "name"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdateLocationRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">delete</a>({ ...params }) -> number</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Only one that never sold anything and holds no stock: otherwise 409,
+and it is archived instead. The main store can't be deleted.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.delete({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.DeleteLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">setActive</a>({ ...params }) -> FiveOneEat.SetActiveLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.setActive({
+    location: "location",
+    active: true
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.SetLocationActiveRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">archive</a>({ ...params }) -> FiveOneEat.ArchiveLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Hides it and stops it taking orders, keeping its history and freeing
+its name and, for a store, its place in the plan's limit. The main
+store can't be archived.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.archive({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.ArchiveLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">flyer</a>({ ...params }) -> FiveOneEat.FlyerLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A download link that works for a few minutes. `url` is null while the
+flyer is still being generated. Only a stand has a flyer.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.flyer({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.FlyerLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">offerMainStoreProducts</a>({ ...params }) -> FiveOneEat.OfferMainStoreProductsLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Offers, for pickup, every product the main store offers; those already
+offered are left as they are. Only an extra store takes products this
+way. `added` is how many it added, so a second call adds none.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.offerMainStoreProducts({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.OfferMainStoreProductsLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">getPickup</a>({ ...params }) -> FiveOneEat.GetPickupLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Its pickup settings, weekly windows with slot capacity and date
+exceptions, and whether the plan lets it take pickup orders
+(`can_offer_pickup`: a stand needs Pro).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.getPickup({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.GetPickupLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">updatePickup</a>({ ...params }) -> FiveOneEat.UpdatePickupLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replaces the whole schedule. A window never runs past midnight and
+two windows on a day can't overlap. Turning pickup on at a stand on a
+Free plan is refused with a form error on `offers_pickup`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.updatePickup({
+    location: "location",
+    offers_pickup: true,
+    preparation_minutes: 1,
+    pickup_slot_minutes: 1,
+    windows: [{
+            day_of_week: 1,
+            opens_at: "opens_at",
+            closes_at: "closes_at"
+        }],
+    exceptions: ["exceptions"]
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdatePickupScheduleRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">previewPickupAffectedOrders</a>({ ...params }) -> FiveOneEat.PreviewPickupAffectedOrdersLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send the schedule you are about to save. The answer lists the open
+pickup orders it would leave outside its windows, so the owner can
+contact those buyers or cancel the orders first. It changes nothing,
+and so, unlike the writes, takes no `Idempotency-Key`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.previewPickupAffectedOrders({
+    location: "location",
+    offers_pickup: true,
+    preparation_minutes: 1,
+    pickup_slot_minutes: 1,
+    windows: [{
+            day_of_week: 1,
+            opens_at: "opens_at",
+            closes_at: "closes_at"
+        }],
+    exceptions: ["exceptions"]
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.PreviewPickupScheduleRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">getHours</a>({ ...params }) -> FiveOneEat.GetHoursLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Its weekly slots and exceptions, and whether it is open now. The main
+store and stands answer 404: the main store's hours are the business
+hours.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.getHours({
+    location: "location"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.GetHoursLocationsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `LocationsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.locations.<a href="/src/api/resources/business/resources/commerce/resources/locations/client/Client.ts">updateHours</a>({ ...params }) -> FiveOneEat.UpdateHoursLocationsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replaces the whole schedule, with the business hours' rules: a slot
+may close after midnight, and two slots on a day can't overlap. Send
+every slot and exception to keep; none to clear them.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.locations.updateHours({
+    location: "location",
+    slots: [{
+            day_of_week: 1,
+            opens_at: "opens_at",
+            closes_at: "closes_at"
+        }],
+    exceptions: ["exceptions"]
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdateOpeningHoursRequest` 
+    
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -5872,6 +6737,325 @@ await client.business.commerce.orders.refund({
 <dd>
 
 **requestOptions:** `OrdersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Business Commerce Selling
+<details><summary><code>client.business.commerce.selling.<a href="/src/api/resources/business/resources/commerce/resources/selling/client/Client.ts">get</a>() -> FiveOneEat.GetSellingResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Selling on or off, why it can't sell yet (`blocker`, which leaves out
+the switch and the seller terms, since `seller_terms` answers those),
+the seller terms it is on and whether a newer version is due, how many
+stores and stands sell, and where 51Eat's approval stands.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.selling.get();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `SellingClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.selling.<a href="/src/api/resources/business/resources/commerce/resources/selling/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateSellingResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Switching it on doesn't let the business sell until it has accepted the
+current seller terms, is approved and has payments set up: `blocker` and
+`seller_terms.due` still say what is left.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.selling.update({
+    enabled: true
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdateSellingRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `SellingClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.selling.<a href="/src/api/resources/business/resources/commerce/resources/selling/client/Client.ts">getSellerTerms</a>() -> FiveOneEat.GetSellerTermsSellingResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The current version with its text as safe HTML, and whether the
+business has accepted it. 404 before 51Eat publishes the first version.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.selling.getSellerTerms();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `SellingClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.selling.<a href="/src/api/resources/business/resources/commerce/resources/selling/client/Client.ts">acceptSellerTerms</a>({ ...params }) -> FiveOneEat.AcceptSellerTermsSellingResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send the `id` of the version the owner read as `version_id`. Only the
+owner can accept, the IP address is recorded, and a version that isn't
+the current one is refused with 422 on `version_id`. Accepting the
+version the business is already on changes nothing.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.selling.acceptSellerTerms({
+    "Idempotency-Key": "Idempotency-Key",
+    version_id: "version_id"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.AcceptSellerTermsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `SellingClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.selling.<a href="/src/api/resources/business/resources/commerce/resources/selling/client/Client.ts">requestApproval</a>({ ...params }) -> FiveOneEat.RequestApprovalSellingResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+`sells_prepared_food` is only a hint for the admin who decides. Asking
+again changes nothing and tells nobody twice; a business 51Eat turned
+down can't ask again (422 on `selling_approval`).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.selling.requestApproval({
+    "Idempotency-Key": "Idempotency-Key",
+    sells_prepared_food: true
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.RequestSellingApprovalRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `SellingClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -9624,11 +10808,15 @@ await client.commerce.orders.get({
 <dd>
 
 Puts a variant in the cart, or adds to its line when it's there. The
-variant has to be the business's, for sale, and offered at the cart's
-location the cart's way (before a location is chosen, at any of the
-business's locations). The quantity is in the variant's unit, a whole
-number of its `quantity_step`, from 1 to 1000 steps. Answers with the
-cart.
+variant has to be the business's and for sale. An in-person cart takes
+what its stand sells. An online cart takes what any of the business's
+locations offers for pickup: when the cart's own store doesn't, a cart
+with items keeps its store and the line comes back with `offered_here`
+false (the quote blocks it until the buyer removes it or switches to a
+store that offers it), and a cart with no items drops its store, so
+`location` is null and the buyer chooses one. The quantity is in the
+variant's unit, a whole number of its `quantity_step`, from 1 to 1000
+steps. Answers with the cart.
 </dd>
 </dl>
 </dd>

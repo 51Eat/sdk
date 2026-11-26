@@ -107,7 +107,7 @@ export namespace Cart {
             price_source: string;
             /** Whether the product is offered at the cart's location, the cart's way; null before a location is chosen. */
             offered_here: boolean | null;
-            /** False when the variant is archived or unpriced, or the product unpublished: remove the line. */
+            /** False when the variant is archived or unpriced, or the product unpublished or without a tax code: remove the line. */
             purchasable: boolean;
             /** At the cart's location: `in_stock`, `sold_out` or `backorder`; null before a location is chosen. */
             stock_status: Item.StockStatus | null;
