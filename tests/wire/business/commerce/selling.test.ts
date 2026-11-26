@@ -22,7 +22,7 @@ describe("SellingClient", () => {
                 },
                 locations: { stores: 1, stands: 1, switched_off: 1 },
                 approval: { status: "not_requested", requested_at: "requested_at", rejected_reason: "rejected_reason" },
-                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"] },
+                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"], url: "url" },
             },
         };
 
@@ -93,7 +93,7 @@ describe("SellingClient", () => {
                 },
                 locations: { stores: 1, stands: 1, switched_off: 1 },
                 approval: { status: "not_requested", requested_at: "requested_at", rejected_reason: "rejected_reason" },
-                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"] },
+                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"], url: "url" },
             },
         };
 
@@ -272,7 +272,7 @@ describe("SellingClient", () => {
                 },
                 locations: { stores: 1, stands: 1, switched_off: 1 },
                 approval: { status: "not_requested", requested_at: "requested_at", rejected_reason: "rejected_reason" },
-                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"] },
+                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"], url: "url" },
             },
         };
 
@@ -382,7 +382,7 @@ describe("SellingClient", () => {
                 },
                 locations: { stores: 1, stands: 1, switched_off: 1 },
                 approval: { status: "not_requested", requested_at: "requested_at", rejected_reason: "rejected_reason" },
-                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"] },
+                upcoming_seller_terms: { effective_on: "effective_on", fee_changes: ["fee_changes"], url: "url" },
             },
         };
 

@@ -9,7 +9,7 @@ export interface BusinessSelling {
     locations: BusinessSelling.Locations;
     /** Where 51Eat's approval to sell stands: `not_requested`, `pending`, `approved` or `rejected`. */
     approval: BusinessSelling.Approval;
-    /** The seller terms 51Eat has announced but not yet published, as the web dashboard's notice shows them: the date they take effect and what changes in the fees. Null when nothing is announced or the terms don't apply to the business. */
+    /** The seller terms 51Eat has announced but not yet published, as the web dashboard's notice shows them: the date they take effect, what changes in the fees and where to read the new version (the page the announcement email links to). Null when nothing is announced or the terms don't apply to the business. */
     upcoming_seller_terms: BusinessSelling.UpcomingSellerTerms | null;
 }
 
@@ -59,10 +59,11 @@ export namespace BusinessSelling {
     }
 
     /**
-     * The seller terms 51Eat has announced but not yet published, as the web dashboard's notice shows them: the date they take effect and what changes in the fees. Null when nothing is announced or the terms don't apply to the business.
+     * The seller terms 51Eat has announced but not yet published, as the web dashboard's notice shows them: the date they take effect, what changes in the fees and where to read the new version (the page the announcement email links to). Null when nothing is announced or the terms don't apply to the business.
      */
     export interface UpcomingSellerTerms {
         effective_on: string;
         fee_changes: string[];
+        url: string;
     }
 }

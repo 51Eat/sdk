@@ -6769,6 +6769,829 @@ await client.business.commerce.orders.refund({
 </dl>
 </details>
 
+## Business Commerce Products
+<details><summary><code>client.business.commerce.products.<a href="/src/api/resources/business/resources/commerce/resources/products/client/Client.ts">list</a>({ ...params }) -> FiveOneEat.ListProductsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Newest first, 20 a page, each with its default option and category.
+`search` keeps those whose name contains it, any case; `location`
+those offered at that store or stand, either way of buying (ignored
+unless it's one of the business's unarchived locations); `category`
+those filed in that category.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.products.list();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.ListProductsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.products.<a href="/src/api/resources/business/resources/commerce/resources/products/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreateProductsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Answers 201 with the product as `GET /products/{product}` shows it. It
+starts with one option, the default: `price` prices it, and `compare_at_price`,
+`unit`, `quantity_step` and `starting_stock` need a price. Without a
+price the option starts unpriced. Refused with a form error on
+`payments` until the business can take payments, and on `is_active`
+when it would go on sale before 51Eat approves the business to sell.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.products.create({
+    "Idempotency-Key": "Idempotency-Key",
+    name: "name",
+    tax_code: "tax_code"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.StoreProductRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.products.<a href="/src/api/resources/business/resources/commerce/resources/products/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetProductsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+With its unarchived options in order, each with its stock at every
+location, where it's offered (`availability`), its category, photos
+and tax code.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.products.get({
+    product: "product"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.GetProductsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.products.<a href="/src/api/resources/business/resources/commerce/resources/products/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateProductsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Saves its details. `availability`, when sent, replaces where it's
+offered; left out, that stays as it is.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.products.update({
+    product: "product",
+    name: "name",
+    tax_code: "tax_code"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdateProductRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.products.<a href="/src/api/resources/business/resources/commerce/resources/products/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Archives it, so its orders keep it. It leaves the list and every store
+and stand.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.products.delete({
+    product: "product"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.DeleteProductsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ProductsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Business Commerce Variants
+<details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">list</a>({ ...params }) -> FiveOneEat.ListVariantsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Its unarchived options in their order, each with its stock at every
+location, as `GET /products/{product}` shows them.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.variants.list({
+    product: "product"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.ListVariantsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">create</a>({ ...params }) -> FiveOneEat.CreateVariantsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Answers 201. It counts its stock unless `tracks_inventory` is false,
+starting from `starting_stock` at the locations that hold stock.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.variants.create({
+    "Idempotency-Key": "Idempotency-Key",
+    product: "product",
+    name: "name",
+    price: 1.1,
+    unit: "each",
+    quantity_step: 1
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.StoreVariantRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">get</a>({ ...params }) -> FiveOneEat.GetVariantsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+`stock_locations` is each store and stand that counts stock, the main
+store first, then stores, then stands, with this option's stock there
+(`level` is null where it has never been counted). `locked` is true
+once stock or orders count in its unit, so the unit can't change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.variants.get({
+    product: "product",
+    variant: "variant"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.GetVariantsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">update</a>({ ...params }) -> FiveOneEat.UpdateVariantsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Its unit can't change once stock or orders count in it: a form error
+on `unit`. Left out, `tracks_inventory` and `allow_backorder` stay as
+they are.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.variants.update({
+    product: "product",
+    variant: "variant",
+    name: "name",
+    price: 1.1,
+    unit: "each",
+    quantity_step: 1
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.UpdateVariantRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">delete</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Only one that isn't the default and has no stock or orders: otherwise
+a form error on `variant`, and it can only be archived.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.variants.delete({
+    product: "product",
+    variant: "variant"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.DeleteVariantsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">setPrice</a>({ ...params }) -> FiveOneEat.SetPriceVariantsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Just its price and "was" price, in dollars and cents.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.variants.setPrice({
+    product: "product",
+    variant: "variant",
+    price: 1.1
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.SetVariantPriceRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business.commerce.variants.<a href="/src/api/resources/business/resources/commerce/resources/variants/client/Client.ts">archive</a>({ ...params }) -> FiveOneEat.ArchiveVariantsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Takes it off sale, keeping its stock and order history. When it was
+the default, the next option becomes the default. The product's last
+option can't be archived: a form error on `variant`; remove the
+product instead.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.business.commerce.variants.archive({
+    product: "product",
+    variant: "variant"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `FiveOneEat.business.commerce.ArchiveVariantsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VariantsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Business Commerce Selling
 <details><summary><code>client.business.commerce.selling.<a href="/src/api/resources/business/resources/commerce/resources/selling/client/Client.ts">get</a>() -> FiveOneEat.GetSellingResponse</code></summary>
 <dl>
